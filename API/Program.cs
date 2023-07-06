@@ -1,21 +1,33 @@
+using API.Helpers;
 using API.Repos;
+using API.Repos.Interfaces;
+using API.Repos.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<LotteryContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// services
+builder.Services.AddScoped<IRegisterRepository, RegisterService>();
+builder.Services.AddScoped<IAccountRepository, AccountService>();
+builder.Services.AddSingleton<GlobalDataService>();
+builder.Services.AddOptions();
+builder.Services.Configure<TwillioSettings>(builder.Configuration.GetSection("Twilio"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
 var app = builder.Build();
+
+app.UseCors(builder =>
+{
+    builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -24,9 +36,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 

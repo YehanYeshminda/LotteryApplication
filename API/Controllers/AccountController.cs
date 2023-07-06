@@ -1,127 +1,155 @@
 ﻿using API.Helpers;
-using API.Repos;
 using API.Repos.Dtos;
+using API.Repos.Interfaces;
 using API.Repos.Models;
+using API.Repos.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
+using Microsoft.Extensions.Options;
+using System.Collections.Specialized;
+using System.Net;
 using System.Text;
 
 namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly LotteryContext _lotteryContext;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IRegisterRepository _registerRepository;
+        private readonly GlobalDataService _globalDataService;
+        private readonly TwillioSettings _twilioSettings;
 
-        public AccountController(LotteryContext lotteryContext)
+        string url = "https://verify.twilio.com/v2/Services/VAc057cb0dc538d2255ff47cbf76e10b3f/Verifications";
+        string checkUrl = "https://verify.twilio.com/v2/Services/VAc057cb0dc538d2255ff47cbf76e10b3f/VerificationCheck";
+
+        public AccountController(IAccountRepository accountRepository, IRegisterRepository registerRepository, IOptions<TwillioSettings> twilioSettingsOptions, GlobalDataService globalDataService)
         {
-            _lotteryContext = lotteryContext;
+            _accountRepository = accountRepository;
+            _registerRepository = registerRepository;
+            _globalDataService = globalDataService;
+            _twilioSettings = twilioSettingsOptions.Value;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tblregister>>> GetUsers()
         {
-            var users = await _lotteryContext.Tblregisters.ToListAsync();
+            var users = await _registerRepository.GetAllUsers();
 
             if (users == null)
             {
                 return NotFound("Unable to find users!");
             }
 
-            return users;
+            return Ok(users);
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<Tblregister>> RegisterUser(CreateUserDto createUserDto)
-        {   
-            if (createUserDto == null)
+        public async Task<ActionResult<RegistrationResult>> RegisterUser(CreateUserDto createUserDto)
+        {
+            var registrationResult = await _accountRepository.RegisterUser(createUserDto);
+
+            if (registrationResult.IsSuccess)
             {
-                return BadRequest("User data is empty!");
+                return Ok(registrationResult.User);
             }
-
-            var existingUser = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == createUserDto.Email || x.Nic == createUserDto.Nic || x.ContactNo == createUserDto.ContactNo || x.CustName == createUserDto.CustName);
-
-            if (existingUser != null)
+            else
             {
-                return BadRequest("User already exist with this information!");
-            };
-
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.CustPassword));
-                var encryptedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-                createUserDto.CustPassword = encryptedPassword;
+                return BadRequest(registrationResult.ErrorMessage);
             }
-
-            string refreshToken = TokenHelpers.GenerateToken();
-
-            var newUser = new Tblregister
-            {
-                ContactNo = createUserDto.ContactNo,
-                Nic = createUserDto.Nic,
-                AccountBalance = createUserDto.AccountBalance,
-                AddOn = DateTime.UtcNow,
-                AlternatePhone = createUserDto.AlternatePhone,
-                CustAddress = createUserDto.CustAddress,
-                CustName = createUserDto.CustName,
-                CustPassword = createUserDto.CustPassword,
-                CustStatus = 1,
-                Email = createUserDto.Email,
-                Mobile = createUserDto.Mobile,
-                Otp = "This will be OTP",
-                Photo = "",
-                Hash = refreshToken
-            };
-
-            _lotteryContext.Tblregisters.Add(newUser);
-            await _lotteryContext.SaveChangesAsync();
-
-            return Ok(existingUser);
         }
 
         [HttpPost("Login")]
         public async Task<ActionResult<LoginReponseDto>> LoginUser(LoginDto loginDto)
         {
-            if (loginDto == null)
+            var loginResult = await _accountRepository.LoginUser(loginDto);
+
+            if (loginResult.IsSuccess)
             {
-                return BadRequest("User data is empty!");
-            }
-
-            var existingUser = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.CustName == loginDto.Username);
-
-            if (existingUser == null)
-            {
-                return BadRequest("User does not exist!");
-            }
-
-            // Decrypt and compare the passwords
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-                var enteredPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-                if (enteredPassword != existingUser.CustPassword)
+                return Ok(new LoginReponseDto
                 {
-                    return BadRequest("Invalid password!");
+                    Username = loginResult.Username,
+                    Email = loginResult.Email,
+                    Hash = loginResult.Hash
+                });
+            }
+            else
+            {
+                return BadRequest(loginResult.ErrorMessage);
+            }
+        }
+
+        [HttpPost("SendOTP")]
+        public async Task<ActionResult> SendOTP(SendOtpDto sendOtpDto)
+        {
+            string secret = _twilioSettings.TWILIO_AUTH_TOKEN;
+            string credential = _twilioSettings.TWILIO_ACCOUNT_SID;
+
+            using (WebClient client = new WebClient())
+            {
+                client.Credentials = new NetworkCredential(credential, secret);
+                client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+
+                NameValueCollection parameters = new NameValueCollection();
+                parameters["To"] = sendOtpDto.PhoneNumber;
+                parameters["Channel"] = sendOtpDto.Method;
+                _globalDataService.PhoneNumber = sendOtpDto.PhoneNumber;
+
+                byte[] responseBytes = client.UploadValues(url, "POST", parameters);
+                string responseString = Encoding.UTF8.GetString(responseBytes);
+            }
+
+            return Ok("OTP has been sent for the number: " + sendOtpDto.PhoneNumber);
+        }
+
+
+        [HttpPost("VerifyOTP")]
+        public async Task<ActionResult<ValuesDto>> CheckOTPValid(string OTP)
+        {
+            string secret = _twilioSettings.TWILIO_AUTH_TOKEN;
+            string credential = _twilioSettings.TWILIO_ACCOUNT_SID;
+            string checkUrl = "https://verify.twilio.com/v2/Services/VAc057cb0dc538d2255ff47cbf76e10b3f/VerificationCheck";
+            var newValues = new ValuesDto();
+            newValues.Status = false;
+
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    client.Credentials = new NetworkCredential(credential, secret);
+                    client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+
+                    NameValueCollection checkParameters = new NameValueCollection();
+
+                    if (_globalDataService.PhoneNumber == null || _globalDataService.PhoneNumber == "")
+                    {
+                        return BadRequest("Phone number not found!");
+                    }
+
+                    checkParameters["To"] = _globalDataService.PhoneNumber;
+                    checkParameters["Code"] = OTP;
+
+                    byte[] checkResponseBytes;
+                    try
+                    {
+                        checkResponseBytes = client.UploadValues(checkUrl, "POST", checkParameters);
+                    }
+                    catch (WebException ex)
+                    {
+                        if (ex.Response is HttpWebResponse response && response.StatusCode == HttpStatusCode.NotFound)
+                        {
+                            return Ok(newValues);
+                        }
+                        return Ok(newValues);
+                    }
+
+                    string checkResponseString = Encoding.UTF8.GetString(checkResponseBytes);
+                    newValues.Status = checkResponseString.Contains("approved");
+                    return Ok(newValues);
                 }
             }
-
-            if (existingUser.CustName != loginDto.Username)
+            catch (Exception ex)
             {
-                return BadRequest("Invalid Username!");
+                return BadRequest("Error while verying the OTP with the error! " + ex.Message);
             }
-
-            existingUser.Hash = TokenHelpers.GenerateToken();
-            _lotteryContext.Tblregisters.Update(existingUser);
-            await _lotteryContext.SaveChangesAsync();
-
-            return Ok(new LoginReponseDto
-            {
-                Username = existingUser.CustName,
-                Email = existingUser.Email,
-                Hash = existingUser.Hash
-            });
         }
 
     }

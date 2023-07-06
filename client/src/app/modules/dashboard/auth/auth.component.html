@@ -1,0 +1,76 @@
+<div class="center-container">
+  <form [formGroup]="form">
+
+    <div class="row">
+      <div class="col-12">
+        <app-input [formControl]="$any(form.controls['custName'])" [label]="'Username'"></app-input>
+      </div>
+
+      <ng-container *ngIf="registerMode">
+  
+        <div class="col-12">
+          <app-input [formControl]="$any(form.controls['nic'])" [label]="'NIC'"></app-input>
+        </div>
+
+  
+        <div class="col-12">
+          <app-input [formControl]="$any(form.controls['email'])" [label]="'Email'"></app-input>
+        </div>
+
+  
+        <div class="col-12">
+          <app-input [formControl]="$any(form.controls['custAddress'])" [label]="'Address'"></app-input>
+        </div>
+
+        <div class="col-12">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group m-2">
+                <div class="row">
+                  <div class="col-12">
+                    <label class="form-label">Mobile No</label>
+                  </div>
+
+                  <div class="col-10">
+                    <input type="text" class="form-control w-100" placeholder="Please enter Mobile No" formControlName="mobile">
+                  </div>
+
+                  <div class="col-2">
+                    <button (click)="sendOtp()" type="button" class="btn btn-primary w-100">OTP</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <app-input [formControl]="$any(form.controls['alternatePhone'])" [label]="'Alternate Mobile No'"></app-input>
+        </div>
+
+        <div class="col-12">
+          <app-input [formControl]="$any(form.controls['contactNo'])" [label]="'Contact No'"></app-input>
+        </div>
+      </ng-container>
+
+
+      <div class="col-12">
+        <app-input [formControl]="$any(form.controls['password'])" [label]="'Password'" [type]="'password'"></app-input>
+      </div>
+
+      <div class="col-12 justify-content-center align-items-center d-flex flex-column mt-2">
+        <ng-container *ngIf="!registerMode">
+          <button class="btn btn-primary w-50" (click)="onSubmit()">Login</button>
+          <p>Don't have an Account?
+            <span (click)="toggleRegisterMode()" class="link-danger">Register</span>
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="registerMode">
+          <button class="btn btn-primary w-50" (click)="onSubmit()">Register</button>
+          <p>Already have an Account? <span (click)="toggleRegisterMode()" class="link-danger">Login</span> </p>
+        </ng-container>
+      </div>
+    </div>
+  </form>
+</div>

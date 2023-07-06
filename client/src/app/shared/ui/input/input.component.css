@@ -1,0 +1,23 @@
+.error-message {
+  font-size: 10px;
+  color: red;
+}
+
+.mat-form-field {
+  height: 10%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.form-label {
+  font-weight: bold;
+  margin: 0px;
+}
+
+.form-control {
+  outline: 1px solid lightgray
+}
