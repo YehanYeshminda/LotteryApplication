@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -7,7 +7,6 @@ import { AuthHttpService } from './services/auth-http.service';
 import { noop, tap } from 'rxjs';
 import { login } from './features/auth.actions';
 import { MakeLogin } from './models/user';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { OtpSend } from './models/auth';
 
 @Component({
@@ -18,18 +17,15 @@ import { OtpSend } from './models/auth';
 export class AuthComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   registerMode: boolean = false;
-  modalRef?: BsModalRef;
-
-  constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService,
-    private modalService: BsModalService
-    ) { }
+  constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
   }
 
   initializeForm() {
-    if (this.registerMode == false) {
+    if (!this.registerMode) {
       this.form = this.fb.group({
         custName: ['', [Validators.required]],
         password: ['', []],
@@ -53,7 +49,7 @@ export class AuthComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      if (this.registerMode == false) {
+      if (!this.registerMode) {
         const data: MakeLogin = {
           username: this.form.value.custName,
           password: this.form.value.password
@@ -69,7 +65,7 @@ export class AuthComponent implements OnInit {
           )
           .subscribe({
             next: noop,
-            error: (err) => alert('Login Failed')
+            error: () => alert('Login Failed')
           });
       } else {
         this.router.navigate(['/dashboard']);

@@ -19,7 +19,6 @@ namespace API.Controllers
         private readonly TwillioSettings _twilioSettings;
 
         string url = "https://verify.twilio.com/v2/Services/VAc057cb0dc538d2255ff47cbf76e10b3f/Verifications";
-        string checkUrl = "https://verify.twilio.com/v2/Services/VAc057cb0dc538d2255ff47cbf76e10b3f/VerificationCheck";
 
         public AccountController(IAccountRepository accountRepository, IRegisterRepository registerRepository, IOptions<TwillioSettings> twilioSettingsOptions, GlobalDataService globalDataService)
         {

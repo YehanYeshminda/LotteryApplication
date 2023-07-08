@@ -26,10 +26,6 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=127.0.0.1;port=3306;database=lottery;uid=root;pwd=123;Convert Zero Datetime=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tblcashgiven>(entity =>
@@ -79,6 +75,7 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.EndOn).HasDefaultValueSql("'NULL'");
             entity.Property(e => e.RaffleDate).HasDefaultValueSql("'NULL'");
             entity.Property(e => e.StartOn).HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.TicketNo).HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Tblregister>(entity =>

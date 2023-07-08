@@ -2,6 +2,7 @@
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
 using API.Repos.Models;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -88,10 +89,21 @@ namespace API.Repos.Services
                 }
             }
 
-            existingUser.Hash = TokenHelpers.GenerateToken();
+            existingUser.Hash = EncodeValue(existingUser.Id);
             await _registerRepository.UpdateUser(existingUser);
 
             return LoginResult.Success(existingUser.CustName, existingUser.Email, existingUser.Hash);
+        }
+
+        private string EncodeValue(int userId)
+        {
+            string datetimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            string valueToEncode = $"{userId}!{datetimeString}";
+
+            byte[] bytes = Encoding.UTF8.GetBytes(valueToEncode);
+            string encodedValue = Convert.ToBase64String(bytes);
+
+            return encodedValue;
         }
     }
 }

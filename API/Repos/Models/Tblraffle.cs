@@ -10,8 +10,8 @@ namespace API.Repos.Models;
 public partial class Tblraffle
 {
     [Key]
-    [Column(TypeName = "int(11)")]
-    public int Id { get; set; }
+    [Column(TypeName = "int(11) unsigned")]
+    public uint Id { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? RaffleDate { get; set; }
@@ -24,4 +24,7 @@ public partial class Tblraffle
 
     [Column(TypeName = "bit(1)")]
     public ulong? CustStatus { get; set; }
+
+    [Column(TypeName = "int(11)")]
+    public int? TicketNo { get; set; }
 }
