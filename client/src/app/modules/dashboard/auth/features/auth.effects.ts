@@ -23,7 +23,7 @@ export class AuthEffects {
 				ofType(AuthActions.logout),
 				tap((action) => {
 					sessionStorage.removeItem('user');
-					this.router.navigateByUrl('/products');
+					this.router.navigateByUrl('/');
 				})
 			),
 		{ dispatch: false }

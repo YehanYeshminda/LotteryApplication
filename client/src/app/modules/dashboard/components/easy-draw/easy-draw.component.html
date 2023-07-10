@@ -3,7 +3,11 @@
   </div>
 
   <div class="col-12">
-    {{ (numbers$ | async) | json }}
+    <ul *ngIf="(numbers$ | async) as number" class="item-container">
+      <li class="item-list-container" *ngFor="let item of number.result">
+        {{ item }}
+      </li>
+    </ul>
   </div>
 
   <button (click)="drawRandomNumber()" class="btn btn-primary">Draw</button>

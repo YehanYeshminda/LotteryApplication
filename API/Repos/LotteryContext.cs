@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using API.Repos.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos;
 
@@ -32,70 +29,173 @@ public partial class LotteryContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.Property(e => e.AccNo).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Amount).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Bank).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Branch).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.CashGivenDate).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.GivenMoneyId).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.PayOn).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.UserId).HasDefaultValueSql("'NULL'");
+            entity.ToTable("tblcashgiven");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AccNo)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Amount)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Bank)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Branch)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.CashGivenDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.GivenMoneyId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.PayOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<Tbllotteryno>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.Property(e => e.AddOn).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.AmountToPay).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.LotteryNo).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.LotteryStatus).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Paid).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.RaffleNo).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.UserId).HasDefaultValueSql("'NULL'");
+            entity.ToTable("tbllotterynos");
+
+            entity.HasIndex(e => new { e.RaffleNo, e.LotteryNo }, "Index_2").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.AmountToPay)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LotteryNo)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LotteryStatus)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("bit(1)");
+            entity.Property(e => e.Paid)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.RaffleNo)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<Tblmoneycredit>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.Property(e => e.Credit).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.MoneyCreditDate).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Paid).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.RaffleNo).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.UserId).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.WinNo).HasDefaultValueSql("'NULL'");
+            entity.ToTable("tblmoneycredit");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Credit)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.MoneyCreditDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Paid)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.RaffleNo)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.WinNo)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Tblraffle>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.Property(e => e.CustStatus).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.EndOn).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.RaffleDate).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.StartOn).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.TicketNo).HasDefaultValueSql("'NULL'");
+            entity.ToTable("tblraffle");
+
+            entity.Property(e => e.Id).HasColumnType("int(11) unsigned");
+            entity.Property(e => e.CustStatus)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("bit(1)");
+            entity.Property(e => e.EndOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.RaffleDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.RaffleName)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("raffleName");
+            entity.Property(e => e.StartOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.TicketNo)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<Tblregister>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.Property(e => e.AccountBalance).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.AddOn).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.AlternatePhone).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.ContactNo).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.CustAddress).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.CustName).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.CustPassword).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.CustStatus).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Email).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Hash).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Mobile).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Nic).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Otp).HasDefaultValueSql("'NULL'");
-            entity.Property(e => e.Photo).HasDefaultValueSql("'NULL'");
+            entity.ToTable("tblregister");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AccountBalance)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.AlternatePhone)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.ContactNo)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.CustAddress)
+                .HasMaxLength(400)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.CustName)
+                .HasMaxLength(300)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.CustPassword)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.CustStatus)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("bit(1)");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Hash)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Mobile)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Nic)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("NIC");
+            entity.Property(e => e.Otp)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("OTP");
+            entity.Property(e => e.Photo)
+                .HasMaxLength(500)
+                .HasDefaultValueSql("'NULL'");
         });
 
         OnModelCreatingPartial(modelBuilder);

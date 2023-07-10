@@ -6,7 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import { CoreModule } from 'src/app/core/core.module';
 import { EasyDrawComponent } from './components/easy-draw/easy-draw.component';
 import { MegaDrawComponent } from './components/mega-draw/mega-draw.component';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { MegaDrawComponent } from './components/mega-draw/mega-draw.component';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    CoreModule
+    CoreModule,
+    ModalModule.forRoot()
   ]
 })
 export class DashboardModule { }

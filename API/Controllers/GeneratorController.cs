@@ -167,11 +167,11 @@ namespace API.Controllers
             }
         }
         
-        [HttpPost("MegaDrawValues")]
+        [HttpGet("MegaDrawValues")]
         public async Task<ActionResult> MegaDrawGet(int until)
         {
             var arr = Enumerable.Range(1, until);
-            return this.Ok(new { arr });
+            return Ok(new { arr });
         }
 
         [HttpPost("VerifyMegaDraw")]

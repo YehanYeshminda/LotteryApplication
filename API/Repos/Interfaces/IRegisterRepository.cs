@@ -1,6 +1,4 @@
-﻿using API.Repos.Models;
-
-namespace API.Repos.Interfaces
+﻿namespace API.Repos.Interfaces
 {
     public interface IRegisterRepository
     {

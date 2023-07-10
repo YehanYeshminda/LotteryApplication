@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import {Store} from "@ngrx/store";
+import {AppState} from "../../reducer";
+import {logout} from "../../modules/dashboard/auth/features/auth.actions";
 
 @Component({
   selector: 'app-navbar',
@@ -7,15 +10,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  constructor(private router: Router) {}
-  
-  routeEasyDraw() {
-    console.log('hit routeEasyDraw');
-    this.router.navigateByUrl('/dashboard/easy-draw');
-  }
+  constructor(private router: Router, private store: Store<AppState>) {}
 
-  routeMegaDraw() {
-    console.log('hit routeEasyDraw');
-    this.router.navigateByUrl('/dashboard/mega-draw');
+  logOut() {
+    this.store.dispatch(logout());
   }
 }

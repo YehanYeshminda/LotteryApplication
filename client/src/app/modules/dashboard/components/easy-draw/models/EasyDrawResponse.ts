@@ -1,3 +1,3 @@
 export interface EasyDrawResponse {
-    numbers: number[];
+    result: number[];
 }

@@ -1,0 +1,78 @@
+.lottery-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.lottery-body li {
+  list-style-type: none;
+}
+
+.lottery-item {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  background: lightgreen;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lottery-item:hover {
+  cursor: pointer;
+  color: white;
+  background: #f56565;
+  border: 1px solid green;
+}
+
+.lottery-body-selected-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  list-style-type: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.lottery-body-selected-list li {
+  list-style-type: none;
+}
+
+.circle,
+.empty-circle {
+  width: 30px;
+  height: 30px;
+  border: 1px solid green;
+  font-weight: 500;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+
+.empty-circle {
+  margin-right: 5px;
+}
+
+.container-parent-mega-draw {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+
+.selected {
+  color: white;
+  background: #f56565;
+  border: 1px solid green;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}

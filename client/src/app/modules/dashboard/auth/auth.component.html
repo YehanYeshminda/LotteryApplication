@@ -7,17 +7,17 @@
       </div>
 
       <ng-container *ngIf="registerMode">
-  
+
         <div class="col-12">
           <app-input [formControl]="$any(form.controls['nic'])" [label]="'NIC'"></app-input>
         </div>
 
-  
+
         <div class="col-12">
           <app-input [formControl]="$any(form.controls['email'])" [label]="'Email'"></app-input>
         </div>
 
-  
+
         <div class="col-12">
           <app-input [formControl]="$any(form.controls['custAddress'])" [label]="'Address'"></app-input>
         </div>
@@ -36,7 +36,7 @@
                   </div>
 
                   <div class="col-2">
-                    <button (click)="sendOtp()" type="button" class="btn btn-primary w-100">OTP</button>
+                    <button (click)="sendOtp()" [disabled]="otpSent" type="button" class="btn btn-primary w-100" >OTP</button>
                   </div>
                 </div>
               </div>

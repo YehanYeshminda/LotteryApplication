@@ -1,7 +1,7 @@
 ﻿using API.Helpers;
+using API.Repos;
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
-using API.Repos.Models;
 using API.Repos.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -77,7 +77,7 @@ namespace API.Controllers
         }
 
         [HttpPost("SendOTP")]
-        public async Task<ActionResult> SendOTP(SendOtpDto sendOtpDto)
+        public async Task<ActionResult<int>> SendOTP(SendOtpDto sendOtpDto)
         {
             string secret = _twilioSettings.TWILIO_AUTH_TOKEN;
             string credential = _twilioSettings.TWILIO_ACCOUNT_SID;
@@ -96,7 +96,7 @@ namespace API.Controllers
                 string responseString = Encoding.UTF8.GetString(responseBytes);
             }
 
-            return Ok("OTP has been sent for the number: " + sendOtpDto.PhoneNumber);
+            return Ok(sendOtpDto.PhoneNumber);
         }
 
 

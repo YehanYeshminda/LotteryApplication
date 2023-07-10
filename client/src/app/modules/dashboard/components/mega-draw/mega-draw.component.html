@@ -1,0 +1,39 @@
+<div class="container-parent-mega-draw">
+  <div class="lottery-body-selected-parent">
+
+    <ul class="lottery-body-selected-list" *ngIf="(selectedItems$ | async) as items; else loadingTemplate">
+      <li *ngFor="let item of items">
+        <div class="circle">{{ item }}</div>
+      </li>
+      <li *ngIf="items.length < 6" class="empty-circle"></li>
+      <li *ngIf="items.length < 5" class="empty-circle"></li>
+      <li *ngIf="items.length < 4" class="empty-circle"></li>
+      <li *ngIf="items.length < 3" class="empty-circle"></li>
+      <li *ngIf="items.length < 2" class="empty-circle"></li>
+      <li *ngIf="items.length < 1" class="empty-circle"></li>
+    </ul>
+
+    <ng-template #loadingTemplate>
+      <li>Loading....</li>
+    </ng-template>
+  </div>
+
+<!--  <ul class="lottery-body">-->
+<!--    <li class="lottery-item" *ngFor="let item of (megaDrawNos$ | async)?.arr" (click)="selectDrawNumber(item)">-->
+<!--      {{ item }}-->
+<!--    </li>-->
+<!--  </ul>-->
+
+  <ul class="lottery-body">
+    <li class="lottery-item" *ngFor="let item of (megaDrawNos$ | async)?.arr"
+        [class.selected]="(selectedItems$ | async)?.includes(item)"
+        (click)="selectDrawNumber(item)">
+      {{ item }}
+    </li>
+  </ul>
+
+  <div class="btn-container">
+    <button class="btn btn-primary" (click)="makeMegaDraw()">Make Draw</button>
+    <button class="btn btn-primary" (click)="getRandomDraw()">Get Random Draw</button>
+  </div>
+</div>

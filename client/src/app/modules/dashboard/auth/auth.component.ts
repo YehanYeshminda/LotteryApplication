@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducer';
 import { AuthHttpService } from './services/auth-http.service';
-import { noop, tap } from 'rxjs';
+import {noop, Observable, of, tap} from 'rxjs';
 import { login } from './features/auth.actions';
 import { MakeLogin } from './models/user';
 import { OtpSend } from './models/auth';
@@ -17,6 +17,8 @@ import { OtpSend } from './models/auth';
 export class AuthComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   registerMode: boolean = false;
+  otpSent: boolean = false;
+  disabledTime: Observable<number> = of(0);
   constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService
   ) { }
 
@@ -76,6 +78,7 @@ export class AuthComponent implements OnInit {
   sendOtp() {
     if (this.form.controls['mobile'].invalid) {
       console.error("Missing Mobile Number!")
+      return;
     }
 
     const values: OtpSend = {
@@ -85,7 +88,11 @@ export class AuthComponent implements OnInit {
 
     this.authService.sendOtp(values).subscribe({
       next: response => {
-        console.log(response);
+        this.otpSent = true;
+        setTimeout(() => {
+          this.otpSent = false;
+          this.disabledTime = of(0);
+        }, 50000);
       }
     })
   }

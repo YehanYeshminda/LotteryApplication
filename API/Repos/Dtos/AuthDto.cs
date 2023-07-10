@@ -2,6 +2,6 @@
 {
     public class AuthDto
     {
-        public string Hash { get; set; }
+        public string? Hash { get; set; }
     }
 }
