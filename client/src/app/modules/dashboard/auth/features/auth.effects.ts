@@ -11,7 +11,7 @@ export class AuthEffects {
 			this.actions$.pipe(
 				ofType(AuthActions.login),
 				tap((action) =>
-					localStorage.setItem('user', JSON.stringify(action.user))
+					sessionStorage.setItem('user', JSON.stringify(action.user))
 				)
 			),
 		{ dispatch: false }
@@ -22,7 +22,7 @@ export class AuthEffects {
 			this.actions$.pipe(
 				ofType(AuthActions.logout),
 				tap((action) => {
-					localStorage.removeItem('user');
+					sessionStorage.removeItem('user');
 					this.router.navigateByUrl('/products');
 				})
 			),
