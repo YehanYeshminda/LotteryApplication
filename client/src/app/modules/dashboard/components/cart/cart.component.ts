@@ -10,6 +10,7 @@ import {Observable, of} from "rxjs";
 })
 export class CartComponent implements OnInit {
   cartItems: Observable<Cart[]> = of([]);
+  total = 0;
 
   constructor(private cartService: CartHttpService) {}
 
@@ -25,5 +26,9 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.cartItems = this.cartService.getCartItems();
+  }
+
+  getTotal(): Observable<number> {
+    return this.cartService.getTotal();
   }
 }

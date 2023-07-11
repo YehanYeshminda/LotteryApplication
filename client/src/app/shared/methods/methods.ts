@@ -1,10 +1,8 @@
 import {AuthDetails} from "../models/auth";
 
-export function getAuthDetails(): AuthDetails | null {
-  const user = sessionStorage.getItem('user');
-
-  if (user) {
-    return JSON.parse(user);
+export function getAuthDetails(cookieData: string): AuthDetails | null {
+  if (cookieData) {
+    return JSON.parse(cookieData);
   }
 
   return null;

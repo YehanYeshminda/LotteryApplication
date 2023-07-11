@@ -1,0 +1,5 @@
+<div class="container">
+  <div class="col-md-5 mb-2" *ngIf="cartHttpService.getTotal() | async as payment">
+    <button (click)="makePayment(payment)" class="btn btn-danger btn-block">Pay ${{ payment }}</button>
+  </div>
+</div>

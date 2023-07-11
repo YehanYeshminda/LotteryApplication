@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
-import { Observable, of } from 'rxjs';
-import { getAuthDetails } from '../../../../shared/methods/methods';
 import { EasyDrawResponse } from './models/EasyDrawResponse';
 import { CartHttpService } from '../cart/services/cart-http.service';
 import { Cart } from '../cart/models/cart';
+import {CookieService} from "ngx-cookie-service";
+import {getAuthDetails} from "../../../../shared/methods/methods";
 
 @Component({
   selector: 'app-easy-draw',
@@ -17,11 +17,12 @@ export class EasyDrawComponent {
 
   constructor(
     private easyDrawHttpService: EasyDrawHttpService,
-    private cartHttpService: CartHttpService
+    private cartHttpService: CartHttpService,
+    private cookieService: CookieService
   ) {}
 
   drawRandomNumber() {
-    const authDetails = getAuthDetails();
+    const authDetails = getAuthDetails(this.cookieService.get('user'));
 
     if (authDetails) {
       this.easyDrawHttpService.getEasyDrawNumbers(authDetails).subscribe((response: EasyDrawResponse) => {

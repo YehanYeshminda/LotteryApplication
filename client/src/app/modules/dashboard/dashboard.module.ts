@@ -8,6 +8,7 @@ import { EasyDrawComponent } from './components/easy-draw/easy-draw.component';
 import { MegaDrawComponent } from './components/mega-draw/mega-draw.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CartComponent } from './components/cart/cart.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { CartComponent } from './components/cart/cart.component';
     DashboardComponent,
     EasyDrawComponent,
     MegaDrawComponent,
-    CartComponent
+    CartComponent,
+    PaymentComponent
   ],
   imports: [
     CommonModule,

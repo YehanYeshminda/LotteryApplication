@@ -13,7 +13,8 @@ import {Cart} from "../../modules/dashboard/components/cart/models/cart";
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  cartItemsCount$: Observable<Cart[]> = of([]);
+  cartItemsCount$: Observable<Cart[]> = this.cartHttpService.getCartItems();
+
   constructor(private router: Router, private store: Store<AppState>, private cartHttpService: CartHttpService) {}
 
   logOut() {
