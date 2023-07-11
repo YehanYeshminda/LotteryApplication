@@ -15,7 +15,7 @@ namespace API.Controllers
             _lotteryContext = lotteryContext;
         }
 
-        [HttpPost]
+        [HttpPost("EasyDraw")]
         public async Task<ActionResult> CreateEasyDraw(CreateEasyDrawDto createEasyDrawDto)
         {
             if (createEasyDrawDto == null)

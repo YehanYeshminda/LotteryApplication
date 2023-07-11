@@ -3,12 +3,18 @@
   </div>
 
   <div class="col-12">
-    <ul *ngIf="(numbers$ | async) as number" class="item-container">
-      <li class="item-list-container" *ngFor="let item of number.result">
+    <ul class="item-container">
+      <li class="item-list-container" *ngFor="let item of latestNumbers">
         {{ item }}
       </li>
     </ul>
   </div>
 
-  <button (click)="drawRandomNumber()" class="btn btn-primary">Draw</button>
+    <div class="col-6">
+      <button (click)="drawRandomNumber()" type="button" class="btn btn-primary">Draw</button>
+    </div>
+</div>
+
+<div class="col-6">
+  <button class="btn btn-primary" type="button" (click)="addToCart()" *ngIf="drawExecuted">Add to cart</button>
 </div>

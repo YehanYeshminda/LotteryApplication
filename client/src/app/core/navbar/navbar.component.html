@@ -1,21 +1,25 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand">Navbar</a>
+      <a class="navbar-brand">Lottery Application</a>
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard">Home</a>
+            <a class="nav-link" routerLinkActive="active" routerLink="/dashboard">Home</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard/easy-draw">Easy Draw</a>
+            <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/easy-draw">Easy Draw</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard/mega-draw">Mega Draw</a>
+            <a class="nav-link" routerLinkActive="active" routerLink="/dashboard/mega-draw">Mega Draw</a>
           </li>
         </ul>
 
       <button (click)="logOut()" class="btn btn-primary">LogOut</button>
+      <button class="btn btn-primary" routerLink="/dashboard/cart">
+        <span class="badge badge-danger">{{ (cartItemsCount$ | async)?.length }}</span>
+        <i class="fa fa-cart-shopping"></i>
+      </button>
     </div>
   </nav>
