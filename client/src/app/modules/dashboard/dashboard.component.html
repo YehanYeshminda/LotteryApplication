@@ -6,6 +6,11 @@
     </ol>
   </nav>
 
+   <ng-container *ngIf="loading">
+     <app-spash-screen [loading]="loadingValue"></app-spash-screen>
+   </ng-container>
 
-  <router-outlet></router-outlet>
+   <ng-container *ngIf="!loading">
+     <router-outlet></router-outlet>
+   </ng-container>
 </div>

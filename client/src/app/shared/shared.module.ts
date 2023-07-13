@@ -9,6 +9,6 @@ import { UiModule } from './ui/ui.module';
   imports: [
     CommonModule,
     UiModule
-  ]
+  ],
 })
 export class SharedModule { }

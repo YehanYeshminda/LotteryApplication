@@ -1,0 +1,74 @@
+.custom-padding {
+  padding: 100px;
+}
+
+img.custom-logo-main {
+  width: 376px;
+  height: 376px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-logo-main {
+  z-index: 1;
+}
+
+.main-image {  
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+  justify-content: center;
+  align-items: center;
+}
+
+.money1-custom-class {
+  position: absolute;
+  z-index: 1;
+  top: 250px;
+  left: 230px;
+}
+
+.money2-custom-class {
+  position: absolute;
+  z-index: 1;
+  top: 280px;
+  left: 150px;
+}
+
+.money3-custom-class {
+  position: absolute;
+  z-index: 0;
+  top: 255px;
+  right: 255px;
+}
+
+.money4-custom-class {
+  position: absolute;
+  z-index: 0;
+  left: 240px;
+  bottom: 280px;
+}
+
+.money5-custom-class {
+  position: absolute;
+  z-index: 0;
+  left: 120px;
+  bottom: 280px;
+}
+
+.money6-custom-class {
+  position: absolute;
+  z-index: 0;
+  right: 300px;
+  bottom: 270px;
+}

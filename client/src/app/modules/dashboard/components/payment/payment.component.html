@@ -1,5 +1,12 @@
-<div class="container">
-  <div class="col-md-5 mb-2" *ngIf="cartHttpService.getTotal() | async as payment">
-    <button (click)="makePayment(payment)" class="btn btn-danger btn-block">Pay ${{ payment }}</button>
-  </div>
+<h2>Collection Payment Intent</h2>
+<div [formGroup]="stripeTest">
+  <input formControlName="name" />
+  <input formControlName="amount" />
+  <ngx-stripe-card
+    [options]="cardOptions"
+    [elementsOptions]="elementsOptions"
+  ></ngx-stripe-card>
+  <button type="submit" (click)="pay()">
+    PAY
+  </button>
 </div>

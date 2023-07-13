@@ -1,0 +1,115 @@
+/* Extra */
+$primary: #fff;
+$secondary: #ccc;
+$ternary: #272727;
+$dark: #444444;
+$cart-badge-color: white;
+
+body {
+  background: $secondary;
+  color: $ternary;
+  font-size: 14px;
+  margin: 0;
+
+}
+
+.logo img {
+    width: 79px;
+    height: 79px;
+    flex-shrink: 0;
+}
+
+.navbar {
+  align-items: center;
+  background: $primary;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: row;
+  font-family: sans-serif;
+  padding: 10px 50px;
+}
+
+.push-left {
+  margin-left: auto;
+}
+
+.show-cart-in-sm {
+    display: none;
+
+    @media screen and (max-width: 575px) {
+        position: relative;
+        display: block;
+        margin-left: 30px;
+    }
+}
+
+.show-cart-in-sm-btn {
+  display: none;
+
+    @media screen and (max-width: 575px) {
+        position: relative;
+        display: block;
+    }
+}
+
+.fa-cart-plus {
+  font-size: 24px;
+}
+
+.show-cart-in-md {
+    margin-right: 10px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+
+
+    @media screen and (max-width: 575px) {
+      display: none;
+  }
+}
+
+.cart-btn {
+  position: relative;
+}
+
+.cart-badge h3 {
+  position: absolute;
+  color: $cart-badge-color;
+  background: red;
+  border-radius: 20px;
+  width: 22px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: bolder;
+  left: 30px;
+  bottom: 15px;
+}
+
+.btn {
+  outline: none;
+}
+
+.logout-btn {
+  border: 1px solid blue;
+  border-radius: 5px;
+  background: blue;
+  color: white;
+  width: 80px;
+  height: 40px;
+  text-align: center;
+}
+
+.logout-btn:hover {
+  background: white;
+  color: blue;
+  cursor: pointer;
+}
+
+.navbar {
+  background: #63D7FC;
+}

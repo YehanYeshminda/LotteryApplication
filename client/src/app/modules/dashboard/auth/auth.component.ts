@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/reducer';
 import { AuthHttpService } from './services/auth-http.service';
-import {noop, Observable, of, tap} from 'rxjs';
+import { noop, Observable, of, tap } from 'rxjs';
 import { login } from './features/auth.actions';
 import { MakeLogin } from './models/user';
 import { OtpSend } from './models/auth';
+import { errorNotification } from 'src/app/shared/alerts/sweetalert';
 
 @Component({
   selector: 'app-auth',
@@ -67,7 +68,9 @@ export class AuthComponent implements OnInit {
           )
           .subscribe({
             next: noop,
-            error: () => alert('Login Failed')
+            error: (error) => {
+              errorNotification(error.error);
+            }
           });
       } else {
         this.router.navigate(['/dashboard']);

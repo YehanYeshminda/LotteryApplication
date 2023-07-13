@@ -17,6 +17,7 @@ builder.Services.AddScoped<IAccountRepository, AccountService>();
 builder.Services.AddSingleton<GlobalDataService>();
 builder.Services.AddOptions();
 builder.Services.Configure<TwillioSettings>(builder.Configuration.GetSection("Twilio"));
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
