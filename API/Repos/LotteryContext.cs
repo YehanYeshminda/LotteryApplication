@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using API.API.Repos.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos;
 
@@ -22,6 +25,10 @@ public partial class LotteryContext : DbContext
     public virtual DbSet<Tblraffle> Tblraffles { get; set; }
 
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySQL("Server=127.0.0.1;port=3306;database=lottery;uid=root;pwd=123;Convert Zero Datetime=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -137,12 +144,15 @@ public partial class LotteryContext : DbContext
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnName("raffleName");
+            entity.Property(e => e.RafflePrice)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(11) unsigned");
             entity.Property(e => e.StartOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
             entity.Property(e => e.TicketNo)
                 .HasDefaultValueSql("'NULL'")
-                .HasColumnType("int(11)");
+                .HasColumnType("int(11) unsigned");
         });
 
         modelBuilder.Entity<Tblregister>(entity =>

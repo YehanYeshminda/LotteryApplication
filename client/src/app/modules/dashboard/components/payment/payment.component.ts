@@ -1,12 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
 import { errorNotification, successNotification } from "../../../../shared/alerts/sweetalert";
 import { CartHttpService } from "../cart/services/cart-http.service";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Appearance, PaymentIntent, StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
 import { StripeCardComponent, StripeService } from 'ngx-stripe';
 import { HttpClient } from '@angular/common/http';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { getAuthDetails } from 'src/app/shared/methods/methods';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthDetails } from 'src/app/shared/models/auth';
+import { Cart, CartReponse } from '../cart/models/cart';
 
 @Component({
   selector: 'app-payment',
@@ -15,6 +19,10 @@ import { environment } from 'src/environments/environment.development';
 })
 export class PaymentComponent {
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
+  authInformartion: AuthDetails | null = null;
+  totalAmountPay: Observable<number> = of(0);
+  amount: number = 0;
+  cartItems: Observable<CartReponse[]> = of([]);
 
   cardOptions: StripeCardElementOptions = {
     style: {
@@ -25,41 +33,56 @@ export class PaymentComponent {
         fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
         fontSize: '18px',
         '::placeholder': {
-          color: '#CFD7E0',
+          color: 'lightblack',
         },
       },
     },
   };
 
   elementsOptions: StripeElementsOptions = {
-    locale: 'es',
+    locale: 'en',
+    loader: 'always',
   };
 
-  stripeTest!: FormGroup;
+  stripePayment!: FormGroup;
 
   constructor(
     private http: HttpClient,
     private fb: FormBuilder,
-    private stripeService: StripeService
+    private stripeService: StripeService,
+    private cookieService: CookieService,
+    private cartHttpService: CartHttpService,
   ) { }
 
   ngOnInit(): void {
-    this.stripeTest = this.fb.group({
-      name: ['Angular v10', []],
-      amount: [500, []],
-    });
+    if (getAuthDetails(this.cookieService.get('user')) != null) {
+      this.cartItems = this.cartHttpService.getCartItems(getAuthDetails(this.cookieService.get('user')));
+      this.authInformartion = getAuthDetails(this.cookieService.get('user'));
+      this.totalAmountPay = this.cartHttpService.getTotal()
+
+      this.stripePayment = this.fb.group({
+        name: [this.authInformartion?.username, []],
+        amount: [this.cartHttpService.getTotal(), []],
+      });
+
+      this.cartHttpService.getTotal().subscribe({
+        next: respose => {
+          this.amount = respose;
+        }
+      });
+    }
   }
 
   pay(): void {
-    if (this.stripeTest.valid) {
-      this.createPaymentIntent(this.stripeTest.get('amount')?.value)
+    if (this.stripePayment.valid) {
+      this.createPaymentIntent(this.amount)
         .pipe(
           switchMap((pi) =>
             this.stripeService.confirmCardPayment(pi.clientSecret, {
               payment_method: {
                 card: this.card.element,
                 billing_details: {
-                  name: this.stripeTest.get('name')?.value,
+                  name: this.stripePayment.get('name')?.value,
                 },
               },
             })
@@ -101,7 +124,7 @@ export class PaymentComponent {
           }
         });
     } else {
-      console.log(this.stripeTest);
+      console.log(this.stripePayment);
     }
   }
 
@@ -110,5 +133,9 @@ export class PaymentComponent {
       `${environment.apiUrl}payment/create-payment-intent`,
       { amount }
     );
+  }
+
+  getTotal(): Observable<number> {
+    return this.cartHttpService.getTotal();
   }
 }

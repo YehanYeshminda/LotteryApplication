@@ -1,4 +1,7 @@
-﻿namespace API.Repos;
+﻿using System;
+using System.Collections.Generic;
+
+namespace API.API.Repos.Models;
 
 public partial class Tblraffle
 {
@@ -12,7 +15,9 @@ public partial class Tblraffle
 
     public ulong? CustStatus { get; set; }
 
-    public int? TicketNo { get; set; }
+    public uint? TicketNo { get; set; }
 
     public string? RaffleName { get; set; }
+
+    public uint? RafflePrice { get; set; }
 }

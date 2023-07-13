@@ -15,7 +15,16 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { NgxStripeModule } from 'ngx-stripe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EntityDataService, EntityDefinitionService, EntityMetadataMap } from '@ngrx/data';
+import { CartEntityService } from './components/cart/services/cart-entity.service';
+import { CartHttpService } from './components/cart/services/cart-http.service';
+import { CartResolver } from './components/cart/resolver/cart.resolver';
+import { CartDataService } from './components/cart/services/cart-data.service';
 
+
+const entityMetaData: EntityMetadataMap = {
+  Cart: {},
+}
 
 @NgModule({
   declarations: [
@@ -38,9 +47,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ],
+  providers: [
+    CartEntityService,
+    CartHttpService,
+    CartResolver,
+    CartDataService
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
-export class DashboardModule { }
+export class DashboardModule {
+  constructor(private eds: EntityDefinitionService, private entityDataService: EntityDataService, private cartDataService: CartDataService) {
+    eds.registerMetadataMap(entityMetaData);
+    entityDataService.registerService("Cart", cartDataService);
+  }
+}
 
 

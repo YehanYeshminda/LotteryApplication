@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {CartHttpService} from "./services/cart-http.service";
-import {Cart} from "./models/cart";
-import {Observable, of} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { CartHttpService } from "./services/cart-http.service";
+import { Cart, CartReponse } from "./models/cart";
+import { Observable, of } from "rxjs";
+import { getAuthDetails } from 'src/app/shared/methods/methods';
+import { CookieService } from 'ngx-cookie-service';
+import { errorNotification } from 'src/app/shared/alerts/sweetalert';
+import { CartEntityService } from './services/cart-entity.service';
 
 @Component({
   selector: 'app-cart',
@@ -9,26 +13,32 @@ import {Observable, of} from "rxjs";
   styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
-  cartItems: Observable<Cart[]> = of([]);
+  cartItems: Observable<CartReponse[]> = of([]);
   total = 0;
 
-  constructor(private cartService: CartHttpService) {}
+  constructor(private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
-  removeCartItem(item: Cart): void {
-    this.cartService.removeFromCart(item);
-    this.cartItems = this.cartService.getCartItems();
+  removeCartItem(item: CartReponse): void {
+    if (getAuthDetails(this.cookieService.get('user')) != null) {
+      // this.cartService.removeFromCart(item);
+      // this.cartItems = this.cartService.getCartItems(getAuthDetails(this.cookieService.get('user')));
+    } else {
+      errorNotification('Please login to remove from cart');
+    }
   }
 
-  clearCart(): void {
-    this.cartService.clearCart();
-    this.cartItems = this.cartService.getCartItems();
-  }
+  // clearCart(): void {
+  //   this.cartService.clearCart();
+  //   this.cartItems = this.cartService.getCartItems();
+  // }
 
   ngOnInit(): void {
-    this.cartItems = this.cartService.getCartItems();
+    if (getAuthDetails(this.cookieService.get('user')) != null) {
+      this.cartItems = this.cartEntityService.entities$;
+    }
   }
 
   getTotal(): Observable<number> {
-    return this.cartService.getTotal();
+    return of(0);
   }
 }

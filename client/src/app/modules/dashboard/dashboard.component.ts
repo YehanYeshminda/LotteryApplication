@@ -17,8 +17,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.routerState$ = this.store.pipe(select('router'));
-    this.loading = true;
-    this.startLoading();
+    this.loading = false;
+    // this.startLoading();
   }
 
   setDelayedLoadingValue(value: number, delay: number): void {

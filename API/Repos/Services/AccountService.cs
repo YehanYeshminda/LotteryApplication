@@ -1,4 +1,5 @@
-﻿using API.Helpers;
+﻿using API.API.Repos.Models;
+using API.Helpers;
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
 using System.Globalization;

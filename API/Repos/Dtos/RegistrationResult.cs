@@ -1,4 +1,6 @@
-﻿namespace API.Repos.Dtos
+﻿using API.API.Repos.Models;
+
+namespace API.Repos.Dtos
 {
     public class RegistrationResult
     {

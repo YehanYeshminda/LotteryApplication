@@ -1,4 +1,5 @@
-﻿using API.Helpers;
+﻿using API.API.Repos.Models;
+using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -64,7 +65,7 @@ namespace API.Controllers
                         StartOn = createEasyDrawDto.StartOn,
                         EndOn = createEasyDrawDto.EndOn,
                         CustStatus = createEasyDrawDto.CustStatus,
-                        TicketNo = createEasyDrawDto.TicketNo,
+                        TicketNo = (uint?)createEasyDrawDto.TicketNo,
                         RaffleName = createEasyDrawDto.RaffleName
                     };
 

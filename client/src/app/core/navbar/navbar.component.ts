@@ -5,7 +5,10 @@ import { AppState } from "../../reducer";
 import { logout } from "../../modules/dashboard/auth/features/auth.actions";
 import { CartHttpService } from "../../modules/dashboard/components/cart/services/cart-http.service";
 import { Observable, of } from "rxjs";
-import { Cart } from "../../modules/dashboard/components/cart/models/cart";
+import { Cart, CartReponse } from "../../modules/dashboard/components/cart/models/cart";
+import { getAuthDetails } from 'src/app/shared/methods/methods';
+import { CookieService } from 'ngx-cookie-service';
+import { CartEntityService } from 'src/app/modules/dashboard/components/cart/services/cart-entity.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,18 +16,21 @@ import { Cart } from "../../modules/dashboard/components/cart/models/cart";
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  cartItemsCount$: Observable<Cart[]> = this.cartHttpService.getCartItems();
   isMenuActive = false;
   navbarCollapsed = true;
+  cartNo: number = 0;
+  cartItems$: Observable<CartReponse[]> = of([]);
 
-  constructor(private router: Router, private store: Store<AppState>, private cartHttpService: CartHttpService) { }
+  constructor(private router: Router, private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService) { }
 
   logOut() {
     this.store.dispatch(logout());
   }
 
   ngOnInit(): void {
-    this.cartItemsCount$ = this.cartHttpService.getCartItems();
+    if (getAuthDetails(this.cookieService.get('user')) != null) {
+      this.cartItems$ = this.cartEntityService.entities$;
+    }
   }
 
 

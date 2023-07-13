@@ -1,38 +1,34 @@
 import { Injectable } from '@angular/core';
-import {Cart} from "../models/cart";
-import {Observable, of} from "rxjs";
-import {errorNotification, successNotification} from "../../../../../shared/alerts/sweetalert";
+import { Cart, CartReponse } from "../models/cart";
+import { Observable, of } from "rxjs";
+import { errorNotification, successNotification } from "../../../../../shared/alerts/sweetalert";
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.development';
+import { AuthDetails } from 'src/app/shared/models/auth';
+
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartHttpService {
   private cartItems: Cart[] = [];
+  baseUrl: string = environment.apiUrl;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const storedCartItems = sessionStorage.getItem('cartItems');
     if (storedCartItems) {
       this.cartItems = JSON.parse(storedCartItems);
     }
   }
 
-  addToCart(item: Cart): void {
-    if (this.cartItems.find(cartItem => cartItem.numbers === item.numbers)) {
-      errorNotification('Lottery already in cart!');
-      return;
-    }
-
-    this.cartItems.push(item);
-    successNotification(`Lottery added to cart with ${item.numbers} and ${item.price} price!`);
-    this.saveCartItems();
+  addToCart(item: Cart): Observable<CartReponse> {
+    return this.http.post<CartReponse>(this.baseUrl + "Cart/AddToCart", item)
   }
 
-  getCartItems(): Observable<Cart[]> {
-    return of(this.cartItems);
-  }
-
-  getCartItemById(id: number): Cart | undefined {
-    return this.cartItems.find(item => item.id === id);
+  getCartItems(auth: AuthDetails | null): Observable<CartReponse[]> {
+    return this.http.post<CartReponse[]>(this.baseUrl + "Cart/GetCartItems", auth)
   }
 
   removeFromCart(item: any): void {

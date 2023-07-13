@@ -1,4 +1,7 @@
-﻿namespace API.Repos;
+﻿using System;
+using System.Collections.Generic;
+
+namespace API.API.Repos.Models;
 
 public partial class Tblcashgiven
 {

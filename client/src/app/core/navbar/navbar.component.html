@@ -20,7 +20,7 @@
     <div class="show-cart-in-sm">
       <div class="cart-btn" routerLink="/dashboard/cart">
         <span class="cart-badge">
-          <h3>{{ (cartItemsCount$ | async)?.length }}</h3>
+          <h3>{{ (cartItems$ | async)?.length }}</h3>
         </span>
         <button class="btn btn-default">
           <i class="fa fa-cart-plus" aria-hidden="true"></i>
@@ -49,7 +49,7 @@
       <div class="show-cart-in-md">
         <div class="cart-btn" routerLink="/dashboard/cart">
           <span class="cart-badge">
-            <h3>{{ (cartItemsCount$ | async)?.length }}</h3>
+            <h3>{{ (cartItems$ | async)?.length }}</h3>
           </span>
           <button class="btn btn-default">
             <i class="fa fa-cart-plus" aria-hidden="true"></i>
