@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
 import { EasyDrawResponse } from './models/EasyDrawResponse';
-import { CartHttpService } from '../cart/services/cart-http.service';
-import { Cart, CartReponse } from '../cart/models/cart';
+import { CartReponse } from '../cart/models/cart';
 import { CookieService } from "ngx-cookie-service";
 import { getAuthDetails } from "../../../../shared/methods/methods";
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';

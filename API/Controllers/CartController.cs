@@ -22,6 +22,11 @@ namespace API.Controllers
             public AuthDto AuthDto { get; set; }
             public List<int> CartNumbers { get; set; }
             public int RaffleId { get; set; }
+            public int UserId { get; set; }
+            public int LotteryStatus { get; set; } = 0;
+            public string Name { get; set; }
+            public decimal Paid { get; set; }
+            public decimal Price { get; set; }
         }
 
 
@@ -67,10 +72,10 @@ namespace API.Controllers
                     var lotteryNo = new Tbllotteryno
                     {
                         AddOn = DateTime.UtcNow,
-                        AmountToPay = 0,
-                        Paid = 0,
+                        AmountToPay = addToCartDto.Price,
+                        Paid = addToCartDto.Paid,
                         RaffleNo = addToCartDto.RaffleId.ToString(),
-                        LotteryStatus = 0,
+                        LotteryStatus = (ulong?)addToCartDto.LotteryStatus,
                         UserId = _user.Id,
                         LotteryNo = convertedNumbers,
                     };
@@ -82,8 +87,8 @@ namespace API.Controllers
                     {
                         Id = lotteryNo.Id,
                         AddOn = DateTime.UtcNow,
-                        AmountToPay = 0,
-                        Paid = 0,
+                        AmountToPay = addToCartDto.Price,
+                        Paid = addToCartDto.Paid,
                         RaffleNo = addToCartDto.RaffleId.ToString(),
                         LotteryStatus = 0,
                         UserId = _user.Id,
@@ -136,6 +141,60 @@ namespace API.Controllers
                 }
 
                 return Ok(items);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        public class DeleteCartDto
+        {
+            public AuthDto AuthDto { get; set; }
+            public int LotteryId { get; set; }
+        }
+
+        [HttpPost("DeleteFromCart")]
+        public async Task<IActionResult> DeleteFromCart(DeleteCartDto deleteCartDto)
+        {
+
+            if (deleteCartDto.AuthDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(deleteCartDto.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == deleteCartDto.AuthDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var item = await _lotteryContext.Tbllotterynos.FirstOrDefaultAsync(x => x.Id == deleteCartDto.LotteryId && x.UserId == _user.Id);
+
+                    if (item == null)
+                    {
+                        return BadRequest("Item does not exist!");
+                    }
+
+                    _lotteryContext.Remove(item);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occured while deleting cart item! " + ex.Message);
+                }
             }
             else
             {

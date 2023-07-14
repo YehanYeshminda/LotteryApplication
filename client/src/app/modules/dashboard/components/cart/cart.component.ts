@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CartHttpService } from "./services/cart-http.service";
-import { Cart, CartReponse } from "./models/cart";
+import { CartReponse } from "./models/cart";
 import { Observable, of } from "rxjs";
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
@@ -20,17 +19,21 @@ export class CartComponent implements OnInit {
 
   removeCartItem(item: CartReponse): void {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
-      // this.cartService.removeFromCart(item);
-      // this.cartItems = this.cartService.getCartItems(getAuthDetails(this.cookieService.get('user')));
+      if (!item) return;
+      const itemId: string | number = item.id || '';
+      this.cartEntityService.delete(itemId).subscribe({
+        next: (response) => {
+          console.log(response);
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      }
+      );
     } else {
       errorNotification('Please login to remove from cart');
     }
   }
-
-  // clearCart(): void {
-  //   this.cartService.clearCart();
-  //   this.cartItems = this.cartService.getCartItems();
-  // }
 
   ngOnInit(): void {
     if (getAuthDetails(this.cookieService.get('user')) != null) {

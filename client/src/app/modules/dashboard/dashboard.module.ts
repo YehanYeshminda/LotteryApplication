@@ -23,7 +23,12 @@ import { CartDataService } from './components/cart/services/cart-data.service';
 
 
 const entityMetaData: EntityMetadataMap = {
-  Cart: {},
+  Cart: {
+    entityDispatcherOptions: {
+      optimisticDelete: true,
+      optimisticUpdate: true
+    }
+  },
 }
 
 @NgModule({

@@ -17,6 +17,7 @@ export interface CartReponse {
     price: number
     paid: number
     lotteryStatus: number
+    lotteryNo?: number[]
     name: string
     cartNumbers: number[]
     authDto?: AuthDetails | null;

@@ -3,7 +3,7 @@
   <ng-container *ngIf="(cartItems | async) as items">
     <li *ngFor="let item of items">
       <div class="Items">
-        {{item.name}} - {{item.paid | currency:'USD'}} - {{ item.cartNumbers }}
+        Raffle No: {{item.raffleNo}} | Amount Paid: {{item.paid | currency:'USD'}} | Cart Numbers: {{ item.lotteryNo }}
         <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button>
       </div>
     </li>
