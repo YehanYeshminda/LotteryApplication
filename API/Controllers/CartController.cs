@@ -4,7 +4,6 @@ using API.Repos;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static API.Controllers.CartController;
 
 namespace API.Controllers
 {
@@ -66,7 +65,7 @@ namespace API.Controllers
 
                     if (existingLotteryValue != null)
                     {
-                        return BadRequest("Lottery Number Already Exists");
+                        return BadRequest("Lottery number already exists!");
                     }
 
                     var lotteryNo = new Tbllotteryno

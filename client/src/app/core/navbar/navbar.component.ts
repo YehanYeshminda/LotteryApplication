@@ -1,14 +1,14 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducer";
-import { logout } from "../../modules/dashboard/auth/features/auth.actions";
-import { CartHttpService } from "../../modules/dashboard/components/cart/services/cart-http.service";
+import { logout, clearEntityCache } from "../../modules/dashboard/auth/features/auth.actions";
 import { Observable, of } from "rxjs";
-import { Cart, CartReponse } from "../../modules/dashboard/components/cart/models/cart";
+import { CartReponse } from "../../modules/dashboard/components/cart/models/cart";
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { CartEntityService } from 'src/app/modules/dashboard/components/cart/services/cart-entity.service';
+import { clearCartEntities } from 'src/app/modules/dashboard/components/cart/features/cart.action';
 
 @Component({
   selector: 'app-navbar',
@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit {
 
   logOut() {
     this.store.dispatch(logout());
+    this.cartEntityService.clearCache();
   }
 
   ngOnInit(): void {

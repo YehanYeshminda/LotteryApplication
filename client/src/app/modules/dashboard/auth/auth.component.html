@@ -60,14 +60,14 @@
 
       <div class="col-12 justify-content-center align-items-center d-flex flex-column mt-2">
         <ng-container *ngIf="!registerMode">
-          <button class="btn btn-primary w-50" (click)="onSubmit()">Login</button>
+          <button [disabled]="isDisabled || form.invalid" class="btn btn-primary w-50" (click)="onSubmit()">Login</button>
           <p>Don't have an Account?
             <span (click)="toggleRegisterMode()" class="link-danger">Register</span>
           </p>
         </ng-container>
 
         <ng-container *ngIf="registerMode">
-          <button class="btn btn-primary w-50" (click)="onSubmit()">Register</button>
+          <button [disabled]="isDisabled || form.invalid" class="btn btn-primary w-50" (click)="onSubmit()">Register</button>
           <p>Already have an Account? <span (click)="toggleRegisterMode()" class="link-danger">Login</span> </p>
         </ng-container>
       </div>

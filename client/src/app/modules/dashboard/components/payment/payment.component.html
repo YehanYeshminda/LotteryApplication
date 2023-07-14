@@ -14,10 +14,10 @@
     <div class="col-12 mb-4">
      <div class="row box-right">
       <div class="col-md-8 ps-0">
-       <p class="ps-3 textmuted fw-bold h6 mb-0">TOTAL TO PAY</p> <p class="h1 fw-bold d-flex"> <span class="fas fa-dollar-sign textmuted pe-1 h6 align-text-top mt-1"></span>{{ totalAmountPay | async }}</p>
+       <p class="ps-3 textmuted fw-bold h6 mb-0">TOTAL TO PAY</p> <p class="h1 fw-bold d-flex"> <span class="fas fa-dollar-sign textmuted pe-1 h6 align-text-top mt-1"></span>{{ total }}</p>
       </div>
       <div class="col-md-4">
-       <p class="p-blue"> <span class="fas fa-circle pe-2"></span>Pending </p> <p class="fw-bold mb-3"><span class="fas fa-dollar-sign pe-1"></span>{{ totalAmountPay | async }} </p> <p class="p-org"> </p
+       <p class="p-blue"> <span class="fas fa-circle pe-2"></span>Pending </p> <p class="fw-bold mb-3"><span class="fas fa-dollar-sign pe-1"></span>{{ total }} </p> <p class="p-org"> </p
       ></div>
      </div>
     </div>
@@ -38,10 +38,10 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container *ngFor="let item of cartItems | async">
+            <ng-container *ngFor="let item of cartItems$ | async">
               <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.cartNumbers }}</td>
+                <td>{{ item.raffleNo }}</td>
+                <td>{{ item.lotteryNo }}</td>
                 <td><span class="fas fa-dollar-sign"></span>{{ item.paid }}</td>
                 <td><span class="fas fa-dollar-sign"></span>{{ item.paid }}</td>
               </tr>
@@ -50,13 +50,13 @@
           <tfoot>
             <tr>
               <td colspan="3" class="fw-bolder">Grand Total</td>
-              <td class="fw-bolder"><span class="fas fa-dollar-sign"></span>{{ getTotal() | async }}</td>
+              <td class="fw-bolder"><span class="fas fa-dollar-sign"></span>{{ total }}</td>
             </tr>
           </tfoot>
         </table>
      </div>
      <div class="d-flex h7 mb-2">
-      <p class="fw-bolder">Total Amount</p> <p class="ms-auto fw-bolder"><span class="fas fa-dollar-sign"></span>{{ getTotal() | async }}</p>
+      <p class="fw-bolder">Total Amount</p> <p class="ms-auto fw-bolder"><span class="fas fa-dollar-sign"></span>{{ total }}</p>
      </div>
      <div class="h8 mb-3"> <p class="textmuted">Lets Pay! </p> </div>
     </div>
@@ -75,7 +75,7 @@
         class="btn btn-primary d-block h8 mt-4"
         type="submit"
         (click)="pay()"
-        >PAY <span class="fas fa-dollar-sign ms-2"></span>{{ getTotal() | async }}<span class="ms-3 fas fa-arrow-right"></span
+        >PAY <span class="fas fa-dollar-sign ms-2"></span>{{ total }}<span class="ms-3 fas fa-arrow-right"></span
        ></div>
       </div>
      </div>

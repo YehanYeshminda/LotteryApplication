@@ -15,6 +15,6 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   ],
   exports: [
     NavbarComponent
-  ]
+  ],
 })
 export class CoreModule { }

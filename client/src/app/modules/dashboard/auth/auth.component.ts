@@ -6,7 +6,7 @@ import { AppState } from 'src/app/reducer';
 import { AuthHttpService } from './services/auth-http.service';
 import { noop, Observable, of, tap } from 'rxjs';
 import { login } from './features/auth.actions';
-import { MakeLogin } from './models/user';
+import { MakeLogin, MakeRegisterUser, User } from './models/user';
 import { OtpSend } from './models/auth';
 import { errorNotification } from 'src/app/shared/alerts/sweetalert';
 
@@ -20,6 +20,8 @@ export class AuthComponent implements OnInit {
   registerMode: boolean = false;
   otpSent: boolean = false;
   disabledTime: Observable<number> = of(0);
+  isDisabled: boolean = false;
+
   constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService
   ) { }
 
@@ -31,7 +33,7 @@ export class AuthComponent implements OnInit {
     if (!this.registerMode) {
       this.form = this.fb.group({
         custName: ['', [Validators.required]],
-        password: ['', []],
+        password: ['', [Validators.required]],
       });
     } else {
       this.form = this.fb.group({
@@ -42,9 +44,6 @@ export class AuthComponent implements OnInit {
         mobile: ['', [Validators.required]],
         alternatePhone: ['', [Validators.required]],
         contactNo: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-        zip: ['', [Validators.required]],
         password: ['', [Validators.required]],
       });
     }
@@ -58,22 +57,45 @@ export class AuthComponent implements OnInit {
           password: this.form.value.password
         }
 
+        this.isDisabled = true;
         this.authService
           .login(data)
           .pipe(
             tap((user) => {
               this.store.dispatch(login({ user }));
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/dashboard']).then(() => {
+                this.isDisabled = false;
+              });
             })
           )
           .subscribe({
             next: noop,
             error: (error) => {
               errorNotification(error.error);
+              this.isDisabled = false;
             }
           });
-      } else {
-        this.router.navigate(['/dashboard']);
+      } else if (this.registerMode) {
+        const data: User = { ...this.form.value }
+
+        this.isDisabled = true;
+        this.authService
+          .registerUser(data)
+          .pipe(
+            tap((user) => {
+              this.store.dispatch(login({ user }));
+              this.router.navigate(['/dashboard']).then(() => {
+                this.isDisabled = false;
+              });
+            })
+          )
+          .subscribe({
+            next: noop,
+            error: (error) => {
+              errorNotification(error.error);
+              this.isDisabled = false;
+            }
+          });
       }
     }
   }

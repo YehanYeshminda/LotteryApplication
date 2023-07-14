@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
 import { EasyDrawResponse } from './models/EasyDrawResponse';
-import { CartReponse } from '../cart/models/cart';
 import { CookieService } from "ngx-cookie-service";
 import { getAuthDetails } from "../../../../shared/methods/methods";
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
@@ -19,8 +18,7 @@ export class EasyDrawComponent {
   constructor(
     private easyDrawHttpService: EasyDrawHttpService,
     private cartEntityService: CartEntityService,
-    private cookieService: CookieService
-  ) { }
+    private cookieService: CookieService) { }
 
   drawRandomNumber() {
     const authDetails = getAuthDetails(this.cookieService.get('user'));
@@ -36,7 +34,7 @@ export class EasyDrawComponent {
 
   addToCart() {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
-      const newCartItem: CartReponse = {
+      const newCartItem = {
         cartNumbers: this.latestNumbers,
         paid: 500,
         name: "Easy Draw",
@@ -49,16 +47,14 @@ export class EasyDrawComponent {
         userId: 0
       };
 
-      this.cartEntityService.add(newCartItem).subscribe({
-        next: (response: CartReponse) => {
+      this.cartEntityService.add(newCartItem).subscribe(
+        () => {
           successNotification('Added to cart');
-          return;
         },
-        error: (error) => {
-          errorNotification(error.error.error);
-          return;
+        (error) => {
+          errorNotification("Lottery number already inside of cart!");
         }
-      });
+      );
     } else {
       errorNotification('Please login to add to cart');
     }

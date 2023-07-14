@@ -1,28 +1,28 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { errorNotification, successNotification } from "../../../../shared/alerts/sweetalert";
 import { CartHttpService } from "../cart/services/cart-http.service";
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
 import { StripeCardComponent, StripeService } from 'ngx-stripe';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthDetails } from 'src/app/shared/models/auth';
 import { Cart, CartReponse } from '../cart/models/cart';
+import { CartEntityService } from '../cart/services/cart-entity.service';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.scss']
 })
-export class PaymentComponent {
+export class PaymentComponent implements OnInit, AfterViewInit {
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
   authInformartion: AuthDetails | null = null;
-  totalAmountPay: Observable<number> = of(0);
-  amount: number = 0;
-  cartItems: Observable<CartReponse[]> = of([]);
+  cartItems$: Observable<CartReponse[]> = of([]);
+  total: number = 0;
 
   cardOptions: StripeCardElementOptions = {
     style: {
@@ -51,31 +51,33 @@ export class PaymentComponent {
     private fb: FormBuilder,
     private stripeService: StripeService,
     private cookieService: CookieService,
-    private cartHttpService: CartHttpService,
+    private cartEntityService: CartEntityService
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
-      this.cartItems = this.cartHttpService.getCartItems(getAuthDetails(this.cookieService.get('user')));
-      this.authInformartion = getAuthDetails(this.cookieService.get('user'));
-      this.totalAmountPay = this.cartHttpService.getTotal()
-
-      this.stripePayment = this.fb.group({
-        name: [this.authInformartion?.username, []],
-        amount: [this.cartHttpService.getTotal(), []],
-      });
-
-      this.cartHttpService.getTotal().subscribe({
-        next: respose => {
-          this.amount = respose;
-        }
-      });
+      this.cartItems$ = this.cartEntityService.entities$.pipe(
+        tap(response => {
+          this.total = 0;
+        }),
+        map(response => {
+          this.total = response.reduce((acc, item) => acc + item.paid, 0);
+          return response;
+        })
+      );
     }
+  }
+
+  ngOnInit(): void {
+    this.stripePayment = this.fb.group({
+      name: [this.authInformartion?.username, []],
+      amount: [0, []],
+    });
   }
 
   pay(): void {
     if (this.stripePayment.valid) {
-      this.createPaymentIntent(this.amount)
+      this.createPaymentIntent(this.total)
         .pipe(
           switchMap((pi) =>
             this.stripeService.confirmCardPayment(pi.clientSecret, {
@@ -133,9 +135,5 @@ export class PaymentComponent {
       `${environment.apiUrl}payment/create-payment-intent`,
       { amount }
     );
-  }
-
-  getTotal(): Observable<number> {
-    return this.cartHttpService.getTotal();
   }
 }

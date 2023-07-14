@@ -1,6 +1,6 @@
 <h2>Cart Items:</h2>
 <ul>
-  <ng-container *ngIf="(cartItems | async) as items">
+  <ng-container *ngIf="(cartItems$ | async) as items">
     <li *ngFor="let item of items">
       <div class="Items">
         Raffle No: {{item.raffleNo}} | Amount Paid: {{item.paid | currency:'USD'}} | Cart Numbers: {{ item.lotteryNo }}
@@ -8,7 +8,7 @@
       </div>
     </li>
 
-    <div>Total : {{ getTotal() | async }}</div>
+    <div>Total : {{ total | json }}</div>
   </ng-container>
 
   <button class="btn btn-primary">

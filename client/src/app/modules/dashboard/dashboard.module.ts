@@ -56,7 +56,7 @@ const entityMetaData: EntityMetadataMap = {
     CartEntityService,
     CartHttpService,
     CartResolver,
-    CartDataService
+    CartDataService,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

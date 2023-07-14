@@ -11,14 +11,14 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>) { }
   isLoggedIn$: Observable<boolean> = of(false);
-  
+
   ngOnInit(): void {
     const userProfile = localStorage.getItem("user");
-    
+
     if (userProfile) {
-      this.store.dispatch(login({user: JSON.parse(userProfile)}));
+      this.store.dispatch(login({ user: JSON.parse(userProfile) }));
     }
 
     this.isLoggedIn$ = this.store

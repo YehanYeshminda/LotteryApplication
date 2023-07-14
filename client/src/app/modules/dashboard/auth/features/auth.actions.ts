@@ -7,3 +7,7 @@ export const login = createAction(
 );
 
 export const logout = createAction('[Top Menu] Logout');
+
+export const clearState = createAction('[State] Clear State');
+
+export const clearEntityCache = createAction('[State] Clear Entity Cache');
