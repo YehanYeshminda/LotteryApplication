@@ -1,0 +1,120 @@
+$main-card-font: 'Avenir LT Pro', sans-serif;
+
+.flex-center-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+}
+
+.box-container {
+    width: 340px;
+    height: 220px;
+    background: linear-gradient(90deg, #A447E2 0%, #CE48D2 100%);
+}
+
+.image-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 40px;
+}
+
+.text-container {
+    padding-top: 20px;
+    padding-left: 25px;
+    color: white;
+    color: #FFF;
+    text-align: center;
+    font-family: $main-card-font;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.right-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .line-up {
+        width: 10px;
+        height: 120px;
+        border-left: 3px dotted white;
+        margin-top: 15px;
+        padding-left: 70px;;
+    }
+}
+
+.number-container {
+    transform: rotate(90deg);
+    background: white;
+    border-radius: 15px;
+    position: absolute;
+    top: 52px;
+    font-family: $main-card-font;
+    height: 25px;
+    flex-shrink: 0;
+    text-align: center;
+    width: 99px;
+
+    p {
+        margin-top: 2px;
+        transform: rotate(-180deg);
+        font-weight: bolder;
+        letter-spacing: 3px;
+        color: #CC49D3;
+        font-family: $main-card-font;
+    }
+}
+
+.digit-containers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 40px;
+    margin-top: 20px;
+    flex-shrink: 0;
+    text-align: center;
+
+    .number {
+        width: 45px;
+        height: 45px;
+        border-radius: 30px;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            font-weight: bolder;
+            letter-spacing: 3px;
+            color: #CC49D3;
+            margin-top: 10px;
+            margin-left: 3px;
+            font-family: $main-card-font;
+        }
+    }
+    
+}
+
+.row-container {
+    margin-top: 12px;
+    
+    .text-color-inside-card {
+        color: #FFF;
+        text-align: center;
+        font-family: $main-card-font;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    }
+
+    .add-margin-left {
+        margin-left: 70px;
+    }
+}

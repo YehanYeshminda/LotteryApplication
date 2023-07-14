@@ -20,6 +20,10 @@ import { CartEntityService } from './components/cart/services/cart-entity.servic
 import { CartHttpService } from './components/cart/services/cart-http.service';
 import { CartResolver } from './components/cart/resolver/cart.resolver';
 import { CartDataService } from './components/cart/services/cart-data.service';
+import { HomeComponent } from './components/home/home.component';
+import { HomeDataService } from './components/home/services/home-data.service';
+import { SequenceNoResolver } from './components/home/resolvers/sequence-no.resolver';
+import { HomeEntityService } from './components/home/services/home-entity.service';
 
 
 const entityMetaData: EntityMetadataMap = {
@@ -29,6 +33,7 @@ const entityMetaData: EntityMetadataMap = {
       optimisticUpdate: true
     }
   },
+  Home: {}
 }
 
 @NgModule({
@@ -39,6 +44,7 @@ const entityMetaData: EntityMetadataMap = {
     CartComponent,
     PaymentComponent,
     SpashScreenComponent,
+    HomeComponent,
   ],
   imports: [
     CommonModule,
@@ -57,14 +63,18 @@ const entityMetaData: EntityMetadataMap = {
     CartHttpService,
     CartResolver,
     CartDataService,
+    HomeDataService,
+    HomeEntityService,
+    SequenceNoResolver
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
 export class DashboardModule {
-  constructor(private eds: EntityDefinitionService, private entityDataService: EntityDataService, private cartDataService: CartDataService) {
+  constructor(private eds: EntityDefinitionService, private entityDataService: EntityDataService, private cartDataService: CartDataService, private HomeDataService: HomeDataService) {
     eds.registerMetadataMap(entityMetaData);
     entityDataService.registerService("Cart", cartDataService);
+    entityDataService.registerService("Home", HomeDataService);
   }
 }
 

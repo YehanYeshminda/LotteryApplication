@@ -10,7 +10,6 @@ import { CookieService } from "ngx-cookie-service";
 import { HttpOptions } from "@ngrx/data/src/dataservices/interfaces";
 import { Store } from "@ngrx/store";
 import { AppState } from "src/app/reducer";
-import { AddToCartError } from "../../easy-draw/features/action";
 
 @Injectable()
 export class CartDataService extends DefaultDataService<CartReponse> {

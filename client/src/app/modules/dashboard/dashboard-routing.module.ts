@@ -7,10 +7,13 @@ import { CartComponent } from "./components/cart/cart.component";
 import { AuthGuard } from "../../shared/guards/auth.guard";
 import { PaymentComponent } from "./components/payment/payment.component";
 import { CartResolver } from './components/cart/resolver/cart.resolver';
+import { HomeComponent } from './components/home/home.component';
+import { SequenceNoResolver } from './components/home/resolvers/sequence-no.resolver';
 
 const routes: Routes = [
   {
     path: '', component: DashboardComponent, resolve: { CartItems: CartResolver }, canActivate: [AuthGuard], children: [
+      { path: 'home', component: HomeComponent, resolve: { CartItems: CartResolver, HomeItems: SequenceNoResolver } },
       { path: 'easy-draw', component: EasyDrawComponent, resolve: { CartItems: CartResolver } },
       { path: 'mega-draw', component: MegaDrawComponent, resolve: { CartItems: CartResolver } },
       { path: 'cart', component: CartComponent, resolve: { CartItems: CartResolver } },

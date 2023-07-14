@@ -63,7 +63,7 @@ export class AuthComponent implements OnInit {
           .pipe(
             tap((user) => {
               this.store.dispatch(login({ user }));
-              this.router.navigate(['/dashboard']).then(() => {
+              this.router.navigate(['/dashboard/home']).then(() => {
                 this.isDisabled = false;
               });
             })
@@ -84,7 +84,7 @@ export class AuthComponent implements OnInit {
           .pipe(
             tap((user) => {
               this.store.dispatch(login({ user }));
-              this.router.navigate(['/dashboard']).then(() => {
+              this.router.navigate(['/dashboard/home']).then(() => {
                 this.isDisabled = false;
               });
             })

@@ -13,7 +13,7 @@
 
 <nav class="navbar navbar-expand-sm mb-5">
   <div class="container-fluid">
-    <a class="navbar-brand logo" routerLink="/dashboard">
+    <a class="navbar-brand logo" routerLink="/dashboard/home">
       <img src="assets/LogoMain.png" alt="">
     </a>
 
@@ -23,7 +23,7 @@
           <h3>{{ (cartItems$ | async)?.length }}</h3>
         </span>
         <button class="btn btn-default">
-          <i class="fa fa-cart-plus" aria-hidden="true"></i>
+          <i class="fa fa-cart-shopping" aria-hidden="true"></i>
         </button>
       </div>
     </div>
@@ -52,7 +52,7 @@
             <h3>{{ (cartItems$ | async)?.length }}</h3>
           </span>
           <button class="btn btn-default">
-            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+            <i class="fa fa-cart-shopping" aria-hidden="true"></i>
           </button>
         </div>
 

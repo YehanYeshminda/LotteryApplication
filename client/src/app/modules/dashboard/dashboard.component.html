@@ -5,7 +5,7 @@
       <li class="breadcrumb-item"><a routerLink="/">{{ (routerState$ | async)?.state.url }}</a></li>
     </ol>
   </nav>
-
+  
    <ng-container *ngIf="loading">
      <app-spash-screen [loading]="loadingValue"></app-spash-screen>
    </ng-container>
