@@ -130,6 +130,9 @@ namespace API.Controllers
                         }
                     }
 
+                    existingTicketNo.DrawCount = existingTicketNo.DrawCount + 1;
+                    await _lotteryContext.SaveChangesAsync();
+
                     if (matchingIndexes == 0)
                     {
                         return BadRequest("No matches found.");

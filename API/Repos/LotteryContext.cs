@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using API.API.Repos.Models;
+using API.Repos.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos;
@@ -134,6 +134,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.CustStatus)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bit(1)");
+            entity.Property(e => e.DrawCount)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.EndOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");

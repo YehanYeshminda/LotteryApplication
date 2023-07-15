@@ -1,30 +1,22 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
-import {BsModalService} from "ngx-bootstrap/modal";
-import {MegaDrawHttpService} from "./services/mega-draw-http.service";
-import {Observable, of, take} from "rxjs";
-import {MegaDrawResponse} from "./models/megaDraw";
+import { Component, OnInit } from '@angular/core';
+import { Observable, map, of, take } from "rxjs";
+import { MegaDrawResponse } from "./models/megaDraw";
+import { MegaDrawHttpService } from './services/mega-draw-http.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-mega-draw',
   templateUrl: './mega-draw.component.html',
   styleUrls: ['./mega-draw.component.scss']
 })
-export class MegaDrawComponent implements OnInit{
-  megaDrawNos$: Observable<MegaDrawResponse> = of();
+export class MegaDrawComponent implements OnInit {
+  drawNumbers$: Observable<number[]> = of([]);
   selectedItems$: Observable<number[]> = of([]);
-  constructor(private  megaDrawHttpService: MegaDrawHttpService) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.megaDrawNos$ = this.megaDrawHttpService.getMegaDraws(31);
+    this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
   }
-
-  // selectDrawNumber(item: number) {
-  //   this.selectedItems$.pipe(take(1)).subscribe((items) => {
-  //     if (items.length < 6) {
-  //       this.selectedItems$ = of([...items, item]);
-  //     }
-  //   });
-  // }
 
   selectDrawNumber(item: number) {
     this.selectedItems$.pipe(take(1)).subscribe((items) => {
@@ -45,7 +37,7 @@ export class MegaDrawComponent implements OnInit{
   getRandomDraw() {
     this.selectedItems$.pipe(take(1)).subscribe({
       next: response => {
-        const newNumbers:any[] = [];
+        const newNumbers: any[] = [];
 
         while (newNumbers.length < 6) {
           const randomNumber = Math.floor(Math.random() * 31) + 1;

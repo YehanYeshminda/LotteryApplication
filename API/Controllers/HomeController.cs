@@ -1,4 +1,5 @@
-﻿using API.Repos;
+﻿using API.Helpers;
+using API.Repos;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,16 +27,40 @@ namespace API.Controllers
         }
 
         [HttpPost("GetHomeInfo")]
-        public async Task<ActionResult<IEnumerable<GetRaffleDto>>> GetRaffleInformation()
+        public async Task<ActionResult<IEnumerable<GetRaffleDto>>> GetRaffleInformation([FromBody] AuthDto authDto)
         {
-            var items = await _lotteryContext.Tblraffles.ToListAsync();
-
-            if (items == null)
+            if (authDto.Hash == null)
             {
-                return BadRequest("Error while finding items");
+                return Unauthorized("Missing Authentication Details");
             }
 
-            return Ok(items);
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                var items = await _lotteryContext.Tblraffles.ToListAsync();
+
+                if (items == null)
+                {
+                    return BadRequest("Error while finding Raffles");
+                }
+
+                return Ok(items);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
         }
     }
 }

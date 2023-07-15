@@ -1,8 +1,8 @@
-﻿using API.API.Repos.Models;
-using API.Helpers;
+﻿using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
+using API.Repos.Models;
 using API.Repos.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

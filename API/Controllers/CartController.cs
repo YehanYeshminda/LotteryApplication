@@ -1,7 +1,7 @@
-﻿using API.API.Repos.Models;
-using API.Helpers;
+﻿using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
+using API.Repos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

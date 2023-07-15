@@ -9,7 +9,7 @@ $main-card-font: 'Avenir LT Pro', sans-serif;
     gap: 40px;
 }
 
-.box-container {
+.easy-draw-container {
     width: 340px;
     height: 220px;
     background: linear-gradient(90deg, #A447E2 0%, #CE48D2 100%);
@@ -90,11 +90,13 @@ $main-card-font: 'Avenir LT Pro', sans-serif;
         align-items: center;
 
         p {
-            font-weight: bolder;
-            letter-spacing: 3px;
             color: #CC49D3;
-            margin-top: 10px;
-            margin-left: 3px;
+            margin-top: 13px;
+            text-align: center;
+            font-size: 26px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
             font-family: $main-card-font;
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
-namespace API.API.Repos.Models;
+using System.Collections.Generic;
+
+namespace API.Repos.Models;
 
 public partial class Tbllotteryno
 {

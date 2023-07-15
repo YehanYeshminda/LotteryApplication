@@ -24,6 +24,7 @@ import { HomeComponent } from './components/home/home.component';
 import { HomeDataService } from './components/home/services/home-data.service';
 import { SequenceNoResolver } from './components/home/resolvers/sequence-no.resolver';
 import { HomeEntityService } from './components/home/services/home-entity.service';
+import { MegaDrawResolver } from './components/mega-draw/resolvers/mega-draw.resolver';
 
 
 const entityMetaData: EntityMetadataMap = {
@@ -33,7 +34,7 @@ const entityMetaData: EntityMetadataMap = {
       optimisticUpdate: true
     }
   },
-  Home: {}
+  Home: {},
 }
 
 @NgModule({
@@ -65,7 +66,8 @@ const entityMetaData: EntityMetadataMap = {
     CartDataService,
     HomeDataService,
     HomeEntityService,
-    SequenceNoResolver
+    SequenceNoResolver,
+    MegaDrawResolver
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -13,7 +13,7 @@ import { AuthDetails } from "src/app/shared/models/auth";
 @Injectable()
 export class HomeDataService extends DefaultDataService<Home> {
     baseUrl = environment.apiUrl;
-    constructor(http: HttpClient, httpUrlGenerator: HttpUrlGenerator, private cookieService: CookieService, private store: Store<AppState>) {
+    constructor(http: HttpClient, httpUrlGenerator: HttpUrlGenerator, private cookieService: CookieService) {
         super('Home', http, httpUrlGenerator);
     }
 

@@ -17,8 +17,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.routerState$ = this.store.pipe(select('router'));
-    this.loading = false;
-    // this.startLoading();
+    this.loading = true;
+    this.startLoading();
   }
 
   setDelayedLoadingValue(value: number, delay: number): void {
@@ -34,12 +34,12 @@ export class DashboardComponent implements OnInit {
   startLoading(): void {
     this.loading = true;
 
-    const duration = 4000;
+    const duration = 4300;
     const interval = 10;
     const steps = duration / interval;
 
     let step = 0;
-    const increment = 100 / steps;
+    const increment = 150 / steps;
 
     const intervalId = setInterval(() => {
       step++;

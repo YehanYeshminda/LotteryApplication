@@ -9,6 +9,7 @@ import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { CartEntityService } from 'src/app/modules/dashboard/components/cart/services/cart-entity.service';
 import { clearCartEntities } from 'src/app/modules/dashboard/components/cart/features/cart.action';
+import { HomeEntityService } from 'src/app/modules/dashboard/components/home/services/home-entity.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,11 +22,12 @@ export class NavbarComponent implements OnInit {
   cartNo: number = 0;
   cartItems$: Observable<CartReponse[]> = of([]);
 
-  constructor(private router: Router, private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService) { }
+  constructor(private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService, private homeEntityService: HomeEntityService) { }
 
   logOut() {
     this.store.dispatch(logout());
     this.cartEntityService.clearCache();
+    this.homeEntityService.clearCache();
   }
 
   ngOnInit(): void {
