@@ -25,6 +25,7 @@ import { HomeDataService } from './components/home/services/home-data.service';
 import { SequenceNoResolver } from './components/home/resolvers/sequence-no.resolver';
 import { HomeEntityService } from './components/home/services/home-entity.service';
 import { MegaDrawResolver } from './components/mega-draw/resolvers/mega-draw.resolver';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 
 const entityMetaData: EntityMetadataMap = {
@@ -57,7 +58,8 @@ const entityMetaData: EntityMetadataMap = {
     ProgressbarModule.forRoot(),
     NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CarouselModule.forRoot()
   ],
   providers: [
     CartEntityService,

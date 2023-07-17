@@ -27,7 +27,7 @@
   </ul>
 
   <div class="btn-container" *ngIf="(selectedItems$ | async) as selectedItems">
-    <button class="btn btn-primary" (click)="addToCart()" [disabled]="selectedItems.length <= 0">Add to cart</button>
+    <button class="btn btn-primary" (click)="addToCart()" [disabled]="selectedItems.length < 6">Add to cart</button>
   </div>
 
   <div class="btn-container">

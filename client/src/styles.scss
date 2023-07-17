@@ -14,3 +14,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .navbar {
     padding: 10px 4px !important;
 }
+
+.navbar>.container-fluid {
+    justify-content: space-evenly !important;
+}

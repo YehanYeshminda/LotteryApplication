@@ -1,5 +1,30 @@
+<!-- <carousel class="bg-danger w-100" [isAnimated]="true" [interval]="interval">
+    <slide>
+      <img src="assets/LogoMain.png" alt="first slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>First slide label</h3>
+        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+      </div>
+    </slide>
+    <slide>
+      <img src="assets/Money1.svg" alt="second slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>Second slide label</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </div>
+    </slide>
+    <slide>
+      <img src="assets/Money2.svg" alt="third slide" style="display: block; width: 100%;">
+      <div class="carousel-caption d-none d-md-block">
+        <h3>Third slide label</h3>
+        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+      </div>
+    </slide>
+</carousel> -->
+
+
 <div class="flex-center-container">
-    <div class="easy-draw-container" routerLink="/dashboard/easy-draw">
+    <div class="easy-draw-container" style="background: url(assets/TicketEasyDrawBg.svg);" routerLink="/dashboard/easy-draw">
         <div class="row">
             <div class="col-12">
                 <div class="image-container">
@@ -38,6 +63,104 @@
                 </div>
             </div>
             <div class="col-3"></div>
+        </div>
+    </div>
+
+    <div class="mega-draw-container" style="background: url(assets/TicketMegaDrawBg.svg);" routerLink="/dashboard/mega-draw">
+        <div class="row">
+            <div class="col-12">
+                <div class="image-container">
+                    <img src="assets/MEGADRAW.svg" alt="">
+                </div>
+            </div>
+            
+            <div class="col-9">
+                <div class="text-container">
+                    <p>Leave Hey it all to chance and let fate reveal your winning combination!</p>
+                </div>
+    
+                <div class="digit-containers-mega-draw">
+                    <div *ngFor="let number of megaDrawNo$ | async" class="number">
+                        <p>{{ number }}</p>
+                    </div>
+                </div>
+
+                <div class="row mega-row-container">
+                    <div class="col-6">
+                        <p class="text-color-inside-card">{{ megaDrawCount$ | async }}</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="text-color-inside-card add-margin-left">{{ megaDrawDate$ | async | date: 'shortDate' }}</p>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="col-3 right-line">
+                <div class="right-container">
+                    <div class="line-up"></div>
+    
+                    <div class="mega-draw-number-container">
+                        <p>123456</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="past-winner-container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="fw-bolder text-decoration-underline">PAST WINNERS</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="carousel-container">
+                <carousel [isAnimated]="true" [interval]="interval">
+                    <slide>
+                      <div class="text-center py-5 bg-white text-white slider-background">
+                        <div class="image-container">
+                            <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
+                        </div>
+                        <div class="digit-containers-carousel">
+                            <div *ngFor="let number of drawNo$ | async" class="number">
+                                <p>{{ number }}</p>
+                            </div>
+                        </div>
+                      </div>
+                    </slide>
+
+                    <slide>
+                        <div class="text-center py-5 bg-white text-white slider-background">
+                          <div class="image-container">
+                              <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
+                          </div>
+                          <div class="digit-containers-carousel">
+                              <div *ngFor="let number of drawNo$ | async" class="number">
+                                  <p>12</p>
+                              </div>
+                          </div>
+                        </div>
+                      </slide>
+
+                      <slide>
+                        <div class="text-center py-5 bg-white text-white slider-background">
+                          <div class="image-container">
+                              <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
+                          </div>
+                          <div class="digit-containers-carousel">
+                              <div *ngFor="let number of drawNo$ | async" class="number">
+                                  <p>11</p>
+                              </div>
+                          </div>
+                        </div>
+                      </slide>
+                  </carousel>
+            </div>
         </div>
     </div>
 </div>

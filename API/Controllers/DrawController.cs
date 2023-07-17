@@ -65,7 +65,7 @@ namespace API.Controllers
                         StartOn = createEasyDrawDto.StartOn,
                         EndOn = createEasyDrawDto.EndOn,
                         CustStatus = createEasyDrawDto.CustStatus,
-                        TicketNo = (uint?)createEasyDrawDto.TicketNo,
+                        TicketNo = createEasyDrawDto.TicketNo.ToString(),
                         RaffleName = createEasyDrawDto.RaffleName
                     };
 

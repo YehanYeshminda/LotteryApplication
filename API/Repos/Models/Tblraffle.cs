@@ -15,7 +15,7 @@ public partial class Tblraffle
 
     public ulong? CustStatus { get; set; }
 
-    public uint? TicketNo { get; set; }
+    public string? TicketNo { get; set; }
 
     public string? RaffleName { get; set; }
 

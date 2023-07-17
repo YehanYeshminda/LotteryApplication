@@ -4,6 +4,8 @@ using API.Repos.Dtos;
 using API.Repos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
+using static API.Controllers.CartController;
 
 namespace API.Controllers
 {
@@ -186,6 +188,53 @@ namespace API.Controllers
                     }
 
                     _lotteryContext.Remove(item);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occured while deleting cart item! " + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        [HttpPost("DeleteAllFromCart")]
+        public async Task<ActionResult> RemoveAllCartItemsById(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var items = await _lotteryContext.Tbllotterynos.Where(x => x.UserId == _user.Id).ToListAsync();
+
+                    if (items == null)
+                    {
+                        return BadRequest("Item does not exist!");
+                    }
+                        
+                    _lotteryContext.RemoveRange(items);
                     await _lotteryContext.SaveChangesAsync();
 
                     return Ok();

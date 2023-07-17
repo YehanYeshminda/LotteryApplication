@@ -154,8 +154,8 @@ public partial class LotteryContext : DbContext
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
             entity.Property(e => e.TicketNo)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnType("int(11) unsigned");
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Tblregister>(entity =>
