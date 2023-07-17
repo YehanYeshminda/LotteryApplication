@@ -18,12 +18,6 @@
     </ng-template>
   </div>
 
-<!--  <ul class="lottery-body">-->
-<!--    <li class="lottery-item" *ngFor="let item of (megaDrawNos$ | async)?.arr" (click)="selectDrawNumber(item)">-->
-<!--      {{ item }}-->
-<!--    </li>-->
-<!--  </ul>-->
-
   <ul class="lottery-body">
     <li class="lottery-item" *ngFor="let item of drawNumbers$ | async"
         [class.selected]="(selectedItems$ | async)?.includes(item)"
@@ -32,8 +26,11 @@
     </li>
   </ul>
 
+  <div class="btn-container" *ngIf="(selectedItems$ | async) as selectedItems">
+    <button class="btn btn-primary" (click)="addToCart()" [disabled]="selectedItems.length <= 0">Add to cart</button>
+  </div>
+
   <div class="btn-container">
-    <button class="btn btn-primary" (click)="makeMegaDraw()">Make Draw</button>
     <button class="btn btn-primary" (click)="getRandomDraw()">Get Random Draw</button>
   </div>
 </div>

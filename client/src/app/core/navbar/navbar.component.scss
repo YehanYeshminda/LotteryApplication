@@ -5,6 +5,23 @@ $dark: #444444;
 $cart-badge-color: #9747FF;
 $cart-background-color: white;
 
+.cart-btn-custom {
+  background: $cart-badge-color;
+  color: $primary;
+  border: 0px black solid;
+  width: 90px;
+  height: 35px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.cart-btn-custom:hover {
+  background: white;
+  color: black;
+  border: 1px black solid;
+  font-weight: bold;
+}
+
 body {
   background: $secondary;
   color: $ternary;
@@ -14,7 +31,7 @@ body {
 }
 
 .logo img {
-    width: 79px;
+    width: 76px;
     height: 79px;
     flex-shrink: 0;
 }
@@ -38,8 +55,7 @@ body {
 
     @media screen and (max-width: 575px) {
         position: relative;
-        display: block;
-        margin-left: 30px;
+        display: flex;
     }
 }
 

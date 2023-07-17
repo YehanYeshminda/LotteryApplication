@@ -5,6 +5,8 @@ import { errorNotification, successNotification } from "../../../../../shared/al
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { AuthDetails } from 'src/app/shared/models/auth';
+import { getAuthDetails } from 'src/app/shared/methods/methods';
+import { CookieService } from 'ngx-cookie-service';
 
 
 
@@ -16,7 +18,7 @@ export class CartHttpService {
   private cartItems: Cart[] = [];
   baseUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private cookieService: CookieService) {
     const storedCartItems = sessionStorage.getItem('cartItems');
     if (storedCartItems) {
       this.cartItems = JSON.parse(storedCartItems);
@@ -50,5 +52,10 @@ export class CartHttpService {
 
   private saveCartItems(): void {
     sessionStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+  }
+
+  removeAllFromCart() {
+    const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+    return this.http.post(this.baseUrl + "Cart/DeleteAllFromCart", auth)
   }
 }

@@ -18,6 +18,12 @@
     </a>
 
     <div class="show-cart-in-sm">
+      <div class="btn-container">
+        <button class="cart-btn-custom">
+          Buy Now
+        </button>
+      </div>
+
       <div class="cart-btn" routerLink="/dashboard/cart">
         <span class="cart-badge">
           <h3>{{ (cartItems$ | async)?.length }}</h3>
@@ -26,12 +32,13 @@
           <i class="fa fa-cart-shopping" aria-hidden="true"></i>
         </button>
       </div>
-    </div>
-    
-    <button
+
+      <button
       (click)="toggleNavbarCollapsing()" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"aria-expanded="false"aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    </div>
+
     <div [class.collapse]="navbarCollapsed" class="navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -44,6 +51,10 @@
       </ul>
 
       <div class="show-cart-in-md">
+        <button class="cart-btn-custom">
+          Buy Now
+        </button>
+
         <div class="cart-btn" routerLink="/dashboard/cart">
           <span class="cart-badge">
             <h3>{{ (cartItems$ | async)?.length }}</h3>

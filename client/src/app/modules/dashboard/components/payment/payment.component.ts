@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment.development';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthDetails } from 'src/app/shared/models/auth';
-import { Cart, CartReponse } from '../cart/models/cart';
+import { CartReponse } from '../cart/models/cart';
 import { CartEntityService } from '../cart/services/cart-entity.service';
 
 @Component({
@@ -23,6 +23,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
   authInformartion: AuthDetails | null = null;
   cartItems$: Observable<CartReponse[]> = of([]);
   total: number = 0;
+  paymentOnGoing: boolean = false;
 
   cardOptions: StripeCardElementOptions = {
     style: {
@@ -51,7 +52,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private stripeService: StripeService,
     private cookieService: CookieService,
-    private cartEntityService: CartEntityService
+    private cartEntityService: CartEntityService,
+    private cartHttpService: CartHttpService
   ) { }
 
   ngAfterViewInit(): void {
@@ -77,6 +79,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
 
   pay(): void {
     if (this.stripePayment.valid) {
+      this.paymentOnGoing = true;
       this.createPaymentIntent(this.total)
         .pipe(
           switchMap((pi) =>
@@ -92,6 +95,7 @@ export class PaymentComponent implements OnInit, AfterViewInit {
         )
         .subscribe((result) => {
           if (result.error) {
+            this.paymentOnGoing = false;
             if (result.error.code === 'card_declined') {
               errorNotification('Card declined!');
               return;
@@ -121,12 +125,15 @@ export class PaymentComponent implements OnInit, AfterViewInit {
             console.log(result.error.message);
           } else {
             if (result.paymentIntent.status === 'succeeded') {
+              this.cartHttpService.removeAllFromCart().subscribe();
+              this.paymentOnGoing = false;
               successNotification(`Payment of ${result.paymentIntent.amount} has been done with the !`)
+              this.cartEntityService.clearCache();
             }
           }
         });
     } else {
-      console.log(this.stripePayment);
+      errorNotification('Please fill all the fields!');
     }
   }
 

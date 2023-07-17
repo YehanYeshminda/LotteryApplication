@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, map, of, take } from "rxjs";
-import { MegaDrawResponse } from "./models/megaDraw";
-import { MegaDrawHttpService } from './services/mega-draw-http.service';
 import { ActivatedRoute } from '@angular/router';
+import { getAuthDetails } from 'src/app/shared/methods/methods';
+import { CookieService } from 'ngx-cookie-service';
+import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { CartEntityService } from '../cart/services/cart-entity.service';
 
 @Component({
   selector: 'app-mega-draw',
@@ -12,7 +14,8 @@ import { ActivatedRoute } from '@angular/router';
 export class MegaDrawComponent implements OnInit {
   drawNumbers$: Observable<number[]> = of([]);
   selectedItems$: Observable<number[]> = of([]);
-  constructor(private route: ActivatedRoute) { }
+  latestNumbers: number[] = [];
+  constructor(private route: ActivatedRoute, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
   ngOnInit(): void {
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
@@ -26,12 +29,45 @@ export class MegaDrawComponent implements OnInit {
     });
   }
 
-  makeMegaDraw() {
-    this.selectedItems$.subscribe({
-      next: (items) => {
-        console.log(items)
-      }
-    })
+  addToCart() {
+    if (getAuthDetails(this.cookieService.get('user')) != null) {
+
+      this.selectedItems$.subscribe({
+        next: response => {
+          if (!response) {
+            errorNotification("Please select some numbers!");
+            return;
+          }
+
+          this.latestNumbers = response;
+        }
+      })
+
+
+      const newCartItem = {
+        cartNumbers: this.latestNumbers,
+        paid: 100,
+        name: "Mega Draw",
+        addOn: new Date().toISOString(),
+        authDto: getAuthDetails(this.cookieService.get('user')),
+        price: 100,
+        raffleId: "2",
+        lotteryStatus: 0,
+        raffleNo: "",
+        userId: 0
+      };
+
+      this.cartEntityService.add(newCartItem).subscribe(
+        () => {
+          successNotification('Added to cart');
+        },
+        (error) => {
+          errorNotification("Lottery number already inside of cart!");
+        }
+      );
+    } else {
+      errorNotification('Please login to add to cart');
+    }
   }
 
   getRandomDraw() {

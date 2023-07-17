@@ -10,3 +10,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
 
 @import url('https://fonts.cdnfonts.com/css/avenir-lt-pro');
+
+.navbar {
+    padding: 10px 4px !important;
+}

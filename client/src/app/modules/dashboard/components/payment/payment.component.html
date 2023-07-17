@@ -40,7 +40,7 @@
           <tbody>
             <ng-container *ngFor="let item of cartItems$ | async">
               <tr>
-                <td>{{ item.raffleNo }}</td>
+                <td>{{ item.raffleNo == "1" ? "Easy Draw" : "Mega Draw" }}</td>
                 <td>{{ item.lotteryNo }}</td>
                 <td><span class="fas fa-dollar-sign"></span>{{ item.paid }}</td>
                 <td><span class="fas fa-dollar-sign"></span>{{ item.paid }}</td>
@@ -71,12 +71,13 @@
          </ngx-stripe-card>
         </div>
        </div>
-       <div
+       <button
         class="btn btn-primary d-block h8 mt-4"
         type="submit"
         (click)="pay()"
+        [disabled]="paymentOnGoing"
         >PAY <span class="fas fa-dollar-sign ms-2"></span>{{ total }}<span class="ms-3 fas fa-arrow-right"></span
-       ></div>
+       ></button>
       </div>
      </div>
     </div>
