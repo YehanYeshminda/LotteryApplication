@@ -33,7 +33,6 @@ namespace API.Controllers
 
             return Ok(paymentIntent);
         }
-
         public record PaymentIntentRequest(int Amount);
     }
 }

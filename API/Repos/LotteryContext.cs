@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using API.Repos.Models;
+using API.API.Repos.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos;
@@ -18,9 +18,13 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblcashgiven> Tblcashgivens { get; set; }
 
+    public virtual DbSet<Tbldrawhistory> Tbldrawhistories { get; set; }
+
     public virtual DbSet<Tbllotteryno> Tbllotterynos { get; set; }
 
     public virtual DbSet<Tblmoneycredit> Tblmoneycredits { get; set; }
+
+    public virtual DbSet<Tblorderhistory> Tblorderhistories { get; set; }
 
     public virtual DbSet<Tblraffle> Tblraffles { get; set; }
 
@@ -63,6 +67,24 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.UserId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Tbldrawhistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tbldrawhistory");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.DrawDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.LotteryId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Sequence)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Tbllotteryno>(entity =>
@@ -122,6 +144,24 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.WinNo)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
+        });
+
+        modelBuilder.Entity<Tblorderhistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tblorderhistory");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.RaffleId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.TicketNo)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
         });
 
         modelBuilder.Entity<Tblraffle>(entity =>

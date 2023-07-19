@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -26,6 +26,9 @@ import { SequenceNoResolver } from './components/home/resolvers/sequence-no.reso
 import { HomeEntityService } from './components/home/services/home-entity.service';
 import { MegaDrawResolver } from './components/mega-draw/resolvers/mega-draw.resolver';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { StoreModule } from '@ngrx/store';
+import { drawHistoryReducer } from './components/home/features/drawHistory.reducer';
+import { DrawHistoryResolver } from './components/home/resolvers/draw-history.resolver';
 
 
 const entityMetaData: EntityMetadataMap = {
@@ -59,7 +62,8 @@ const entityMetaData: EntityMetadataMap = {
     NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
     FormsModule,
     ReactiveFormsModule,
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    StoreModule.forFeature('drawHistory', drawHistoryReducer),
   ],
   providers: [
     CartEntityService,
@@ -69,7 +73,8 @@ const entityMetaData: EntityMetadataMap = {
     HomeDataService,
     HomeEntityService,
     SequenceNoResolver,
-    MegaDrawResolver
+    MegaDrawResolver,
+    DrawHistoryResolver
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -79,6 +84,12 @@ export class DashboardModule {
     eds.registerMetadataMap(entityMetaData);
     entityDataService.registerService("Cart", cartDataService);
     entityDataService.registerService("Home", HomeDataService);
+  }
+
+  static forRoot(): ModuleWithProviders<DashboardModule> {
+    return {
+      ngModule: DashboardModule,
+    };
   }
 }
 

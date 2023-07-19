@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HomeEntityService } from './services/home-entity.service';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AppState } from 'src/app/reducer';
+import { Store } from '@ngrx/store';
+import { OldRafflesReponse } from './models/home';
+import { selectDrawHistoryData, selectDrawHistoryEasyData, selectDrawHistoryMegaData } from './features/drawHistory.selectors';
+import { splitNumbersByTwo } from 'src/app/shared/methods/methods';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +21,11 @@ export class HomeComponent implements OnInit {
   megaDrawCount$: Observable<string | undefined> = of();
   megaDrawDate$: Observable<string | undefined> = of();
   interval = 2000;
+  currentDate = new Date();
+  megaDrawHistory$: Observable<OldRafflesReponse[] | undefined> = of([]);
+  easyDrawHistory$: Observable<OldRafflesReponse[] | undefined> = of([]);
 
-  constructor(private homeEntityService: HomeEntityService) { }
+  constructor(private homeEntityService: HomeEntityService, private store: Store) { }
 
   ngOnInit(): void {
     this.drawNo$ = this.homeEntityService.entities$.pipe(
@@ -61,5 +69,12 @@ export class HomeComponent implements OnInit {
         return megaDraw?.startOn;
       })
     );
+
+    this.megaDrawHistory$ = this.store.select(selectDrawHistoryMegaData);
+    this.easyDrawHistory$ = this.store.select(selectDrawHistoryEasyData);
+  }
+
+  splitValuesAndreturnArray(value: string | undefined): string[] {
+    return splitNumbersByTwo(value ?? '');
   }
 }

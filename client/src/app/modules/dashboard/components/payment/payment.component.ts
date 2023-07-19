@@ -12,6 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthDetails } from 'src/app/shared/models/auth';
 import { CartReponse } from '../cart/models/cart';
 import { CartEntityService } from '../cart/services/cart-entity.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payment',
@@ -53,7 +54,8 @@ export class PaymentComponent implements OnInit, AfterViewInit {
     private stripeService: StripeService,
     private cookieService: CookieService,
     private cartEntityService: CartEntityService,
-    private cartHttpService: CartHttpService
+    private cartHttpService: CartHttpService,
+    private router: Router
   ) { }
 
   ngAfterViewInit(): void {
@@ -125,10 +127,14 @@ export class PaymentComponent implements OnInit, AfterViewInit {
             console.log(result.error.message);
           } else {
             if (result.paymentIntent.status === 'succeeded') {
-              this.cartHttpService.removeAllFromCart().subscribe();
-              this.paymentOnGoing = false;
-              successNotification(`Payment of ${result.paymentIntent.amount} has been done with the !`)
-              this.cartEntityService.clearCache();
+              this.cartHttpService.removeAllFromCart().subscribe({
+                next: response => {
+                  this.paymentOnGoing = false;
+                  successNotification(`Payment of ${result.paymentIntent.amount} has been done!`)
+                  this.cartEntityService.clearCache();
+                  this.router.navigateByUrl('/dashboard/home');
+                }
+              });
             }
           }
         });

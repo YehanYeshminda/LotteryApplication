@@ -103,6 +103,7 @@ $east-draw-color: #CC49D3;
 .digit-containers-carousel {
     display: flex;
     justify-content: space-evenly;
+    // flex-direction: column;
     align-items: center;
     margin-left: 40px;
     width: 90%;
@@ -241,9 +242,23 @@ $east-draw-color: #CC49D3;
 
 .carousel-container {
     width: 348px;
-    height: 171px;
+    height: 220px;
     flex-shrink: 0;
     border-radius: 5px;
     background: #FFF;
-    box-shadow: 3px 6px 6px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 3px 6px 6px 3px rgba(0, 0, 0, 0.25);
+}
+
+.container-carousels {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-footer-container {
+    color: black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 12px;
 }

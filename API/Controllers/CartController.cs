@@ -1,11 +1,9 @@
-﻿using API.Helpers;
+﻿using API.API.Repos.Models;
+using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
-using API.Repos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
-using static API.Controllers.CartController;
 
 namespace API.Controllers
 {
@@ -204,16 +202,17 @@ namespace API.Controllers
         }
 
         [HttpPost("DeleteAllFromCart")]
-        public async Task<ActionResult> RemoveAllCartItemsById(AuthDto authDto)
+        public async Task<ActionResult> RemoveAllCartItemsById(AuthDto AuthDto)
         {
-            if (authDto.Hash == null)
+            if (AuthDto.Hash == null)
             {
                 return Unauthorized("Missing Authentication Details");
             }
 
-            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(AuthDto.Hash);
 
-            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+            var _user = await _lotteryContext.Tblregisters
+                .FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == AuthDto.Hash);
 
             if (_user == null)
             {
@@ -227,21 +226,33 @@ namespace API.Controllers
             {
                 try
                 {
-                    var items = await _lotteryContext.Tbllotterynos.Where(x => x.UserId == _user.Id).ToListAsync();
+                    var items = await _lotteryContext.Tbllotterynos
+                        .Where(x => x.UserId == _user.Id)
+                        .ToListAsync();
 
-                    if (items == null)
+                    if (items == null || items.Count == 0)
                     {
                         return BadRequest("Item does not exist!");
                     }
-                        
-                    _lotteryContext.RemoveRange(items);
+
+                    _lotteryContext.Tbllotterynos.RemoveRange(items);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    var newOrder = items.Select(elements => new Tblorderhistory
+                    {
+                        TicketNo = elements.LotteryNo,
+                        RaffleId = Convert.ToInt32(elements.RaffleNo),
+                        UserId = elements.UserId,
+                    }).ToList();
+
+                    _lotteryContext.Tblorderhistories.AddRange(newOrder);
                     await _lotteryContext.SaveChangesAsync();
 
                     return Ok();
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Error occured while deleting cart item! " + ex.Message);
+                    return BadRequest("Error occurred while deleting cart items! " + ex.Message);
                 }
             }
             else
@@ -249,5 +260,6 @@ namespace API.Controllers
                 return Unauthorized("Invalid Authentication Details");
             }
         }
+
     }
 }

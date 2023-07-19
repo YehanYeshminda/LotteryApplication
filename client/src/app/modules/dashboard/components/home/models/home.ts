@@ -12,3 +12,10 @@ export interface Home {
     authDto: AuthDetails
     drawCount: number
 }
+
+export interface OldRafflesReponse {
+    id: number | undefined
+    lotteryId: number | undefined
+    drawDate: string | undefined
+    sequence: string | undefined
+}

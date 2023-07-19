@@ -1,7 +1,7 @@
-﻿using API.Helpers;
+﻿using API.API.Repos.Models;
+using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
-using API.Repos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -79,6 +79,55 @@ namespace API.Controllers
                 }
 
             } else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        [HttpPost("GetAllDrawHistories")]
+        public async Task<ActionResult<Tbldrawhistory>> GetAllDrawHistory([FromBody] AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var drawHistories = await _lotteryContext.Tbldrawhistories.ToListAsync();
+
+                    if (drawHistories == null)
+                    {
+                        return NotFound("Draw Histories not found!");
+                    }
+
+                    return Ok(drawHistories);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occured while getting Draw Histories!" + ex.Message);
+                }
+            }
+            else
             {
                 return Unauthorized("Invalid Authentication Details");
             }

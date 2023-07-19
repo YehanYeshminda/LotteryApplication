@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Repos.Models;
+namespace API.API.Repos.Models;
 
 public partial class Tblregister
 {

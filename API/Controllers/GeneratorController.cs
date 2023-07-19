@@ -1,4 +1,5 @@
-﻿using API.Helpers;
+﻿using API.API.Repos.Models;
+using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -48,8 +49,10 @@ namespace API.Controllers
                     {
                         value = random.Next(0, 31);
                         var existingRandomNo = await _lotteryContext.Tbllotterynos.SingleOrDefaultAsync(x => x.LotteryNo == value.ToString());
+                        var existingOrderHistory = await _lotteryContext.Tblorderhistories.SingleOrDefaultAsync(x => x.TicketNo == value.ToString());
+                        var existingLotteryNo = await _lotteryContext.Tbllotterynos.SingleOrDefaultAsync(x => x.LotteryNo == value.ToString());
 
-                        if (existingRandomNo == null)
+                        if (existingRandomNo == null && existingOrderHistory == null && existingLotteryNo == null)
                         {
                             if (randomNumbers.Count() != 4)
                             {
@@ -131,6 +134,15 @@ namespace API.Controllers
                     }
 
                     existingTicketNo.DrawCount = existingTicketNo.DrawCount + 1;
+
+                    var newDraw = new Tbldrawhistory
+                    {
+                        DrawDate = DateTime.UtcNow,
+                        LotteryId = verifyEasyDrawGenDto.RaffleId,
+                        Sequence = String.Join("",verifyEasyDrawGenDto.TicketNos.ToArray()),
+                    };
+
+                    await _lotteryContext.Tbldrawhistories.AddAsync(newDraw);
                     await _lotteryContext.SaveChangesAsync();
 
                     if (matchingIndexes == 0)
@@ -227,6 +239,18 @@ namespace API.Controllers
                             matchingIndexes++;
                         }
                     }
+
+                    existingTicketNo.DrawCount = existingTicketNo.DrawCount + 1;
+
+                    var newDraw = new Tbldrawhistory
+                    {
+                        DrawDate = DateTime.UtcNow,
+                        LotteryId = megaDrawGenDto.RaffleId,
+                        Sequence = String.Join("", megaDrawGenDto.TicketNos.ToArray()),
+                    };
+
+                    await _lotteryContext.Tbldrawhistories.AddAsync(newDraw);
+                    await _lotteryContext.SaveChangesAsync();
 
                     if (matchingIndexes == 0)
                     {

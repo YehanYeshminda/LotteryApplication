@@ -1,4 +1,4 @@
-import {AuthDetails} from "../models/auth";
+import { AuthDetails } from "../models/auth";
 
 export function getAuthDetails(cookieData: string): AuthDetails | null {
   if (cookieData) {
@@ -6,4 +6,9 @@ export function getAuthDetails(cookieData: string): AuthDetails | null {
   }
 
   return null;
+}
+
+export function splitNumbersByTwo(str: string): string[] {
+  const regex = /\d{2}/g;
+  return str.match(regex) || [];
 }

@@ -1,28 +1,3 @@
-<!-- <carousel class="bg-danger w-100" [isAnimated]="true" [interval]="interval">
-    <slide>
-      <img src="assets/LogoMain.png" alt="first slide" style="display: block; width: 100%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3>First slide label</h3>
-        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-      </div>
-    </slide>
-    <slide>
-      <img src="assets/Money1.svg" alt="second slide" style="display: block; width: 100%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3>Second slide label</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      </div>
-    </slide>
-    <slide>
-      <img src="assets/Money2.svg" alt="third slide" style="display: block; width: 100%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3>Third slide label</h3>
-        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-      </div>
-    </slide>
-</carousel> -->
-
-
 <div class="flex-center-container">
     <div class="easy-draw-container" style="background: url(assets/TicketEasyDrawBg.svg);" routerLink="/dashboard/easy-draw">
         <div class="row">
@@ -109,7 +84,6 @@
     </div>
 </div>
 
-
 <div class="past-winner-container">
     <div class="row">
         <div class="col-12 text-center">
@@ -118,45 +92,51 @@
     </div>
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-sm-12 col-md-6 container-carousels">
             <div class="carousel-container">
-                <carousel [isAnimated]="true" [interval]="interval">
-                    <slide>
+                <carousel [isAnimated]="true" [interval]="interval" *ngIf="(easyDrawHistory$ | async) as draws">
+                    <slide *ngFor="let item of draws">
                       <div class="text-center py-5 bg-white text-white slider-background">
                         <div class="image-container">
                             <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
                         </div>
                         <div class="digit-containers-carousel">
-                            <div *ngFor="let number of drawNo$ | async" class="number">
-                                <p>{{ number }}</p>
+                            <div class="number" *ngFor="let item of splitValuesAndreturnArray(item.sequence)">
+                                <p>{{ item }}</p>
                             </div>
+                        </div>
+
+                        <div class="carousel-footer-container">
+                            <div class="container-right"> 1212 </div>
+                            <div class="container-center">No of Winners: 12</div>
+                            <div class="container-left">{{ currentDate | date:"shortDate" }}</div>
                         </div>
                       </div>
                     </slide>
+                  </carousel>
+            </div>
+        </div>
 
-                    <slide>
+        <div class="col-12 col-sm-12 col-md-6 container-carousels">
+            <div class="carousel-container">
+                <carousel [isAnimated]="true" [interval]="interval" *ngIf="(megaDrawHistory$ | async) as draws">
+                    <slide *ngFor="let item of draws">
                         <div class="text-center py-5 bg-white text-white slider-background">
-                          <div class="image-container">
-                              <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
-                          </div>
-                          <div class="digit-containers-carousel">
-                              <div *ngFor="let number of drawNo$ | async" class="number">
-                                  <p>12</p>
-                              </div>
-                          </div>
+                        <div class="image-container">
+                            <img src="assets/MEGADRAWCAROUSEL.svg" alt="">
                         </div>
-                      </slide>
+                          
+                        <div class="digit-containers-carousel">
+                            <div class="number" *ngFor="let item of splitValuesAndreturnArray(item.sequence)">
+                                <p>{{ item }}</p>
+                            </div>
+                        </div>
 
-                      <slide>
-                        <div class="text-center py-5 bg-white text-white slider-background">
-                          <div class="image-container">
-                              <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
-                          </div>
-                          <div class="digit-containers-carousel">
-                              <div *ngFor="let number of drawNo$ | async" class="number">
-                                  <p>11</p>
-                              </div>
-                          </div>
+                        <div class="carousel-footer-container">
+                            <div class="container-right"> 1212 </div>
+                                <div class="container-center">No of Winners: 12</div>
+                                <div class="container-left">{{ currentDate | date:"shortDate" }}</div>
+                            </div>
                         </div>
                       </slide>
                   </carousel>

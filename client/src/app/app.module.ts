@@ -12,7 +12,6 @@ import { EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { CartEffects } from './modules/dashboard/components/easy-draw/features/effects';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,7 @@ import { CartEffects } from './modules/dashboard/components/easy-draw/features/e
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([CartEffects]),
+    EffectsModule.forRoot([]),
     EntityDataModule.forRoot({}),
   ],
   providers: [
