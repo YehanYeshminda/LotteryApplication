@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
-  Router, Resolve,
+  Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
@@ -15,12 +15,10 @@ export class SequenceNoResolver implements Resolve<boolean> {
     return this.homeEntityService.loaded$
       .pipe(
         tap(loaded => {
-          if (!loaded) {
-            this.homeEntityService.getAll();
-          }
+          this.homeEntityService.getAll();
         }),
-        filter(loaded => !!loaded),
-        first()
+        // filter(loaded => loaded),
+        // first()
       )
   }
 }

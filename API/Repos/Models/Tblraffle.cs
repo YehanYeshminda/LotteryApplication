@@ -22,4 +22,6 @@ public partial class Tblraffle
     public uint? RafflePrice { get; set; }
 
     public int? DrawCount { get; set; }
+
+    public string? UniqueRaffleId { get; set; }
 }

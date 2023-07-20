@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
   megaDrawNo$: Observable<string[] | null> = of();
   megaDrawCount$: Observable<string | undefined> = of();
   megaDrawDate$: Observable<string | undefined> = of();
+  megaDrawuniqueNo$: Observable<string | undefined> = of();
+  easyDrawuniqueNo$: Observable<string | undefined> = of();
   interval = 2000;
   currentDate = new Date();
   megaDrawHistory$: Observable<OldRafflesReponse[] | undefined> = of([]);
@@ -69,6 +71,18 @@ export class HomeComponent implements OnInit {
         return megaDraw?.startOn;
       })
     );
+
+    this.megaDrawuniqueNo$ = this.homeEntityService.entities$.pipe(
+      map(response => {
+        const megaDraw = response.find((draws) => draws.raffleName === 'MegaDraw');
+        return megaDraw?.uniqueRaffleId?.toString();
+      }));
+
+    this.easyDrawuniqueNo$ = this.homeEntityService.entities$.pipe(
+      map(response => {
+        const easyDraw = response.find((draws) => draws.raffleName === 'EasyDraw');
+        return easyDraw?.uniqueRaffleId?.toString();
+      }));
 
     this.megaDrawHistory$ = this.store.select(selectDrawHistoryMegaData);
     this.easyDrawHistory$ = this.store.select(selectDrawHistoryEasyData);

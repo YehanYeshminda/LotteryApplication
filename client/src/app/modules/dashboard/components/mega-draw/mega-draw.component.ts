@@ -51,7 +51,7 @@ export class MegaDrawComponent implements OnInit {
         addOn: new Date().toISOString(),
         authDto: getAuthDetails(this.cookieService.get('user')),
         price: 100,
-        raffleId: "2",
+        raffleId: "1",
         lotteryStatus: 0,
         raffleNo: "",
         userId: 0

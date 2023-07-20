@@ -1,19 +1,32 @@
-<h2>Cart Items:</h2>
-<ul>
-  <ng-container *ngIf="(cartItems$ | async) as items">
-    <li *ngFor="let item of items">
-      <div class="Items">
-        Raffle No: {{item.raffleNo}} | Amount Paid: {{item.paid | currency:'USD'}} | Cart Numbers: {{ item.lotteryNo }}
-        <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button>
+<h1 class="fw-bold">Cart</h1>
+
+<div class="container">
+  <div class="row">
+    <ng-container *ngIf="(cartItems$ | async) as items">
+      <div class="col-12"  *ngFor="let item of items">
+        <div class="card mb-3" style="max-width: 540px;">
+          <div class="row g-0">
+            <div class="col-md-4 d-flex justify-content-center align-items-center">
+              Raffle Name: {{item.raffleNo === "1" ? 'Mega Draw' : 'Easy Draw'}}
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">ITEM INFORMATION</h5>
+                <p class="card-text">{{item.paid | currency:'USD'}}</p>
+                <p class="card-text"><small class="text-muted">{{ item.lotteryNo }} with the Id : {{item.lotteryReferenceId}}</small></p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button>
+        </div>
       </div>
-    </li>
+    </ng-container>
 
-    <div>Total : {{ total | json }}</div>
-  </ng-container>
-
-  <button class="btn btn-primary">
-    <a routerLink="/dashboard/checkout" class="text-light text-decoration-none">
-      Checkout
-    </a>
-  </button>
-</ul>
+    <button class="btn btn-primary">
+      <a routerLink="/dashboard/checkout" class="text-light text-decoration-none">
+        Checkout
+      </a>
+    </button>
+  </div>
+</div>

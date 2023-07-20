@@ -11,6 +11,7 @@ export interface Home {
     rafflePrice: number
     authDto: AuthDetails
     drawCount: number
+    uniqueRaffleId: string
 }
 
 export interface OldRafflesReponse {

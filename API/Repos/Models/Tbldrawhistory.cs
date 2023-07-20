@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace API.API.Repos.Models;
+﻿namespace API.API.Repos.Models;
 
 public partial class Tbldrawhistory
 {
@@ -12,4 +9,6 @@ public partial class Tbldrawhistory
     public DateTime? DrawDate { get; set; }
 
     public string? Sequence { get; set; }
+
+    public string? UniqueLotteryId { get; set; }
 }

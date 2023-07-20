@@ -10,10 +10,12 @@ namespace API.Controllers
     public class GeneratorController : BaseApiController
     {
         private readonly LotteryContext _lotteryContext;
+        private readonly Generators _generators;
 
-        public GeneratorController(LotteryContext lotteryContext)
+        public GeneratorController(LotteryContext lotteryContext, Generators generators)
         {
             _lotteryContext = lotteryContext;
+            _generators = generators;
         }
 
         [HttpPost("EasyDraw")]
@@ -49,10 +51,8 @@ namespace API.Controllers
                     {
                         value = random.Next(0, 31);
                         var existingRandomNo = await _lotteryContext.Tbllotterynos.SingleOrDefaultAsync(x => x.LotteryNo == value.ToString());
-                        var existingOrderHistory = await _lotteryContext.Tblorderhistories.SingleOrDefaultAsync(x => x.TicketNo == value.ToString());
-                        var existingLotteryNo = await _lotteryContext.Tbllotterynos.SingleOrDefaultAsync(x => x.LotteryNo == value.ToString());
 
-                        if (existingRandomNo == null && existingOrderHistory == null && existingLotteryNo == null)
+                        if (existingRandomNo == null)
                         {
                             if (randomNumbers.Count() != 4)
                             {
@@ -79,6 +79,178 @@ namespace API.Controllers
             else
             {
                   return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        [NonAction]
+        public string GenerateUniqueRaffleNumber()
+        {
+            string raffleNumber;
+            do
+            {
+                raffleNumber = _generators.GenerateRandomNumericStringForRaffle(8);
+            } while (!_generators.IsUniqueRaffleNoAndId(raffleNumber));
+
+            return raffleNumber;
+        }
+
+        public class VerifyBasedOnOrderDto
+        {
+            public AuthDto authDto { get; set; }
+            public string UniqueRaffleId { get; set; }
+        }
+
+        public class GetRaffleBasedDto
+        {
+            public int UserId { get; set; }
+            public string Email { get; set; }
+            public string WonTicketNo { get; set; }
+            public string Matches { get; set; }
+            public string RaffleId { get; set; }
+            public string UniqueRaffleId { get; set; }
+        }
+
+        [HttpPost("VerifyBasedOnOrder")]
+        public async Task<ActionResult<GetRaffleBasedDto>> VerifyBasedOnOrders(VerifyBasedOnOrderDto verifyBasedOnOrderDto)
+        {
+            if (verifyBasedOnOrderDto.authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(verifyBasedOnOrderDto.authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == verifyBasedOnOrderDto.authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var existingTicketNo = await _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.UniqueRaffleId == verifyBasedOnOrderDto.UniqueRaffleId);
+
+                    if (existingTicketNo == null)
+                    {
+                        return BadRequest("Invalid Raffle Id");
+                    }
+
+                    var orderHistories = await _lotteryContext.Tblorderhistories
+                        .Where(x => x.RaffleUniqueId == verifyBasedOnOrderDto.UniqueRaffleId && x.TicketNo != null)
+                        .ToListAsync();
+
+                    if (orderHistories.Count == 0)
+                    {
+                        return BadRequest("No orders found for this raffle.");
+                    }
+
+                    string existingTicketNoString = existingTicketNo.TicketNo.ToString();
+                    List<int> resultList = new List<int>();
+
+                    // Convert existingTicketNoString to a list of integers
+                    for (int i = 0; i < existingTicketNoString.Length; i += 2)
+                    {
+                        if (i + 1 < existingTicketNoString.Length)
+                        {
+                            string substring = existingTicketNoString.Substring(i, 2);
+                            int value = int.Parse(substring);
+                            resultList.Add(value);
+                        }
+                    }
+
+                    List<int> matchingIndexes = new List<int>();
+
+                    foreach (var orderHistory in orderHistories)
+                    {
+                        // Convert the order history ticket number to a list of integers
+                        List<int> orderHistoryList = new List<int>();
+                        for (int i = 0; i < orderHistory.TicketNo.Length; i += 2)
+                        {
+                            if (i + 1 < orderHistory.TicketNo.Length)
+                            {
+                                string substring = orderHistory.TicketNo.Substring(i, 2);
+                                int value = int.Parse(substring);
+                                orderHistoryList.Add(value);
+                            }
+                        }
+
+                        // Compare each digit and count the matches
+                        int matchCount = 0;
+                        for (int i = 0; i < resultList.Count && i < orderHistoryList.Count; i++)
+                        {
+                            if (resultList[i] == orderHistoryList[i])
+                            {
+                                matchCount++;
+                                Console.WriteLine(resultList[i] + " is matching for " + orderHistoryList[i]);
+                            }
+                        }
+                        matchingIndexes.Add(matchCount);
+                        Console.WriteLine(matchCount);
+                    }
+
+
+                    existingTicketNo.DrawCount = existingTicketNo.DrawCount + 1;
+
+                    var newDraw = new Tbldrawhistory
+                    {
+                        DrawDate = DateTime.UtcNow,
+                        LotteryId = (int)existingTicketNo.Id,
+                        Sequence = existingTicketNo.TicketNo,
+                    };
+
+                    await _lotteryContext.Tbldrawhistories.AddAsync(newDraw);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    Console.WriteLine("Old Ticket No: " + existingTicketNo.TicketNo);
+                    foreach (var item in matchingIndexes)
+                    {
+                        Console.WriteLine(item);
+                    }
+
+                    var oldTicketNo = existingTicketNo.TicketNo;
+
+                    var winner = new Tbllotterywinner();
+
+                    for (int i = 0; i < matchingIndexes.Count; i++)
+                    {
+                        if (matchingIndexes[i] > 0)
+                        {
+                            var newWin = new Tbllotterywinner
+                            {
+                                AddOn = DateTime.UtcNow,
+                                DrawDate = newDraw.DrawDate,
+                                RaffleUniqueId = existingTicketNo.UniqueRaffleId,
+                                TicketNo = orderHistories[i].TicketNo,
+                                UserId = orderHistories[i].UserId,
+                                Matches = matchingIndexes[i]
+                            };
+
+                            await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
+                        }
+                    }
+
+                    existingTicketNo.TicketNo = GenerateUniqueRaffleNumber();
+                    existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6);
+
+                    await _lotteryContext.SaveChangesAsync();
+
+
+                    return Ok("Winners checked and saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occurred while checking and saving winners! " + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
             }
         }
 
@@ -145,24 +317,50 @@ namespace API.Controllers
                     await _lotteryContext.Tbldrawhistories.AddAsync(newDraw);
                     await _lotteryContext.SaveChangesAsync();
 
+                    var oldTicketNo = existingTicketNo.TicketNo;
+
+                    var newWin = new Tbllotterywinner
+                    {
+                        AddOn = DateTime.UtcNow,
+                        DrawDate = newDraw.DrawDate,
+                        RaffleUniqueId = existingTicketNo.UniqueRaffleId,
+                        TicketNo = oldTicketNo,
+                        UserId = _user.Id
+                    };
+
+                    existingTicketNo.TicketNo = GenerateUniqueRaffleNumber();
+                    await _lotteryContext.SaveChangesAsync();
+
                     if (matchingIndexes == 0)
                     {
                         return BadRequest("No matches found.");
                     }
                     else if (matchingIndexes == 1)
                     {
+                        newWin.Matches = matchingIndexes;
+                        await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
+                        await _lotteryContext.SaveChangesAsync();
                         return Ok("1 won");
                     }
                     else if (matchingIndexes == 2)
                     {
+                        newWin.Matches = matchingIndexes;
+                        await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
+                        await _lotteryContext.SaveChangesAsync();
                         return Ok("2 won");
                     }
                     else if (matchingIndexes == 3)
                     {
+                        newWin.Matches = matchingIndexes;
+                        await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
+                        await _lotteryContext.SaveChangesAsync();
                         return Ok("3 won");
                     }
                     else if (matchingIndexes == 4)
                     {
+                        newWin.Matches = matchingIndexes;
+                        await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
+                        await _lotteryContext.SaveChangesAsync();
                         return Ok("Jackpot won");
                     }
                     else

@@ -22,6 +22,8 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tbllotteryno> Tbllotterynos { get; set; }
 
+    public virtual DbSet<Tbllotterywinner> Tbllotterywinners { get; set; }
+
     public virtual DbSet<Tblmoneycredit> Tblmoneycredits { get; set; }
 
     public virtual DbSet<Tblorderhistory> Tblorderhistories { get; set; }
@@ -85,6 +87,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Sequence)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UniqueLotteryId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Tbllotteryno>(entity =>
@@ -105,6 +110,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.LotteryNo)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LotteryReferenceId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.LotteryStatus)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bit(1)");
@@ -113,6 +121,33 @@ public partial class LotteryContext : DbContext
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.RaffleNo)
                 .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Tbllotterywinner>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tbllotterywinners");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.DrawDate)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Matches)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.RaffleUniqueId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.TicketNo)
+                .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.UserId)
                 .HasDefaultValueSql("'NULL'")
@@ -153,9 +188,18 @@ public partial class LotteryContext : DbContext
             entity.ToTable("tblorderhistory");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.LotteryReferenceId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.RaffleId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
+            entity.Property(e => e.RaffleUniqueId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.TicketNo)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
@@ -195,6 +239,9 @@ public partial class LotteryContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.TicketNo)
                 .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UniqueRaffleId)
+                .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
         });
 

@@ -10,14 +10,16 @@ namespace API.Controllers
     public class DrawController : BaseApiController
     {
         private readonly LotteryContext _lotteryContext;
+        private readonly Generators _generators;
 
-        public DrawController(LotteryContext lotteryContext)
+        public DrawController(LotteryContext lotteryContext, Generators generators)
         {
             _lotteryContext = lotteryContext;
+            _generators = generators;
         }
 
-        [HttpPost("EasyDraw")]
-        public async Task<ActionResult> CreateEasyDraw(CreateEasyDrawDto createEasyDrawDto)
+        [HttpPost("Draw")]
+        public async Task<ActionResult> CreateDraw(CreateEasyDrawDto createEasyDrawDto)
         {
             if (createEasyDrawDto == null)
             {
@@ -53,7 +55,17 @@ namespace API.Controllers
                 try
                 {
                     string ticketNo = createEasyDrawDto.TicketNo.ToString();
-                    bool hasDuplicates = ticketNo.Distinct().Count() != ticketNo.Length;
+                    bool hasDuplicates = false;
+
+                    for (int i = 0; i < ticketNo.Length - 1; i++)
+                    {
+                        if (ticketNo[i] == ticketNo[i + 1])
+                        {
+                            hasDuplicates = true;
+                            break;
+                        }
+                    }
+
                     if (hasDuplicates)
                     {
                         return BadRequest("TicketNo contains duplicate values!");
@@ -66,7 +78,8 @@ namespace API.Controllers
                         EndOn = createEasyDrawDto.EndOn,
                         CustStatus = createEasyDrawDto.CustStatus,
                         TicketNo = createEasyDrawDto.TicketNo.ToString(),
-                        RaffleName = createEasyDrawDto.RaffleName
+                        RaffleName = createEasyDrawDto.RaffleName,
+                        UniqueRaffleId = _generators.GenerateRandomString(6),
                     };
 
                     await _lotteryContext.Tblraffles.AddAsync(draw);

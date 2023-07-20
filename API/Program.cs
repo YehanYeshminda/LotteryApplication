@@ -15,6 +15,7 @@ builder.Services.AddDbContext<LotteryContext>(options => options.UseMySQL(builde
 // services
 builder.Services.AddScoped<IRegisterRepository, RegisterService>();
 builder.Services.AddScoped<IAccountRepository, AccountService>();
+builder.Services.AddScoped<Generators>();
 builder.Services.AddSingleton<GlobalDataService>();
 builder.Services.AddOptions();
 builder.Services.Configure<TwillioSettings>(builder.Configuration.GetSection("Twilio"));

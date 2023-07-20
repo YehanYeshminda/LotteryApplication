@@ -20,4 +20,6 @@ public partial class Tbllotteryno
     public decimal? Paid { get; set; }
 
     public ulong? LotteryStatus { get; set; }
+
+    public string? LotteryReferenceId { get; set; }
 }

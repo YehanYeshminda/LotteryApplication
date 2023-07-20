@@ -41,7 +41,7 @@ export class EasyDrawComponent {
         addOn: new Date().toISOString(),
         authDto: getAuthDetails(this.cookieService.get('user')),
         price: 500,
-        raffleId: "1",
+        raffleId: "2",
         lotteryStatus: 0,
         raffleNo: "",
         userId: 0

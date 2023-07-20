@@ -10,10 +10,12 @@ namespace API.Controllers
     public class CartController : BaseApiController
     {
         private readonly LotteryContext _lotteryContext;
+        private readonly Generators _generators;
 
-        public CartController(LotteryContext lotteryContext)
+        public CartController(LotteryContext lotteryContext, Generators generators)
         {
             _lotteryContext = lotteryContext;
+            _generators = generators;
         }
 
         public class AddToCartDto
@@ -26,6 +28,18 @@ namespace API.Controllers
             public string Name { get; set; }
             public decimal Paid { get; set; }
             public decimal Price { get; set; }
+        }
+
+        [NonAction]
+        public string GenerateUniqueLotteryNumber()
+        {
+            string raffleNumber;
+            do
+            {
+                raffleNumber = _generators.GenerateRandomNumericStringForLottery(8);
+            } while (!_generators.IsUniqueLotteryNoId(raffleNumber));
+
+            return raffleNumber;
         }
 
 
@@ -77,6 +91,7 @@ namespace API.Controllers
                         LotteryStatus = (ulong?)addToCartDto.LotteryStatus,
                         UserId = _user.Id,
                         LotteryNo = convertedNumbers,
+                        LotteryReferenceId = GenerateUniqueLotteryNumber(),
                     };
 
                     await _lotteryContext.AddAsync(lotteryNo);
@@ -230,7 +245,7 @@ namespace API.Controllers
                         .Where(x => x.UserId == _user.Id)
                         .ToListAsync();
 
-                    if (items == null || items.Count == 0)
+                    if (items == null)
                     {
                         return BadRequest("Item does not exist!");
                     }
@@ -243,6 +258,9 @@ namespace API.Controllers
                         TicketNo = elements.LotteryNo,
                         RaffleId = Convert.ToInt32(elements.RaffleNo),
                         UserId = elements.UserId,
+                        RaffleUniqueId = _lotteryContext.Tblraffles.FirstOrDefault(x => x.Id == Convert.ToInt32(elements.RaffleNo)).UniqueRaffleId,
+                        AddOn = DateTime.UtcNow,
+                        LotteryReferenceId = elements.LotteryReferenceId,
                     }).ToList();
 
                     _lotteryContext.Tblorderhistories.AddRange(newOrder);

@@ -20,5 +20,6 @@ export interface CartReponse {
     lotteryNo?: number[]
     name: string
     cartNumbers: number[]
+    lotteryReferenceId?: string;
     authDto?: AuthDetails | null;
 }
