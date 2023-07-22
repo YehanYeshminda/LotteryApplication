@@ -1,4 +1,7 @@
-﻿namespace API.API.Repos.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace API.Repos.Models;
 
 public partial class Tbldrawhistory
 {

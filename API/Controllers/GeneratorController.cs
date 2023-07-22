@@ -1,7 +1,7 @@
-﻿using API.API.Repos.Models;
-using API.Helpers;
+﻿using API.Helpers;
 using API.Repos;
 using API.Repos.Dtos;
+using API.Repos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -89,6 +89,18 @@ namespace API.Controllers
             do
             {
                 raffleNumber = _generators.GenerateRandomNumericStringForRaffle(8);
+            } while (!_generators.IsUniqueRaffleNoAndId(raffleNumber));
+
+            return raffleNumber;
+        }
+
+        [NonAction]
+        public string GenerateUniqueRaffleNumberMegaDraw()
+        {
+            string raffleNumber;
+            do
+            {
+                raffleNumber = _generators.GenerateRandomNumericStringForRaffle(12);
             } while (!_generators.IsUniqueRaffleNoAndId(raffleNumber));
 
             return raffleNumber;
@@ -191,10 +203,9 @@ namespace API.Controllers
                             }
                         }
                         matchingIndexes.Add(matchCount);
-                        Console.WriteLine(matchCount);
                     }
 
-
+                    // + 1 to the existing draw count
                     existingTicketNo.DrawCount = existingTicketNo.DrawCount + 1;
 
                     var newDraw = new Tbldrawhistory
@@ -202,21 +213,19 @@ namespace API.Controllers
                         DrawDate = DateTime.UtcNow,
                         LotteryId = (int)existingTicketNo.Id,
                         Sequence = existingTicketNo.TicketNo,
+                        UniqueLotteryId = existingTicketNo.UniqueRaffleId
                     };
 
+                    // saving to the draw history
                     await _lotteryContext.Tbldrawhistories.AddAsync(newDraw);
                     await _lotteryContext.SaveChangesAsync();
 
-                    Console.WriteLine("Old Ticket No: " + existingTicketNo.TicketNo);
-                    foreach (var item in matchingIndexes)
-                    {
-                        Console.WriteLine(item);
-                    }
-
+                    // saving the old ticket number
                     var oldTicketNo = existingTicketNo.TicketNo;
 
                     var winner = new Tbllotterywinner();
 
+                    // getting the winner index numbers
                     for (int i = 0; i < matchingIndexes.Count; i++)
                     {
                         if (matchingIndexes[i] > 0)
@@ -228,18 +237,25 @@ namespace API.Controllers
                                 RaffleUniqueId = existingTicketNo.UniqueRaffleId,
                                 TicketNo = orderHistories[i].TicketNo,
                                 UserId = orderHistories[i].UserId,
-                                Matches = matchingIndexes[i]
+                                Matches = matchingIndexes[i],
+                                RaffleId = (int)existingTicketNo.Id
                             };
 
                             await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
                         }
                     }
 
-                    existingTicketNo.TicketNo = GenerateUniqueRaffleNumber();
-                    existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6);
+                    if (existingTicketNo.RaffleName == "MegaDraw")
+                    {
+                        existingTicketNo.TicketNo = GenerateUniqueRaffleNumberMegaDraw(); // adding the new ticket no for the raffle no
+                        existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6);
+                    } else if (existingTicketNo.RaffleName == "EasyDraw")
+                    {
+                        existingTicketNo.TicketNo = GenerateUniqueRaffleNumber(); // adding the new ticket no for the raffle no
+                        existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6); //  generating a unique raffle id for the raffle
+                    }
 
                     await _lotteryContext.SaveChangesAsync();
-
 
                     return Ok("Winners checked and saved successfully.");
                 }

@@ -11,12 +11,10 @@ export class CartResolver implements Resolve<boolean> {
         return this.cartEntityService.loaded$
             .pipe(
                 tap(loaded => {
-                    if (!loaded) {
-                        this.cartEntityService.getAll();
-                    }
+                    this.cartEntityService.getAll();
                 }),
-                filter(loaded => !!loaded),
-                first()
+                // filter(loaded => loaded),
+                // first()
             )
     }
 }

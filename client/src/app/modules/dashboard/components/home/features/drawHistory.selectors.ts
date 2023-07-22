@@ -18,6 +18,7 @@ export const selectDrawHistoryMegaData = createSelector(
     selectDrawHistoryState,
     (state: DrawHistoryState) => {
         if (state.drawHistory) {
+            console.log(state.drawHistory.map(x => console.log(x)));
             return state.drawHistory
                 .filter((draw: OldRafflesReponse) => draw.lotteryId === 1)
                 .map((draw: OldRafflesReponse) => ({ ...draw }));

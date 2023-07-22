@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.API.Repos.Models;
+namespace API.Repos.Models;
 
 public partial class Tblmoneycredit
 {

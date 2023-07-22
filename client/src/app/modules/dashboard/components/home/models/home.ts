@@ -19,4 +19,5 @@ export interface OldRafflesReponse {
     lotteryId: number | undefined
     drawDate: string | undefined
     sequence: string | undefined
+    winnerCount: number;
 }

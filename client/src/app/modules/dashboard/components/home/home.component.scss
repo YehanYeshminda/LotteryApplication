@@ -110,6 +110,7 @@ $east-draw-color: #CC49D3;
     margin-top: 10px;
     flex-shrink: 0;
     text-align: center;
+    color: black;
 
     .number {
         width: 30px;
@@ -190,6 +191,39 @@ $east-draw-color: #CC49D3;
             margin-top: 13px;
             text-align: center;
             font-size: 26px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            font-family: $main-card-font;
+        }
+    }
+    
+}
+
+.digit-containers-carousel-megadraw {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 40px;
+    margin-top: 20px;
+    flex-shrink: 0;
+    text-align: center;
+
+    .number {
+        width: 30px;
+        margin-right: 24px;
+        height: 30px;
+        border-radius: 30px;
+        background: #CC49D3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            color: white;
+            margin-top: 13px;
+            text-align: center;
+            font-size: 13px;
             font-style: normal;
             font-weight: 600;
             line-height: normal;

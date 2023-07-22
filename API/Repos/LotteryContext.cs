@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using API.API.Repos.Models;
+using API.Repos.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos;
@@ -141,6 +141,9 @@ public partial class LotteryContext : DbContext
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
             entity.Property(e => e.Matches)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.RaffleId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
             entity.Property(e => e.RaffleUniqueId)

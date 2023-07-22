@@ -86,6 +86,12 @@ export class HomeComponent implements OnInit {
 
     this.megaDrawHistory$ = this.store.select(selectDrawHistoryMegaData);
     this.easyDrawHistory$ = this.store.select(selectDrawHistoryEasyData);
+
+    this.megaDrawHistory$.subscribe({
+      next: response => {
+        console.log(response);
+      }
+    })
   }
 
   splitValuesAndreturnArray(value: string | undefined): string[] {

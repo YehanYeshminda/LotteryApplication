@@ -107,9 +107,9 @@
                         </div>
 
                         <div class="carousel-footer-container">
-                            <div class="container-right"> 1212 </div>
-                            <div class="container-center">No of Winners: 12</div>
-                            <div class="container-left">{{ currentDate | date:"shortDate" }}</div>
+                            <div class="container-right"> {{ item.sequence }} </div>
+                            <div class="container-center">No of Winners: {{ item.winnerCount }}</div>
+                            <div class="container-left">{{ item.drawDate | date:"shortDate" }}</div>
                         </div>
                       </div>
                     </slide>
@@ -126,17 +126,17 @@
                             <img src="assets/MEGADRAWCAROUSEL.svg" alt="">
                         </div>
                           
-                        <div class="digit-containers-carousel">
+                        <div class="digit-containers-carousel-megadraw">
                             <div class="number" *ngFor="let item of splitValuesAndreturnArray(item.sequence)">
                                 <p>{{ item }}</p>
                             </div>
                         </div>
 
                         <div class="carousel-footer-container">
-                            <div class="container-right"> 1212 </div>
-                                <div class="container-center">No of Winners: 12</div>
-                                <div class="container-left">{{ currentDate | date:"shortDate" }}</div>
-                            </div>
+                            <div class="container-right"> {{ item.sequence }} </div>
+                            <div class="container-center">No of Winners: {{ item.winnerCount }}</div>
+                            <div class="container-left">{{ item.drawDate | date:"shortDate" }}</div>
+                        </div>
                         </div>
                       </slide>
                   </carousel>

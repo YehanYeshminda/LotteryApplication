@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.API.Repos.Models;
+namespace API.Repos.Models;
 
 public partial class Tbllotterywinner
 {
@@ -18,4 +18,6 @@ public partial class Tbllotterywinner
     public DateTime? DrawDate { get; set; }
 
     public DateTime? AddOn { get; set; }
+
+    public int? RaffleId { get; set; }
 }

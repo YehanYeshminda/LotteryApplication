@@ -1,12 +1,3 @@
-<!-- <h2>Collection Payment Intent</h2>
-<div [formGroup]="stripeTest">
-  <input formControlName="name" />
-  <input formControlName="amount" />
-  <button >
-    PAY
-  </button>
-</div> -->
-
 <div class="container">
  <div class="row m-0">
   <div class="col-md-7 col-12">
@@ -40,7 +31,7 @@
           <tbody>
             <ng-container *ngFor="let item of cartItems$ | async">
               <tr>
-                <td>{{ item.raffleNo == "1" ? "Easy Draw" : "Mega Draw" }}</td>
+                <td>{{ item.raffleNo == "1" ? "Mega Draw" : "Easy Draw" }}</td>
                 <td>{{ item.lotteryNo }}</td>
                 <td><span class="fas fa-dollar-sign"></span>{{ item.paid }}</td>
                 <td><span class="fas fa-dollar-sign"></span>{{ item.paid }}</td>
