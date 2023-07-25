@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -6,9 +6,11 @@ import { AppState } from 'src/app/reducer';
 import { AuthHttpService } from './services/auth-http.service';
 import { noop, Observable, of, tap } from 'rxjs';
 import { login } from './features/auth.actions';
-import { MakeLogin, MakeRegisterUser, User } from './models/user';
+import { MakeLogin, User } from './models/user';
 import { OtpSend } from './models/auth';
 import { errorNotification } from 'src/app/shared/alerts/sweetalert';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { VerifyOtpComponent } from './components/verify-otp/verify-otp.component';
 
 @Component({
   selector: 'app-auth',
@@ -21,8 +23,11 @@ export class AuthComponent implements OnInit {
   otpSent: boolean = false;
   disabledTime: Observable<number> = of(0);
   isDisabled: boolean = false;
+  remainingTime: number = 30;
+  bsModalRef?: BsModalRef;
+  @ViewChild('timerSpan', { static: false }) timerSpan!: ElementRef;
 
-  constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService
+  constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService, private modalService: BsModalService
   ) { }
 
   ngOnInit(): void {
@@ -100,6 +105,10 @@ export class AuthComponent implements OnInit {
     }
   }
 
+  openModalWithComponent() {
+    this.bsModalRef = this.modalService.show(VerifyOtpComponent);
+  }
+
   sendOtp() {
     if (this.form.controls['mobile'].invalid) {
       console.error("Missing Mobile Number!")
@@ -113,10 +122,15 @@ export class AuthComponent implements OnInit {
 
     this.authService.sendOtp(values).subscribe({
       next: response => {
-        this.otpSent = true;
+        if (response) {
+          this.otpSent = !this.otpSent;
+          this.startTimer();
+        }
+      },
+      complete: () => {
+        this.openModalWithComponent();
         setTimeout(() => {
-          this.otpSent = false;
-          this.disabledTime = of(0);
+          this.otpSent = !this.otpSent;
         }, 50000);
       }
     })
@@ -125,5 +139,22 @@ export class AuthComponent implements OnInit {
   toggleRegisterMode() {
     this.registerMode = !this.registerMode;
     this.initializeForm();
+  }
+
+  startTimer() {
+    let interval = setInterval(() => {
+      this.remainingTime--;
+
+      const minutes = Math.floor(this.remainingTime / 60);
+      const seconds = this.remainingTime % 60;
+      console.log(this.remainingTime)
+
+      this.timerSpan.nativeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      if (this.remainingTime <= 0) {
+        clearInterval(interval);
+        this.otpSent = false;
+      }
+    }, 1000);
   }
 }

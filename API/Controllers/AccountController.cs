@@ -76,8 +76,13 @@ namespace API.Controllers
             }
         }
 
+        public class GetSentOtpResponse 
+        {
+            public string Number { get; set; }
+        }
+
         [HttpPost("SendOTP")]
-        public async Task<ActionResult<int>> SendOTP(SendOtpDto sendOtpDto)
+        public async Task<ActionResult<GetSentOtpResponse>> SendOTP(SendOtpDto sendOtpDto)
         {
             string secret = _twilioSettings.TWILIO_AUTH_TOKEN;
             string credential = _twilioSettings.TWILIO_ACCOUNT_SID;
@@ -96,12 +101,17 @@ namespace API.Controllers
                 string responseString = Encoding.UTF8.GetString(responseBytes);
             }
 
-            return Ok(sendOtpDto.PhoneNumber);
+            return Ok(new GetSentOtpResponse { Number  = sendOtpDto.PhoneNumber });
+
         }
 
+        public class SendOtpVerification
+        {
+            public string OTP { get; set; }
+        }
 
         [HttpPost("VerifyOTP")]
-        public async Task<ActionResult<ValuesDto>> CheckOTPValid(string OTP)
+        public async Task<ActionResult<ValuesDto>> CheckOTPValid(SendOtpVerification sendOtpVerification)
         {
             string secret = _twilioSettings.TWILIO_AUTH_TOKEN;
             string credential = _twilioSettings.TWILIO_ACCOUNT_SID;
@@ -124,7 +134,7 @@ namespace API.Controllers
                     }
 
                     checkParameters["To"] = _globalDataService.PhoneNumber;
-                    checkParameters["Code"] = OTP;
+                    checkParameters["Code"] = sendOtpVerification.OTP;
 
                     byte[] checkResponseBytes;
                     try

@@ -1,6 +1,5 @@
-<h1 class="fw-bold">Cart</h1>
-
-<div class="container">
+<!-- <div class="container">
+  <h1 class="fw-bold">My Cart</h1>
   <div class="row">
     <ng-container *ngIf="(cartItems$ | async) as items">
       <div class="col-12"  *ngFor="let item of items">
@@ -29,4 +28,69 @@
       </a>
     </button>
   </div>
-</div>
+</div> -->
+
+<mat-horizontal-stepper linear #stepper ngClass="{{ 'last-edited-step-' + stepper.selectedIndex }}" labelPosition="bottom">
+  <mat-step>
+    <ng-template matStepLabel>ORDER</ng-template>
+    <div class="row">
+      <ng-container *ngIf="(cartItems$ | async) as items">
+        <div class="col-12"  *ngFor="let item of items">
+          <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+              <div class="col-md-4 d-flex justify-content-center align-items-center">
+                Raffle Name: {{item.raffleNo === "1" ? 'Mega Draw' : 'Easy Draw'}}
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">ITEM INFORMATION</h5>
+                  <p class="card-text">{{item.paid | currency:'₹'}}</p>
+                  <p class="card-text"><small class="text-muted">{{ item.lotteryNo }} with the Id : {{item.lotteryReferenceId}}</small></p>
+                </div>
+              </div>
+            </div>
+  
+            <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button>
+          </div>
+        </div>
+      </ng-container>
+
+      <div>
+        <button matStepperNext mat-raised-button color="primary">Next</button>
+      </div>
+  
+      <button class="btn btn-primary">
+        <a routerLink="/dashboard/checkout" class="text-light text-decoration-none">
+          Checkout
+        </a>
+      </button>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="paymentForm">
+    <form>
+      <ng-template matStepLabel>PAYMENT</ng-template>
+      <div class="">adsasdasd</div>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+
+      <div>
+        <button matStepperPrevious mat-raised-button color="primary">Back</button>
+        <button matStepperNext mat-raised-button color="primary">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>CONFIRMATION</ng-template>
+    You are now done.
+    <div>
+      <button matStepperPrevious mat-raised-button color="primary">Back</button>
+      <button matStepperNext mat-raised-button color="warn" (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+
+
+
+

@@ -1,0 +1,15 @@
+<div class="container">
+    <form [formGroup]="form" (ngSubmit)="verifyOtp()">
+        <div class="row">
+            <div class="col-12">
+                <app-input [formControl]="$any(form.controls['otp'])" [label]="'OTP'"></app-input>
+              </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center align-items-center p-2">
+                <button class="btn btn-primary">VERIFY OTP</button>
+            </div>
+        </div>
+    </form>
+</div>

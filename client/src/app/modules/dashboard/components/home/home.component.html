@@ -95,7 +95,7 @@
         <div class="col-12 col-sm-12 col-md-6 container-carousels">
             <div class="carousel-container">
                 <carousel [isAnimated]="true" [interval]="interval" *ngIf="(easyDrawHistory$ | async) as draws">
-                    <slide *ngFor="let item of draws">
+                    <slide class="carousel-container" *ngFor="let item of draws">
                       <div class="text-center py-5 bg-white text-white slider-background">
                         <div class="image-container">
                             <img src="assets/EASYDRAWCAROUSEL.svg" alt="">
@@ -117,26 +117,26 @@
             </div>
         </div>
 
-        <div class="col-12 col-sm-12 col-md-6 container-carousels">
+        <div class="col-12 col-sm-12 col-md-6 container-carousels mt-5 mt-sm-5 mt-md-0">
             <div class="carousel-container">
                 <carousel [isAnimated]="true" [interval]="interval" *ngIf="(megaDrawHistory$ | async) as draws">
-                    <slide *ngFor="let item of draws">
+                    <slide *ngFor="let item of draws" class="carousel-container">
                         <div class="text-center py-5 bg-white text-white slider-background">
-                        <div class="image-container">
-                            <img src="assets/MEGADRAWCAROUSEL.svg" alt="">
-                        </div>
-                          
-                        <div class="digit-containers-carousel-megadraw">
-                            <div class="number" *ngFor="let item of splitValuesAndreturnArray(item.sequence)">
-                                <p>{{ item }}</p>
+                            <div class="image-container">
+                                <img src="assets/MEGADRAWCAROUSEL.svg" alt="">
                             </div>
-                        </div>
+                            
+                            <div class="digit-containers-carousel-megadraw">
+                                <div class="number" *ngFor="let item of splitValuesAndreturnArray(item.sequence)">
+                                    <p>{{ item }}</p>
+                                </div>
+                            </div>
 
-                        <div class="carousel-footer-container">
-                            <div class="container-right"> {{ item.sequence }} </div>
-                            <div class="container-center">No of Winners: {{ item.winnerCount }}</div>
-                            <div class="container-left">{{ item.drawDate | date:"shortDate" }}</div>
-                        </div>
+                            <div class="carousel-footer-container">
+                                <div class="container-right"> {{ item.sequence }} </div>
+                                <div class="container-center">No of Winners: {{ item.winnerCount }}</div>
+                                <div class="container-left">{{ item.drawDate | date:"shortDate" }}</div>
+                            </div>
                         </div>
                       </slide>
                   </carousel>

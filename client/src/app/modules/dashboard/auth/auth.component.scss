@@ -1,10 +1,10 @@
-.center-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 10px;
-}
+// .center-container {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   padding: 10px;
+// }
 
 .form-field-container {
   margin-bottom: 10px;
@@ -17,4 +17,12 @@
 
 .form-control {
   outline: 1px solid lightgray
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1073px;
+  margin-top: 20px;
 }

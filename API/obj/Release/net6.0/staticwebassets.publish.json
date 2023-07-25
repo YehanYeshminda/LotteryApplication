@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "pu7aCl0lKe2AmVIASWIWXm3iDyxpU/MB1662P7aCu68=",
+  "Source": "API",
+  "BasePath": "_content/API",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "API\\wwwroot",
+      "Source": "API",
+      "ContentRoot": "D:\\Programming\\Office\\LotteryApp\\API\\wwwroot\\",
+      "BasePath": "_content/API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

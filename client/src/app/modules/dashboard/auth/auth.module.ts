@@ -11,10 +11,12 @@ import { authReducer } from './reducer/auth.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './features/auth.effects';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { VerifyOtpComponent } from './components/verify-otp/verify-otp.component';
 
 @NgModule({
   declarations: [
-    AuthComponent
+    AuthComponent,
+    VerifyOtpComponent
   ],
   imports: [
     CommonModule,

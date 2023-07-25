@@ -29,7 +29,8 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { StoreModule } from '@ngrx/store';
 import { drawHistoryReducer } from './components/home/features/drawHistory.reducer';
 import { DrawHistoryResolver } from './components/home/resolvers/draw-history.resolver';
-
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatButtonModule } from '@angular/material/button';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -64,6 +65,8 @@ const entityMetaData: EntityMetadataMap = {
     ReactiveFormsModule,
     CarouselModule.forRoot(),
     StoreModule.forFeature('drawHistory', drawHistoryReducer),
+    MatStepperModule,
+    MatButtonModule
   ],
   providers: [
     CartEntityService,
