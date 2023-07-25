@@ -31,6 +31,7 @@ import { drawHistoryReducer } from './components/home/features/drawHistory.reduc
 import { DrawHistoryResolver } from './components/home/resolvers/draw-history.resolver';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -66,7 +67,8 @@ const entityMetaData: EntityMetadataMap = {
     CarouselModule.forRoot(),
     StoreModule.forFeature('drawHistory', drawHistoryReducer),
     MatStepperModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [
     CartEntityService,

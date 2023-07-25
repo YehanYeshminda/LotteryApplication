@@ -23,7 +23,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .mat-horizontal-stepper-header {
         &+.mat-stepper-horizontal-line:nth-child(#{$index}) {
             height: 2px;
-            background-image: linear-gradient(to right, #00b495, #00aeea);
+            background-image: linear-gradient(to right, #08FF03, #08FF03);
         }
     }
 }
@@ -39,7 +39,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @mixin styleUnEditedStepIcon($index) {
     .mat-horizontal-stepper-header:nth-child(#{$index}) {
         .mat-step-icon:not(.mat-step-icon-selected) {
-            background-color: greenyellow;
+            background-color: green;
         }
     }
 }
@@ -65,4 +65,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 .mat-stepper-label-position-bottom .mat-stepper-horizontal-line {
   top: 20px !important;
+}
+
+.mat-step-header .mat-step-icon-selected {
+    border: 1px solid green;
+    background: white;
+    color: green;
+    font-weight: bolder;
+}
+
+.mat-step-header .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+    background: white;
+    border: 1px solid green;
 }
