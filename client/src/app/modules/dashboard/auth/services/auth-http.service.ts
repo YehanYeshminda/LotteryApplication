@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MakeLogin, User } from '../models/user';
+import { MakeLogin, MakeRegisterUser, User } from '../models/user';
 import { Observable } from 'rxjs';
 import { OtpSend } from '../models/auth';
 import { environment } from 'src/environments/environment.development';
@@ -22,7 +22,7 @@ export class AuthHttpService {
     return this.http.post<User>(this.baseUrl + "Account/Login", user);
   }
 
-  registerUser(user: User): Observable<User> {
+  registerUser(user: MakeRegisterUser): Observable<User> {
     return this.http.post<User>(this.baseUrl + "Account/Register", user);
   }
 

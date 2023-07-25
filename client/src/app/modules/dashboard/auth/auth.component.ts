@@ -6,7 +6,7 @@ import { AppState } from 'src/app/reducer';
 import { AuthHttpService } from './services/auth-http.service';
 import { noop, Observable, of, tap } from 'rxjs';
 import { login } from './features/auth.actions';
-import { MakeLogin, User } from './models/user';
+import { MakeLogin, MakeRegisterUser, User } from './models/user';
 import { OtpSend } from './models/auth';
 import { errorNotification } from 'src/app/shared/alerts/sweetalert';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -38,7 +38,7 @@ export class AuthComponent implements OnInit {
     if (!this.registerMode) {
       this.form = this.fb.group({
         custName: ['', [Validators.required]],
-        password: ['', [Validators.required]],
+        custPassword: ['', [Validators.required]],
       });
     } else {
       this.form = this.fb.group({
@@ -49,7 +49,7 @@ export class AuthComponent implements OnInit {
         mobile: ['', [Validators.required]],
         alternatePhone: ['', [Validators.required]],
         contactNo: ['', [Validators.required]],
-        password: ['', [Validators.required]],
+        custPassword: ['', [Validators.required]],
       });
     }
   }
@@ -59,7 +59,7 @@ export class AuthComponent implements OnInit {
       if (!this.registerMode) {
         const data: MakeLogin = {
           username: this.form.value.custName,
-          password: this.form.value.password
+          password: this.form.value.custPassword
         }
 
         this.isDisabled = true;
@@ -81,17 +81,17 @@ export class AuthComponent implements OnInit {
             }
           });
       } else if (this.registerMode) {
-        const data: User = { ...this.form.value }
+        const data: MakeRegisterUser = {
+          ...this.form.value
+        }
 
         this.isDisabled = true;
         this.authService
           .registerUser(data)
           .pipe(
             tap((user) => {
-              this.store.dispatch(login({ user }));
-              this.router.navigate(['/dashboard/home']).then(() => {
-                this.isDisabled = false;
-              });
+              this.isDisabled = false;
+              this.registerMode = false;
             })
           )
           .subscribe({
@@ -110,30 +110,32 @@ export class AuthComponent implements OnInit {
   }
 
   sendOtp() {
-    if (this.form.controls['mobile'].invalid) {
-      console.error("Missing Mobile Number!")
-      return;
-    }
+    // if (this.form.controls['mobile'].invalid) {
+    //   console.error("Missing Mobile Number!")
+    //   return;
+    // }
 
-    const values: OtpSend = {
-      phoneNumber: this.form.controls['mobile'].value,
-      method: "sms"
-    }
+    // const values: OtpSend = {
+    //   phoneNumber: this.form.controls['mobile'].value,
+    //   method: "sms"
+    // }
 
-    this.authService.sendOtp(values).subscribe({
-      next: response => {
-        if (response) {
-          this.otpSent = !this.otpSent;
-          this.startTimer();
-        }
-      },
-      complete: () => {
-        this.openModalWithComponent();
-        setTimeout(() => {
-          this.otpSent = !this.otpSent;
-        }, 50000);
-      }
-    })
+    // this.authService.sendOtp(values).subscribe({
+    //   next: response => {
+    //     if (response) {
+    //       this.otpSent = !this.otpSent;
+    //       this.startTimer();
+    //     }
+    //   },
+    //   complete: () => {
+    //     this.openModalWithComponent();
+    //     setTimeout(() => {
+    //       this.otpSent = !this.otpSent;
+    //     }, 50000);
+    //   }
+    // })
+
+    this.otpSent = true;
   }
 
   toggleRegisterMode() {

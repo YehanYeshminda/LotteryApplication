@@ -58,7 +58,7 @@
 
 
       <div class="col-12">
-        <app-input [formControl]="$any(form.controls['password'])" [label]="'Password'" [type]="'password'"></app-input>
+        <app-input [formControl]="$any(form.controls['custPassword'])" [label]="'Password'" [type]="'password'"></app-input>
       </div>
 
       <div class="col-12 justify-content-center align-items-center d-flex flex-column mt-2">
@@ -70,7 +70,7 @@
         </ng-container>
 
         <ng-container *ngIf="registerMode">
-          <button [disabled]="isDisabled || form.invalid" class="btn btn-primary w-50" (click)="onSubmit()">Register</button>
+          <button [disabled]="isDisabled || form.invalid || otpSent" class="btn btn-primary w-50" (click)="onSubmit()">Register</button>
           <p>Already have an Account? <span (click)="toggleRegisterMode()" class="link-danger">Login</span> </p>
         </ng-container>
       </div>

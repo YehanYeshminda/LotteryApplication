@@ -47,14 +47,14 @@ export class EasyDrawComponent {
         userId: 0
       };
 
-      this.cartEntityService.add(newCartItem).subscribe(
-        () => {
-          successNotification('Added to cart');
-        },
-        (error) => {
+      this.cartEntityService.add(newCartItem).subscribe({
+        next: response => {
+          successNotification(response.lotteryNo + " has been successfully added to the cart!");
+          this.drawRandomNumber();
+        }, error: error => {
           errorNotification("Lottery number already inside of cart!");
         }
-      );
+      });
     } else {
       errorNotification('Please login to add to cart');
     }
