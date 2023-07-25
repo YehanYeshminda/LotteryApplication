@@ -16,7 +16,6 @@ import { MatStepper } from '@angular/material/stepper';
 export class CartComponent implements OnInit {
   cartItems$: Observable<CartReponse[]> = of([]);
   total = 0;
-  isLinear = false;
   orderForm: FormGroup = new FormGroup({});
   paymentForm: FormGroup = new FormGroup({});
   confirmationForm: FormGroup = new FormGroup({});

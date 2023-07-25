@@ -1,4 +1,4 @@
-<!-- <div class="container">
+<div class="container">
   <h1 class="fw-bold">My Cart</h1>
   <div class="row">
     <ng-container *ngIf="(cartItems$ | async) as items">
@@ -28,9 +28,9 @@
       </a>
     </button>
   </div>
-</div> -->
+</div>
 
-<mat-horizontal-stepper linear #stepper ngClass="{{ 'last-edited-step-' + stepper.selectedIndex }}" labelPosition="bottom">
+<!-- <mat-horizontal-stepper linear #stepper ngClass="{{ 'last-edited-step-' + stepper.selectedIndex }}" labelPosition="bottom">
   <ng-template matStepperIcon="edit">
     <mat-icon class="custom-color-icons">brightness_1</mat-icon>
   </ng-template>
@@ -54,8 +54,8 @@
               </div>
             </div>
   
-            <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button>
-          </div>
+            <!-- <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button> -->
+          <!-- </div>
         </div>
       </ng-container>
 
@@ -69,12 +69,12 @@
         </a>
       </button>
     </div>
-    
+
   </mat-step>
   <mat-step [stepControl]="paymentForm">
     <form>
       <ng-template matStepLabel>PAYMENT</ng-template>
-      <div class="">adsasdasd</div>
+      <app-payment></app-payment>
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
@@ -94,7 +94,7 @@
       <button matStepperNext mat-raised-button color="warn" (click)="stepper.reset()">Reset</button>
     </div>
   </mat-step>
-</mat-horizontal-stepper>
+</mat-horizontal-stepper> -->
 
 
 

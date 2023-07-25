@@ -32,6 +32,7 @@ import { DrawHistoryResolver } from './components/home/resolvers/draw-history.re
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -52,6 +53,7 @@ const entityMetaData: EntityMetadataMap = {
     PaymentComponent,
     SpashScreenComponent,
     HomeComponent,
+    CheckoutComponent,
   ],
   imports: [
     CommonModule,

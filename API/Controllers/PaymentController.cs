@@ -85,11 +85,11 @@ namespace API.Controllers
                     await _lotteryContext.Tblmoneycredits.AddAsync(newPayment);
                     await _lotteryContext.SaveChangesAsync();
 
-                    return Ok(newPayment);
+                    return Ok(newPayment.RaffleNo   );
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Error occurred while getting Draw Histories!" + ex.Message);
+                    return BadRequest("Error occurred while getting Draw Histories! " + ex.Message);
                 }
             }
             else

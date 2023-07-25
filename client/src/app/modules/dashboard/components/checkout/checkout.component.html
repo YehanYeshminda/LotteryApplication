@@ -1,0 +1,142 @@
+<mat-horizontal-stepper linear #stepper ngClass="{{ 'last-edited-step-' + stepper.selectedIndex }}" labelPosition="bottom">
+    <ng-template matStepperIcon="edit">
+      <mat-icon class="custom-color-icons">brightness_1</mat-icon>
+    </ng-template>
+  
+    <mat-step state="phone">
+      <ng-template matStepLabel>ORDER</ng-template>
+      <div class="row">
+        <ng-container *ngIf="(cartItems$ | async) as items">
+          <div class="col-12"  *ngFor="let item of items">
+            <div class="card mb-3" style="max-width: 540px;">
+              <div class="row g-0">
+                <div class="col-md-4 d-flex justify-content-center align-items-center">
+                  Raffle Name: {{item.raffleNo === "1" ? 'Mega Draw' : 'Easy Draw'}}
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">ITEM INFORMATION</h5>
+                    <p class="card-text">{{item.paid | currency:'₹'}}</p>
+                    <p class="card-text"><small class="text-muted">{{ item.lotteryNo }} with the Id : {{item.lotteryReferenceId}}</small></p>
+                  </div>
+                </div>
+              </div>
+    
+              <!-- <button class="btn btn-danger" (click)="removeCartItem(item)">Remove from cart</button> -->
+            </div>
+          </div>
+        </ng-container>
+  
+        <div>
+          <button matStepperNext mat-raised-button color="primary">Next</button>
+        </div>
+    
+        <!-- <button class="btn btn-primary">
+          <a routerLink="/dashboard/checkout" class="text-light text-decoration-none">
+            Checkout
+          </a>
+        </button> -->
+      </div>
+  
+    </mat-step>
+    <ng-template matStepperIcon="edit">
+      <mat-icon class="custom-color-icons">brightness_1</mat-icon>
+    </ng-template>
+    <mat-step [completed]="isPaymentDone$ | async">
+      <form>
+        <ng-template matStepLabel>PAYMENT</ng-template>
+
+        <div class="container">
+          {{ isPaymentDone$ | async | json }}
+            <div class="row m-0">
+             <div class="col-md-7 col-12">
+              <div class="row">
+               <div class="col-12 mb-4">
+                <div class="row box-right">
+                 <div class="col-md-8 ps-0">
+                  <p class="ps-3 textmuted fw-bold h6 mb-0">TOTAL TO PAY</p> <p class="h1 fw-bold d-flex">{{ total | currency: '₹' }}</p>
+                 </div>
+                 <div class="col-md-4">
+                  <p class="p-blue"> <span class="fas fa-circle pe-2"></span>Pending </p> <p class="fw-bold mb-3">{{ total | currency: '₹' }} </p> <p class="p-org"> </p
+                 ></div>
+                </div>
+               </div>
+              </div>
+             </div>
+             <div class="col-md-5 col-12 ps-md-5 p-0">
+              <div class="box-left">
+               <p class="textmuted h8">Invoice</p> <p class="fw-bold h7">{{ authInformartion?.username }}</p>
+               <div class="h8">
+                <div class="row m-0 border mb-3">
+                   <table class="table">
+                     <thead>
+                       <tr>
+                         <th>Name</th>
+                         <th>Numbers</th>
+                         <th>Price</th>
+                         <th>Total</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       <ng-container *ngFor="let item of cartItems$ | async">
+                         <tr>
+                           <td>{{ item.raffleNo == "1" ? "Mega Draw" : "Easy Draw" }}</td>
+                           <td>{{ item.lotteryNo }}</td>
+                           <td>{{ item.paid | currency: '₹' }}</td>
+                           <td>{{ item.paid | currency: '₹' }}</td>
+                         </tr>
+                       </ng-container>
+                     </tbody>
+                     <tfoot>
+                       <tr>
+                         <td colspan="3" class="fw-bolder">Grand Total</td>
+                         <td class="fw-bolder">{{ total | currency: '₹' }}</td>
+                       </tr>
+                     </tfoot>
+                   </table>
+                </div>
+                <div class="d-flex h7 mb-2">
+                 <p class="fw-bolder">Total Amount</p> <p class="ms-auto fw-bolder">{{ total | currency: '₹' }}</p>
+                </div>
+                <div class="h8 mb-3"> <p class="textmuted">Lets Pay! </p> </div>
+               </div>
+               <div class="">
+                <div class="form">
+                 <div class="row">
+                  <div class="col-12 mt-3">
+                   <div class="stripe-payment-container">
+                    <ngx-stripe-card
+                     [options]="cardOptions"
+                     [elementsOptions]="elementsOptions">
+                    </ngx-stripe-card>
+                   </div>
+                  </div>
+                  <button class="btn btn-primary d-block h8 mt-4" type="submit" (click)="pay(stepper)" [disabled]="paymentOnGoing">PAY {{ total | currency: '₹' }}
+                    <span class="ms-3 fas fa-arrow-right"></span>
+                  </button>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+        <div>
+          <button mat-raised-button color="primary" (click)="goBack(stepper)">Back</button>
+        </div>
+      </form>
+    </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>CONFIRMATION</ng-template>
+
+          <div>
+            {{ isPaymentDone$ | async | json }}
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+          </div>
+
+          <div>
+            <button matStepperPrevious mat-raised-button color="primary">Back</button>
+            <button matStepperNext mat-raised-button color="warn" (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+  </mat-horizontal-stepper>
