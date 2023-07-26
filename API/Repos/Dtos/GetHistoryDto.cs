@@ -7,5 +7,6 @@
         public string UniqueRaffleId { get; set; }
         public DateTime? OrderedOn { get; set; }
         public string ReferenceId { get; set; }
+        public bool IsWin { get; set; }
     }
 }

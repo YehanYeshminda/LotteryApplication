@@ -10,6 +10,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CartEntityService } from 'src/app/modules/dashboard/components/cart/services/cart-entity.service';
 import { clearCartEntities } from 'src/app/modules/dashboard/components/cart/features/cart.action';
 import { HomeEntityService } from 'src/app/modules/dashboard/components/home/services/home-entity.service';
+import { RestoreInitialState } from 'src/app/modules/dashboard/user-history/features/history.actions';
 
 @Component({
   selector: 'app-navbar',
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
     this.store.dispatch(logout());
     this.cartEntityService.clearCache();
     this.homeEntityService.clearCache();
+    this.store.dispatch(RestoreInitialState());
   }
 
   ngOnInit(): void {

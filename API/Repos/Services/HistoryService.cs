@@ -1,6 +1,6 @@
-﻿using API.Repos.Dtos;
+﻿using API.Helpers;
+using API.Repos.Dtos;
 using API.Repos.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos.Services
 {
@@ -13,26 +13,47 @@ namespace API.Repos.Services
             _lotteryContext = lotteryContext;
         }
 
-        public async Task<IEnumerable<GetHistoryDto>> GetUserHistory(int customerId)
+        public async Task<PagedList<GetHistoryDto>> GetUserHistory(UserParams userParams)
         {
-            var histories = new List<GetHistoryDto>();
-            var items = await _lotteryContext.Tblorderhistories.Where(x => x.UserId == customerId).ToListAsync();
-
-            foreach (var item in items)
-            {
-                var newItem = new GetHistoryDto
+            var query = _lotteryContext.Tblorderhistories.AsQueryable();
+            query = query.OrderByDescending(item => item.AddOn);
+            var pagedList = await PagedList<GetHistoryDto>.CreateAsync(
+                query.Select(item => new GetHistoryDto
                 {
                     OrderedOn = item.AddOn,
                     RaffleId = item.RaffleId,
                     ReferenceId = item.LotteryReferenceId,
                     TicketNumber = item.TicketNo,
-                    UniqueRaffleId = item.RaffleUniqueId
-                };
+                    UniqueRaffleId = item.RaffleUniqueId,
+                    IsWin = _lotteryContext.Tbllotterywinners.Any(x => x.TicketNo == item.TicketNo)
+                }),
+                userParams.PageNumber,
+                userParams.PageSize
+            );
 
-                histories.Add(newItem);
+            return pagedList;
+        }
+
+        public async Task<IEnumerable<GetHistoryDto>> GetUserHistoryWinnings(AuthDto authDto)
+        {
+            var query = _lotteryContext.Tblorderhistories.AsQueryable();
+            query = query.OrderByDescending(item => item.AddOn);
+            var data = query.Select(item => new GetHistoryDto
+            {
+                OrderedOn = item.AddOn,
+                RaffleId = item.RaffleId,
+                ReferenceId = item.LotteryReferenceId,
+                TicketNumber = item.TicketNo,
+                UniqueRaffleId = item.RaffleUniqueId,
+                IsWin = _lotteryContext.Tbllotterywinners.Any(x => x.TicketNo == item.TicketNo)
+            });
+
+            if (data == null)
+            {
+                return null;
             }
 
-            return histories;
+            return data;
         }
     }
 }

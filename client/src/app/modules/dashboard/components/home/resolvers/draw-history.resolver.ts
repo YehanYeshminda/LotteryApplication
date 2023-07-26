@@ -25,7 +25,7 @@ export class DrawHistoryResolver implements Resolve<boolean> {
                             return true;
                         }),
                         catchError((error) => {
-                            console.error('Error loading draw history:', error);
+                            console.error('Error loading user history:', error);
                             return of(false);
                         })
                     );

@@ -5,10 +5,9 @@ import { UiModule } from './ui/ui.module';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
-    UiModule
+    UiModule,
   ],
 })
 export class SharedModule { }

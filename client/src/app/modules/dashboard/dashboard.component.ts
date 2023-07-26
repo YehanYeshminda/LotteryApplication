@@ -12,13 +12,18 @@ export class DashboardComponent implements OnInit {
   routerState$: Observable<RouterReducerState<any>> | undefined;
   loading!: boolean;
   loadingValue: number = 0;
+  // count = 1;
 
   constructor(private store: Store<{ router: RouterReducerState<any> }>) { }
 
   ngOnInit(): void {
     this.routerState$ = this.store.pipe(select('router'));
+
+    // if (this.count == 1) {
     this.loading = false;
     // this.startLoading();
+    // this.count++;
+    // }
   }
 
   setDelayedLoadingValue(value: number, delay: number): void {

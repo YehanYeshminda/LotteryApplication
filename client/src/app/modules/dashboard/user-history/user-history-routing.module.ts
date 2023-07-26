@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserHistoryComponent } from './user-history.component';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { HistoryComponent } from './components/history/history.component';
+import { UserHistoryResolver } from './resolvers/user-history.resolver';
 
 const routes: Routes = [
   {
@@ -11,7 +12,7 @@ const routes: Routes = [
       {
         path: 'user-history',
         component: HistoryComponent,
-        resolve: []
+        resolve: { userHistoryData: UserHistoryResolver }
       }
     ]
   }

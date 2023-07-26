@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HomeEntityService } from './services/home-entity.service';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AppState } from 'src/app/reducer';
 import { Store } from '@ngrx/store';
 import { OldRafflesReponse } from './models/home';
-import { selectDrawHistoryData, selectDrawHistoryEasyData, selectDrawHistoryMegaData } from './features/drawHistory.selectors';
+import { selectDrawHistoryEasyData, selectDrawHistoryMegaData } from './features/drawHistory.selectors';
 import { splitNumbersByTwo } from 'src/app/shared/methods/methods';
 
 @Component({

@@ -20,5 +20,19 @@ export const userHistoryReducer = createReducer(
             userHistory: action.userHistory,
             isLoaded: true,
         };
+    }),
+    on(UserHistoryActions.RestoreInitialState, (state: any, action: any) => {
+        return {
+            ...state,
+            userHistory: [],
+            isLoaded: false
+        }
+    }),
+    on(UserHistoryActions.SaveUserHistoryToExistingData, (state: any, action: any) => {
+        return {
+            ...state,
+            userHistory: [...action.newUserHistory],
+            isLoaded: true
+        }
     })
 );

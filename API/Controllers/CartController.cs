@@ -100,7 +100,7 @@ namespace API.Controllers
                     var lotteryToReturn = new TblLotteryAdvancedDto
                     {
                         Id = lotteryNo.Id,
-                        AddOn = DateTime.UtcNow,
+                        AddOn = DateTime.UtcNow.ToLocalTime(),
                         AmountToPay = addToCartDto.Price,
                         Paid = addToCartDto.Paid,
                         RaffleNo = addToCartDto.RaffleId.ToString(),

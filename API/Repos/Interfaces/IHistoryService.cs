@@ -1,9 +1,11 @@
-﻿using API.Repos.Dtos;
+﻿using API.Helpers;
+using API.Repos.Dtos;
 
 namespace API.Repos.Interfaces
 {
     public interface IHistoryService
     {
-        Task<IEnumerable<GetHistoryDto>> GetUserHistory(int customerId);
+        Task<PagedList<GetHistoryDto>> GetUserHistory(UserParams userParams);
+        Task<IEnumerable<GetHistoryDto>> GetUserHistoryWinnings(AuthDto authDto);
     }
 }

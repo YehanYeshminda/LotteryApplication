@@ -13,8 +13,8 @@ export class AuthEffects {
 				ofType(AuthActions.login),
 				tap((action) =>
 					this.cookieService.set('user', JSON.stringify(action.user), {
-            expires: new Date(new Date().getTime() + 1000 * 60 * 24 * 30 * 14),
-          })
+						expires: new Date(new Date().getTime() + 1000 * 60 * 24 * 30 * 14),
+					})
 				)
 			),
 		{ dispatch: false }
@@ -25,12 +25,12 @@ export class AuthEffects {
 			this.actions$.pipe(
 				ofType(AuthActions.logout),
 				tap((action) => {
-          this.cookieService.delete('user');
+					this.cookieService.delete('user');
 					this.router.navigateByUrl('/');
 				})
 			),
 		{ dispatch: false }
 	);
 
-	constructor(private actions$: Actions, private router: Router, private cookieService: CookieService) {}
+	constructor(private actions$: Actions, private router: Router, private cookieService: CookieService) { }
 }

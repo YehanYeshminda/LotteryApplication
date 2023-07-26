@@ -8,19 +8,34 @@ import { CoreModule } from 'src/app/core/core.module';
 import { HistoryComponent } from './components/history/history.component';
 import { StoreModule } from '@ngrx/store';
 import { userHistoryReducer } from './features/history.reducer';
-
+import { UserHistoryResolver } from './resolvers/user-history.resolver';
+import { HistorycardComponent } from './components/historycard/historycard.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { TimezoneConverterPipe } from 'src/app/shared/pipes/timezonePipe/timezone-converter-pipe.pipe';
+import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
     UserHistoryComponent,
-    HistoryComponent
+    HistoryComponent,
+    HistorycardComponent
   ],
   imports: [
     CommonModule,
     UserHistoryRoutingModule,
     SharedModule,
+    PipesModule,
     CoreModule,
     StoreModule.forFeature('userHistory', userHistoryReducer),
+    MatTabsModule,
+    InfiniteScrollModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
+  ],
+  providers: [
+    UserHistoryResolver,
+    TimezoneConverterPipe
   ]
 })
 export class UserHistoryModule {

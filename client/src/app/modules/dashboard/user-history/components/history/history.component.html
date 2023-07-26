@@ -1,9 +1,59 @@
 <div class="container">
-    <div class="card w-100">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Button</a>
+  <mat-tab-group>
+    <mat-tab label="All Orders" *ngIf="userHistoryData$ | async; else loadingOrders">
+      <div class="row">
+        <div class="col-12 col-md-4 my-3" *ngFor="let item of (userHistoryData$ | async) as data">
+          <app-historycard [userHistoryData]="item"></app-historycard>
         </div>
       </div>
+      <div class="row">
+        <div class="col-12 col-md-12 my-3 d-flex justify-content-center align-item-center" *ngIf="loading">
+          <img src="assets/Spinner.svg" style="width: 50px; height: 50px;" alt="image">
+        </div>
+      </div>
+      <!-- <ngx-spinner [fullScreen]="false" type="ball-scale-multiple" class=""></ngx-spinner> -->
+    </mat-tab>
+    <mat-tab label="Winnings" *ngIf="(userHistoryDataWin$ | async) as data; else loadingWinnings"> 
+      <ng-container>
+        <div class="row">
+        <div class="col-12 col-md-4 my-3" *ngFor="let item of data">
+            <app-historycard [userHistoryData]="item"></app-historycard>
+          </div>
+        </div>
+      </ng-container> 
+
+      <!-- used for the infinate scroll -->
+      <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()" (scrolledUp)="onUp()">
+    </div>
+    </mat-tab>
+    <mat-tab label="Latest Orders" *ngIf="(userHistoryBasedOnLast3Days$ | async) as data; else loadingOrders"> 
+      <ng-container>
+        <div class="row">
+        <div class="col-12 col-md-4 my-3" *ngFor="let item of data">
+            <app-historycard [userHistoryData]="item"></app-historycard>
+          </div>
+        </div>
+      </ng-container> 
+    </mat-tab>
+  </mat-tab-group>
+
+  <ng-template #loadingTemplate>
+    <div class="card w-100" >
+      <div class="card-body">
+        <h2 class="card-title">Loading...</h2>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #loadingWinnings>
+    <div class="card w-100" >
+      <div class="card-body">
+        <h2 class="card-title">No Winnings...</h2>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #loadingOrders>
+    <h1>Loading...</h1>
+  </ng-template>
 </div>

@@ -11,7 +11,6 @@ import { SequenceNoResolver } from './components/home/resolvers/sequence-no.reso
 import { MegaDrawResolver } from './components/mega-draw/resolvers/mega-draw.resolver';
 import { DrawHistoryResolver } from './components/home/resolvers/draw-history.resolver';
 import { CheckoutComponent } from './components/checkout/checkout.component';
-import { UserHistoryComponent } from './components/user-history/user-history.component';
 
 const routes: Routes = [
   {
