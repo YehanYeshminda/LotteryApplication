@@ -1,6 +1,7 @@
 ﻿using API.Helpers;
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos.Services
 {
@@ -54,6 +55,28 @@ namespace API.Repos.Services
             }
 
             return data;
+        }
+
+        public async Task<IEnumerable<GetHistoryDto>> GetUserHistoryWinningsBasedOnUniqueRaffleId(int userId, string RaffleId)
+        {
+            var items = await _lotteryContext.Tblorderhistories.Where(x => x.UserId == userId && x.RaffleUniqueId == RaffleId).ToListAsync();
+
+            var itemToReturn = items.Select(x => new GetHistoryDto
+            {
+                RaffleId = x.RaffleId,
+                IsWin = _lotteryContext.Tbllotterywinners.Any(values => values.TicketNo == x.TicketNo),
+                OrderedOn = x.AddOn,
+                ReferenceId = x.LotteryReferenceId,
+                TicketNumber = x.TicketNo,
+                UniqueRaffleId = x.RaffleUniqueId
+            });
+
+            if (itemToReturn == null)
+            {
+                return null;
+            }
+
+            return itemToReturn;
         }
     }
 }

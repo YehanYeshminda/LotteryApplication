@@ -1,0 +1,13 @@
+<ng-container *ngIf="(history$ | async) as data">
+    <div class="row" *ngIf="data.length > 0; else noResultTemplate">
+        <div class="col-12 col-md-4 my-3" *ngFor="let item of data">
+            <app-historycard [userHistoryData]="item"></app-historycard>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #noResultTemplate>
+    <div>
+        <h2>No Items to display</h2>
+    </div>
+</ng-template>

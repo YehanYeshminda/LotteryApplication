@@ -33,6 +33,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { SearchHistoryComponent } from './components/search-history/search-history.component';
+import { UserHistoryModule } from './user-history/user-history.module';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -54,6 +56,7 @@ const entityMetaData: EntityMetadataMap = {
     SpashScreenComponent,
     HomeComponent,
     CheckoutComponent,
+    SearchHistoryComponent,
   ],
   imports: [
     CommonModule,
@@ -70,7 +73,8 @@ const entityMetaData: EntityMetadataMap = {
     StoreModule.forFeature('drawHistory', drawHistoryReducer),
     MatStepperModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    UserHistoryModule
   ],
   providers: [
     CartEntityService,

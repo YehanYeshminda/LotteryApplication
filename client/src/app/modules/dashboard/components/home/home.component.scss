@@ -297,3 +297,11 @@ $east-draw-color: #CC49D3;
     align-items: center;
     margin-top: 12px;
 }
+
+.search-container {
+    margin: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+}

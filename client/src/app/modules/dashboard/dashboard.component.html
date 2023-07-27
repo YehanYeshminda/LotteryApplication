@@ -10,6 +10,13 @@
      <app-spash-screen [loading]="loadingValue"></app-spash-screen>
    </ng-container>
 
+   <div class="container" *ngIf="(routerState$ | async)?.state.url !== '/dashboard/checkout'">
+      <div class="search-container form-group">
+        <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Enter a unique raffle Id...">
+        <button class="btn btn-primary" [routerLink]="['/dashboard/search-history/' + searchTerm]">Search</button>
+      </div>
+    </div>
+
    <ng-container *ngIf="!loading">
      <router-outlet></router-outlet>
    </ng-container>

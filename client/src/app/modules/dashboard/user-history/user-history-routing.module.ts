@@ -13,7 +13,7 @@ const routes: Routes = [
         path: 'user-history',
         component: HistoryComponent,
         resolve: { userHistoryData: UserHistoryResolver }
-      }
+      },
     ]
   }
 ];

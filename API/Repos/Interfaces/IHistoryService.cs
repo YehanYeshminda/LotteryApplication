@@ -7,5 +7,6 @@ namespace API.Repos.Interfaces
     {
         Task<PagedList<GetHistoryDto>> GetUserHistory(UserParams userParams);
         Task<IEnumerable<GetHistoryDto>> GetUserHistoryWinnings(AuthDto authDto);
+        Task<IEnumerable<GetHistoryDto>> GetUserHistoryWinningsBasedOnUniqueRaffleId(int userId, string RaffleId);
     }
 }

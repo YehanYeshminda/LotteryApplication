@@ -173,5 +173,43 @@ namespace API.Controllers
                 return Unauthorized("Invalid Authentication Details");
             }
         }
+
+        [HttpPost("Search-Based-OnHistory")]
+        public async Task<ActionResult<IEnumerable<GetHistoryDto>>> GetAllHistoryBasedOnUnqueRaffle([FromBody] SearchBasedOnHistory searchBasedOnHistory)
+        {
+            if (searchBasedOnHistory.AuthDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(searchBasedOnHistory.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == searchBasedOnHistory.AuthDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var data = await _historyService.GetUserHistoryWinningsBasedOnUniqueRaffleId(decodedValues.UserId, searchBasedOnHistory.RaffleUniqueId);
+                    return Ok(data);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occurred while getting Draw Histories! " + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
     }
 }

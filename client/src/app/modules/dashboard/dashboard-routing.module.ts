@@ -11,6 +11,7 @@ import { SequenceNoResolver } from './components/home/resolvers/sequence-no.reso
 import { MegaDrawResolver } from './components/mega-draw/resolvers/mega-draw.resolver';
 import { DrawHistoryResolver } from './components/home/resolvers/draw-history.resolver';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { SearchHistoryComponent } from './components/search-history/search-history.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'mega-draw', component: MegaDrawComponent, resolve: { CartItems: CartResolver, drawNumbers: MegaDrawResolver, DrawHistory: DrawHistoryResolver } },
       { path: 'cart', component: CartComponent, resolve: { CartItems: CartResolver } },
       { path: 'checkout', component: CheckoutComponent, resolve: { CartItems: CartResolver } },
+      { path: 'search-history/:id', component: SearchHistoryComponent },
     ]
   },
   { path: 'history', loadChildren: () => import('./user-history/user-history.module').then(m => m.UserHistoryModule), canActivate: [AuthGuard] },

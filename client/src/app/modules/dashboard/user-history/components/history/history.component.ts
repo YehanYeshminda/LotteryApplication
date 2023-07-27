@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, map, of, take, tap } from 'rxjs';
 import { PagedList, UserHistoryResponse } from '../../models/userhistory';
 import { Store } from '@ngrx/store';
-import { selectUserHistoryData, selectUserHistoryDataLoaded, selectUserHistoryIsWin } from '../../features/history.selector';
+import { selectUserHistoryData } from '../../features/history.selector';
 import { UserHistoryHttpService } from '../../services/user-history-http.service';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { AuthDetails } from 'src/app/shared/models/auth';
 import { CookieService } from 'ngx-cookie-service';
 import { UserHistoryActions } from '../../features/history.types';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-history',
@@ -26,7 +25,7 @@ export class HistoryComponent implements OnInit {
   canLoadMore = true;
   loading = false;
 
-  constructor(private store: Store, private userHistoryHttpService: UserHistoryHttpService, private cookieService: CookieService, private spinnerService: NgxSpinnerService) { }
+  constructor(private store: Store, private userHistoryHttpService: UserHistoryHttpService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     this.userHistoryData$ = this.store.select(selectUserHistoryData).pipe(

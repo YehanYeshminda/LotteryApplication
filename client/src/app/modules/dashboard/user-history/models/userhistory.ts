@@ -14,3 +14,8 @@ export interface PagedList {
     pageSize: number
     authDto: AuthDetails
 }
+
+export interface SearchBasedOnHistory {
+    raffleUniqueId: string | null
+    authDto: AuthDetails | null
+}

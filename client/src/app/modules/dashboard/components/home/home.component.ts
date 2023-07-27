@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { OldRafflesReponse } from './models/home';
 import { selectDrawHistoryEasyData, selectDrawHistoryMegaData } from './features/drawHistory.selectors';
 import { splitNumbersByTwo } from 'src/app/shared/methods/methods';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
   megaDrawHistory$: Observable<OldRafflesReponse[] | undefined> = of([]);
   easyDrawHistory$: Observable<OldRafflesReponse[] | undefined> = of([]);
 
-  constructor(private homeEntityService: HomeEntityService, private store: Store) { }
+  constructor(private homeEntityService: HomeEntityService, private store: Store, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.drawNo$ = this.homeEntityService.entities$.pipe(
@@ -91,6 +92,8 @@ export class HomeComponent implements OnInit {
         console.log(response);
       }
     })
+
+
   }
 
   splitValuesAndreturnArray(value: string | undefined): string[] {

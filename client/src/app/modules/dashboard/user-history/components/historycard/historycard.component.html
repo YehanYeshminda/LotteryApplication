@@ -2,15 +2,15 @@
         <div class="card-header fw-bolder text-decoration-underline border-bottom-0">
           {{ userHistoryData.raffleId === 1 ? 'Mega Draw' : 'Easy Draw' }}
         </div>
-        <div class="card-body pt-0">
+        <div class="card-body pt-0" [ngClass]="userHistoryData.isWin ? 'bg-success' : ''">
           <div class="row">
             <div class="col-8">
-              <h2 class="lead"><b>Ticket No: {{ userHistoryData.ticketNumber }}</b></h2>
+              <h2 class="lead mt-2" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><b>Ticket No: {{ userHistoryData.ticketNumber }}</b></h2>
               <ul class="ml-0 mb-0 fa-ul text-muted">
-                <li class="small"><span class="fa-li"><i class="fa fa-id-card" aria-hidden="true"></i></span> Unique Raffle Id: {{ userHistoryData.uniqueRaffleId }}</li>
-                <li class="small"><span class="fa-li"><i class="fa fa-calendar" aria-hidden="true"></i></span> Ordered On: {{ userHistoryData.orderedOn | timezoneConverter: getUserTimeZone() }}</li>
+                <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-id-card" aria-hidden="true"></i></span> Unique Raffle Id: {{ userHistoryData.uniqueRaffleId }}</li>
+                <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-calendar" aria-hidden="true"></i></span> Ordered On: {{ userHistoryData.orderedOn | timezoneConverter: getUserTimeZone() }}</li>
 
-                <li class="small"><span class="fa-li"><i class="fa fa-location-arrow" aria-hidden="true"></i></span> {{ getUserTimeZone() }}</li>
+                <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-location-arrow" aria-hidden="true"></i></span> {{ getUserTimeZone() }}</li>
               </ul>
             </div>
             <div class="col-4 text-center">

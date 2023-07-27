@@ -20,7 +20,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   declarations: [
     UserHistoryComponent,
     HistoryComponent,
-    HistorycardComponent
+    HistorycardComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +36,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   providers: [
     UserHistoryResolver,
     TimezoneConverterPipe
+  ],
+  exports: [
+    HistorycardComponent,
   ]
 })
 export class UserHistoryModule {

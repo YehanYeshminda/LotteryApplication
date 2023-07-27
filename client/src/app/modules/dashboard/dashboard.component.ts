@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { RouterReducerState } from '@ngrx/router-store';
 import { Observable } from "rxjs";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,8 +14,9 @@ export class DashboardComponent implements OnInit {
   loading!: boolean;
   loadingValue: number = 0;
   // count = 1;
+  searchTerm: string = '';
 
-  constructor(private store: Store<{ router: RouterReducerState<any> }>) { }
+  constructor(private store: Store<{ router: RouterReducerState<any> }>, private router: Router) { }
 
   ngOnInit(): void {
     this.routerState$ = this.store.pipe(select('router'));
@@ -56,5 +58,4 @@ export class DashboardComponent implements OnInit {
       }
     }, interval);
   }
-
 }
