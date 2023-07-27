@@ -1,51 +1,54 @@
 <div class="container">
   <mat-tab-group>
-    <mat-tab label="All Orders" *ngIf="userHistoryData$ | async; else loadingOrders">
-      <div class="row">
-        <div class="col-12 col-md-4 my-3" *ngFor="let item of (userHistoryData$ | async) as data">
-          <app-historycard [userHistoryData]="item"></app-historycard>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 col-md-12 my-3 d-flex justify-content-center align-item-center" *ngIf="loading">
-          <img src="assets/Spinner.svg" style="width: 50px; height: 50px;" alt="image">
-        </div>
-      </div>
-      <!-- <ngx-spinner [fullScreen]="false" type="ball-scale-multiple" class=""></ngx-spinner> -->
-    </mat-tab>
-    <mat-tab label="Winnings" *ngIf="(userHistoryDataWin$ | async) as data; else loadingWinnings"> 
-      <ng-container>
-        <div class="row">
-        <div class="col-12 col-md-4 my-3" *ngFor="let item of data">
+    <ng-container *ngIf="(userHistoryData$ | async) as allHistoryData">
+      <mat-tab label="All Orders">
+        <div class="row" *ngIf="allHistoryData.length > 0; else noDrawsTemplate">
+          <div class="col-12 col-md-4 my-3" *ngFor="let item of allHistoryData">
             <app-historycard [userHistoryData]="item"></app-historycard>
           </div>
         </div>
-      </ng-container> 
-
-      <!-- used for the infinate scroll -->
-      <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()" (scrolledUp)="onUp()">
-    </div>
-    </mat-tab>
-    <mat-tab label="Latest Orders" *ngIf="(userHistoryBasedOnLast3Days$ | async) as data; else loadingOrders"> 
-      <ng-container>
         <div class="row">
-        <div class="col-12 col-md-4 my-3" *ngFor="let item of data">
-            <app-historycard [userHistoryData]="item"></app-historycard>
+          <div class="col-12 col-md-12 my-3 d-flex justify-content-center align-item-center" *ngIf="loading">
+            <img src="assets/Spinner.svg" style="width: 50px; height: 50px;" alt="image">
           </div>
         </div>
-      </ng-container> 
-    </mat-tab>
+        <!-- <ngx-spinner [fullScreen]="false" type="ball-scale-multiple" class=""></ngx-spinner> -->
+      </mat-tab>
+    </ng-container>
+    
+    <ng-container *ngIf="(userHistoryDataWin$ | async) as userWinHistoryData">
+      <mat-tab label="Winnings" > 
+          <div class="row" *ngIf="userWinHistoryData.length > 0; else noWinHistoryTemplate">
+          <div class="col-12 col-md-4 my-3" *ngFor="let item of userWinHistoryData">
+              <app-historycard [userHistoryData]="item"></app-historycard>
+            </div>
+          </div>
+  
+        <!-- used for the infinate scroll -->
+        <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()" (scrolledUp)="onUp()">
+      </div>
+      </mat-tab>
+    </ng-container>
+    <ng-container *ngIf="(userHistoryBasedOnLast3Days$ | async) as userWinForLast3DaysHistoryData">
+      <mat-tab label="Latest Orders"> 
+          <div class="row" *ngIf="userWinForLast3DaysHistoryData.length > 0; else noLatestOrdersTemplate">
+          <div class="col-12 col-md-4 my-3" *ngFor="let item of userWinForLast3DaysHistoryData">
+              <app-historycard [userHistoryData]="item"></app-historycard>
+            </div>
+          </div>
+      </mat-tab>
+    </ng-container>
   </mat-tab-group>
 
-  <ng-template #loadingTemplate>
+  <ng-template #noDrawsTemplate>
     <div class="card w-100" >
       <div class="card-body">
-        <h2 class="card-title">Loading...</h2>
+        <h2 class="card-title">No Order History to show...</h2>
       </div>
     </div>
   </ng-template>
 
-  <ng-template #loadingWinnings>
+  <ng-template #noWinHistoryTemplate>
     <div class="card w-100" >
       <div class="card-body">
         <h2 class="card-title">No Winnings...</h2>
@@ -53,7 +56,11 @@
     </div>
   </ng-template>
 
-  <ng-template #loadingOrders>
-    <h1>Loading...</h1>
+  <ng-template #noLatestOrdersTemplate>
+    <div class="card w-100" >
+      <div class="card-body">
+        <h2 class="card-title">No Orders for the last 3 days...</h2>
+      </div>
+    </div>
   </ng-template>
 </div>

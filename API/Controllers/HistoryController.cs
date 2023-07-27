@@ -4,8 +4,6 @@ using API.Repos.Dtos;
 using API.Repos.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Crypto;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace API.Controllers
 {
@@ -96,7 +94,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var data = await _lotteryContext.Tblorderhistories.ToListAsync();
+                    var data = await _lotteryContext.Tblorderhistories.Where(x => x.UserId == _user.Id).ToListAsync();
 
                     var dataToReturn = data.Select(item => new GetHistoryDto
                     {
@@ -149,7 +147,7 @@ namespace API.Controllers
                     var lastSevenDaysDate = DateTime.UtcNow.Date.AddDays(-3);
 
                     var data = await _lotteryContext.Tblorderhistories
-                        .Where(item => item.AddOn >= lastSevenDaysDate && item.AddOn <= currentDate)
+                        .Where(item => item.AddOn >= lastSevenDaysDate && item.AddOn <= currentDate && item.UserId == _user.Id)
                         .ToListAsync();
 
                     var dataToReturn = data.Select(item => new GetHistoryDto
