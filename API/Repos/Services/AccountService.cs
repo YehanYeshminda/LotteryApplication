@@ -1,20 +1,22 @@
 ﻿using API.Helpers;
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
-using API.Repos.Models;
-using System.Globalization;
-using System.Security.Cryptography;
+using API.Models;
 using System.Text;
+using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos.Services
 {
     public class AccountService : IAccountRepository
     {
         private readonly IRegisterRepository _registerRepository;
+        private readonly LotteryContext _lotteryContext;
 
-        public AccountService(IRegisterRepository registerRepository, IRegisterRepository registerRepository1)
+        public AccountService(IRegisterRepository registerRepository, LotteryContext lotteryContext)
         {
             _registerRepository = registerRepository;
+            _lotteryContext = lotteryContext;
         }
 
         public async Task<RegistrationResult> RegisterUser(CreateUserDto createUserDto)
@@ -31,13 +33,7 @@ namespace API.Repos.Services
                 return RegistrationResult.Error("User already exists with this information!");
             }
 
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(createUserDto.CustPassword));
-                var encryptedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-                createUserDto.CustPassword = encryptedPassword;
-            }
+            createUserDto.CustPassword = GetHashedPassword(createUserDto.CustPassword);
 
             string refreshToken = TokenHelpers.GenerateToken();
 
@@ -64,6 +60,11 @@ namespace API.Repos.Services
             return RegistrationResult.Success(newUser);
         }
 
+        private string GetHashedPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
         public async Task<LoginResult> LoginUser(LoginDto loginDto)
         {
             if (loginDto == null)
@@ -78,17 +79,12 @@ namespace API.Repos.Services
                 return LoginResult.Error("User does not exist!");
             }
 
-            using (var sha256 = SHA256.Create())
+
+            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, existingUser.CustPassword))
             {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-                var enteredPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-                if (enteredPassword != existingUser.CustPassword)
-                {
-                    return LoginResult.Error("Invalid password!");
-                }
+                return LoginResult.Error("Invalid password!");
             }
-
+            
             existingUser.Hash = EncodeValue(existingUser.Id);
             await _registerRepository.UpdateUser(existingUser);
 
@@ -105,5 +101,31 @@ namespace API.Repos.Services
 
             return encodedValue;
         }
+
+        public async Task<GetUserInformationDto> GetUserInfoByEmail(string email)
+        {
+            var availableUserInfo = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == email);
+
+            if (availableUserInfo == null)
+            {
+                return null;
+            }
+
+            var userToReturn = new GetUserInformationDto
+            {
+                Email = availableUserInfo.Email,
+                AddOn = availableUserInfo.AddOn,
+                AlternatePhone = availableUserInfo.AlternatePhone,
+                ContactNo = availableUserInfo.ContactNo,
+                CustAddress = availableUserInfo.CustAddress,
+                CustName = availableUserInfo.CustName,
+                Mobile = availableUserInfo.Mobile,
+                Nic = availableUserInfo.Nic
+            };
+
+            return userToReturn;
+        }
+
+        //public async Task<GetUserInformationDto> UpdateUserInfoByEmail
     }
 }

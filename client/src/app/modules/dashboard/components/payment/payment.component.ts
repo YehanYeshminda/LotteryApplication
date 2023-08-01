@@ -76,6 +76,9 @@ export class PaymentComponent implements OnInit, AfterViewInit {
       name: [this.authInformartion?.username, []],
       amount: [0, []],
     });
+
+    console.log(this.total + 'is payment');
+    
   }
 
   pay(): void {

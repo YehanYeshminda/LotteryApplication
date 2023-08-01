@@ -1,4 +1,5 @@
 export const environment = {
+	// apiUrl: 'http://192.168.0.222/lotteryapi/api/',
 	// apiUrl: 'http://aruna007-002-site25.etempurl.com/api/',
 	apiUrl: 'https://localhost:5001/api/',
 	production: true,

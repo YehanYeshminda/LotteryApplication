@@ -35,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { SearchHistoryComponent } from './components/search-history/search-history.component';
 import { UserHistoryModule } from './user-history/user-history.module';
+import { UserHomeComponent } from './components/user-home/user-home.component';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -57,6 +58,7 @@ const entityMetaData: EntityMetadataMap = {
     HomeComponent,
     CheckoutComponent,
     SearchHistoryComponent,
+    UserHomeComponent,
   ],
   imports: [
     CommonModule,

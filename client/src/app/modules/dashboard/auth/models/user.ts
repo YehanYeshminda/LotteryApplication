@@ -2,6 +2,7 @@ export interface User {
     username: string;
     password: string;
     hash: string;
+    email?: string
 }
 
 export interface MakeLogin {
@@ -23,4 +24,4 @@ export interface MakeRegisterUser {
     photo: string
     custStatus: number
     accountBalance: number
-  }
+}

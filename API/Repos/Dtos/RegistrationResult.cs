@@ -1,4 +1,4 @@
-﻿using API.Repos.Models;
+﻿using API.Models;
 
 namespace API.Repos.Dtos
 {

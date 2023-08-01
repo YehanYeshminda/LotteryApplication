@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using API.Repos;
+using API.Models;
 
 namespace API.Helpers
 {
@@ -72,6 +72,34 @@ namespace API.Helpers
         {
             return !_context.Tbllotterynos.Any(l => l.LotteryNo == raffleNo)
                 && !_context.Tblraffles.Any(r => r.UniqueRaffleId == raffleNo);
+        }
+
+        // unique packageId
+        public string GenerateForPackageRandomString(int length)
+        {
+            string packgeId;
+            do
+            {
+                packgeId = GenerateRandomIdForPackage(length);
+            } while (!IsUniqueForPackage(packgeId));
+
+            return packgeId;
+        }
+
+        private string GenerateRandomIdForPackage(int length)
+        {
+            StringBuilder sb = new StringBuilder(length);
+            sb.Append(chars[random.Next(52, chars.Length)]);
+            for (int i = 1; i < length; i++)
+            {
+                sb.Append(chars[random.Next(chars.Length)]);
+            }
+            return sb.ToString();
+        }
+
+        private bool IsUniqueForPackage(string packageId)
+        {
+            return !_context.Tblpackages.Any(r => r.PackgeUniqueId == packageId);
         }
     }
 }

@@ -3,7 +3,7 @@
     <ng-container *ngIf="(userHistoryData$ | async) as allHistoryData">
       <mat-tab label="All Orders">
         <div class="row" *ngIf="allHistoryData.length > 0; else noDrawsTemplate">
-          <div class="col-12 col-md-4 my-3" *ngFor="let item of allHistoryData">
+          <div class="col-12 col-sm-6 col-md-4 my-3" *ngFor="let item of allHistoryData">
             <app-historycard [userHistoryData]="item"></app-historycard>
           </div>
         </div>
@@ -19,7 +19,7 @@
     <ng-container *ngIf="(userHistoryDataWin$ | async) as userWinHistoryData">
       <mat-tab label="Winnings" > 
           <div class="row" *ngIf="userWinHistoryData.length > 0; else noWinHistoryTemplate">
-          <div class="col-12 col-md-4 my-3" *ngFor="let item of userWinHistoryData">
+          <div class="col-12 col-sm-6 col-md-4 my-3" *ngFor="let item of userWinHistoryData">
               <app-historycard [userHistoryData]="item"></app-historycard>
             </div>
           </div>
@@ -32,7 +32,7 @@
     <ng-container *ngIf="(userHistoryBasedOnLast3Days$ | async) as userWinForLast3DaysHistoryData">
       <mat-tab label="Latest Orders"> 
           <div class="row" *ngIf="userWinForLast3DaysHistoryData.length > 0; else noLatestOrdersTemplate">
-          <div class="col-12 col-md-4 my-3" *ngFor="let item of userWinForLast3DaysHistoryData">
+          <div class="col-12 col-sm-6 col-md-4 my-3" *ngFor="let item of userWinForLast3DaysHistoryData">
               <app-historycard [userHistoryData]="item"></app-historycard>
             </div>
           </div>

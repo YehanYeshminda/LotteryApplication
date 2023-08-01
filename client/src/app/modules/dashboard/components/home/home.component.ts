@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { OldRafflesReponse } from './models/home';
 import { selectDrawHistoryEasyData, selectDrawHistoryMegaData } from './features/drawHistory.selectors';
 import { splitNumbersByTwo } from 'src/app/shared/methods/methods';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-home',

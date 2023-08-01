@@ -1,0 +1,23 @@
+
+<div class="row">
+  <ng-container *ngIf="(userPackages$ | async) as data; else loadingUserPackageTemplate">
+    <div class="col-4" *ngFor="let item of data">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body text-center">
+          <h5 class="card-title text-decoration-underline">{{ item.packageName }}</h5>
+          <p class="card-text">{{ item.packagePrice }}</p>
+          <a>{{ item.packgeUniqueId }}</a>
+        </div>
+        <div class="card-footer text-center">
+            <button class="btn btn-primary" (click)="buyNewPackage(item.id.toString(), item.packgeUniqueId, item.packageName)">Buy Package</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingUserPackageTemplate>
+    <div>
+      <h1>Loading...</h1>
+    </div>
+  </ng-template>
+</div>

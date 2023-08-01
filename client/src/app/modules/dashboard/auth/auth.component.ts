@@ -110,32 +110,32 @@ export class AuthComponent implements OnInit {
   }
 
   sendOtp() {
-    // if (this.form.controls['mobile'].invalid) {
-    //   console.error("Missing Mobile Number!")
-    //   return;
-    // }
+    if (this.form.controls['mobile'].invalid) {
+      console.error("Missing Mobile Number!")
+      return;
+    }
 
-    // const values: OtpSend = {
-    //   phoneNumber: this.form.controls['mobile'].value,
-    //   method: "sms"
-    // }
+    const values: OtpSend = {
+      phoneNumber: this.form.controls['mobile'].value,
+      method: "sms"
+    }
 
-    // this.authService.sendOtp(values).subscribe({
-    //   next: response => {
-    //     if (response) {
-    //       this.otpSent = !this.otpSent;
-    //       this.startTimer();
-    //     }
-    //   },
-    //   complete: () => {
-    //     this.openModalWithComponent();
-    //     setTimeout(() => {
-    //       this.otpSent = !this.otpSent;
-    //     }, 50000);
-    //   }
-    // })
+    this.authService.sendOtp(values).subscribe({
+      next: response => {
+        if (response) {
+          this.otpSent = !this.otpSent;
+          this.startTimer();
+        }
+      },
+      complete: () => {
+        this.openModalWithComponent();
+        setTimeout(() => {
+          this.otpSent = !this.otpSent;
+        }, 50000);
+      }
+    })
 
-    this.otpSent = true;
+    // this.otpSent = true;
   }
 
   toggleRegisterMode() {

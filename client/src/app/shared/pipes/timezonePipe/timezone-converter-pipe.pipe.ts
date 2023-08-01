@@ -10,7 +10,7 @@ export class TimezoneConverterPipe implements PipeTransform {
       return '';
     }
 
-    const localTime = moment.utc(utcTime).tz(timeZone).format('YYYY-MM-DD HH:mm:ss');
+    const localTime = moment.utc(utcTime).tz(timeZone).format('YYYY-MM-DD hh:mm:ss A');
     return localTime;
   }
 }

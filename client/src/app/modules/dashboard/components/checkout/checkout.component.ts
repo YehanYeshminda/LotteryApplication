@@ -14,6 +14,11 @@ import { CartHttpService } from '../cart/services/cart-http.service';
 import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { PaymentHttpService } from '../payment/services/payment-http.service';
+import { Router } from '@angular/router';
+import { User } from '../../auth/models/user';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/reducer';
+import { selectUser } from '../../auth/features/auth.selectors';
 
 @Component({
   selector: 'app-checkout',
@@ -28,6 +33,9 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
   @ViewChild(StripeCardComponent) card!: StripeCardComponent;
   authInformartion: AuthDetails | null = null;
   paymentOnGoing: boolean = false;
+  lotteryReferenceIds: string[] = [];
+  showTotal: number = 0;
+  userInformation$: Observable<User | undefined> = of();
 
   cardOptions: StripeCardElementOptions = {
     style: {
@@ -51,7 +59,7 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
 
   stripePayment!: FormGroup;
 
-  constructor(private cookieService: CookieService, private cartEntityService: CartEntityService, private fb: FormBuilder, private cartHttpService: CartHttpService, private stripeService: StripeService, private http: HttpClient, private paymentHttpService: PaymentHttpService) { }
+  constructor(private cookieService: CookieService, private cartEntityService: CartEntityService, private fb: FormBuilder, private cartHttpService: CartHttpService, private stripeService: StripeService, private http: HttpClient, private paymentHttpService: PaymentHttpService, private router: Router, private store: Store<AppState>) { }
 
   ngAfterViewInit(): void {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
@@ -80,6 +88,8 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
       );
     }
 
+    this.userInformation$ = this.store.select(selectUser);
+
     this.stripePayment = this.fb.group({
       name: [this.authInformartion?.username, []],
       amount: [0, []],
@@ -96,6 +106,11 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
 
   pay(stepper: MatStepper): void {
     if (this.stripePayment.valid) {
+      if (this.total === 0) {
+        errorNotification("CART IS EMPTY!");
+        this.router.navigateByUrl('/dashboard/home')
+        return;
+      }
       this.paymentOnGoing = true;
       this.createPaymentIntent(this.total)
         .pipe(
@@ -144,9 +159,10 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
               this.isPaymentDone$ = of(true);
               this.cartHttpService.removeAllFromCart().subscribe({
                 next: response => {
+                  this.lotteryReferenceIds = response;
+                  this.showTotal = result.paymentIntent.amount;
                   successNotification(`Payment of ${result.paymentIntent.amount} has been done!`)
                   this.cartEntityService.clearCache();
-
                   if (this.isPaymentDone$.subscribe(x => x === true)) {
                     stepper.next();
                   }

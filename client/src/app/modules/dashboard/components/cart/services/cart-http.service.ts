@@ -56,6 +56,6 @@ export class CartHttpService {
 
   removeAllFromCart() {
     const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
-    return this.http.post(this.baseUrl + "Cart/DeleteAllFromCart", auth)
+    return this.http.post<string[]>(this.baseUrl + "Cart/DeleteAllFromCart", auth)
   }
 }

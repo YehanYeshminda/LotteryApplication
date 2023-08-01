@@ -6,6 +6,8 @@ export const login = createAction(
 	props<{ user: User }>()
 );
 
+export const getAllAuthInformation = createAction('[Checkout Page] User Auth Information');
+
 export const logout = createAction('[Top Menu] Logout');
 
 export const clearState = createAction('[State] Clear State');

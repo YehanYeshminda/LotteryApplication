@@ -36,7 +36,7 @@ export class EasyDrawComponent {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
       const newCartItem = {
         cartNumbers: this.latestNumbers,
-        paid: 500,
+        paid: 0,
         name: "Easy Draw",
         addOn: new Date().toISOString(),
         authDto: getAuthDetails(this.cookieService.get('user')),

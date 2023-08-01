@@ -6,5 +6,6 @@ namespace API.Repos.Interfaces
     {
         Task<RegistrationResult> RegisterUser(CreateUserDto createUserDto);
         Task<LoginResult> LoginUser(LoginDto loginDto);
+        Task<GetUserInformationDto> GetUserInfoByEmail(string email);
     }
 }

@@ -6,6 +6,7 @@ export interface Cart {
     raffleId: string;
     price: number;
     name: string;
+    lotteryName: string;
 }
 
 export interface CartReponse {
@@ -20,6 +21,7 @@ export interface CartReponse {
     lotteryNo?: number[]
     name: string
     cartNumbers: number[]
+    lotteryName?: string
     lotteryReferenceId?: string;
     authDto?: AuthDetails | null;
 }

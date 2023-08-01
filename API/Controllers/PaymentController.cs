@@ -1,7 +1,6 @@
 ﻿using API.Helpers;
-using API.Repos;
 using API.Repos.Dtos;
-using API.Repos.Models;
+using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -85,7 +84,7 @@ namespace API.Controllers
                     await _lotteryContext.Tblmoneycredits.AddAsync(newPayment);
                     await _lotteryContext.SaveChangesAsync();
 
-                    return Ok(newPayment.RaffleNo   );
+                    return Ok(newPayment.RaffleNo);
                 }
                 catch (Exception ex)
                 {

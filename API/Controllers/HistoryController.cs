@@ -1,5 +1,5 @@
 ﻿using API.Helpers;
-using API.Repos;
+using API.Models;
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -147,7 +147,7 @@ namespace API.Controllers
                     var lastSevenDaysDate = DateTime.UtcNow.Date.AddDays(-3);
 
                     var data = await _lotteryContext.Tblorderhistories
-                        .Where(item => item.AddOn >= lastSevenDaysDate && item.AddOn <= currentDate && item.UserId == _user.Id)
+                        .Where(item => item.AddOn >= lastSevenDaysDate && item.AddOn <= DateTime.UtcNow && item.UserId == _user.Id)
                         .ToListAsync();
 
                     var dataToReturn = data.Select(item => new GetHistoryDto
@@ -158,7 +158,7 @@ namespace API.Controllers
                         TicketNumber = item.TicketNo,
                         UniqueRaffleId = item.RaffleUniqueId,
                         IsWin = _lotteryContext.Tbllotterywinners.Any(x => x.TicketNo == item.TicketNo)
-                    });
+                    }).OrderByDescending(x => x.OrderedOn);
 
                     return Ok(dataToReturn);
 

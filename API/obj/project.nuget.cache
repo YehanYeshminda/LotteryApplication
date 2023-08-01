@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "/+wFPCxTM5vQxv3PrYDJTcj5LvSX3sMeY3ljJM8GOsbtmT138+/IbM4UsnCm4nxw0YrizVjyr5SMOo9Eqzg13w==",
+  "dgSpecHash": "ckEqyvSe9lgiSPRfmz9rP67/SOXUGlFFiERU5cB/QGGsgrEbCwoPQ1p8f1kiz0LD8wcKnB9DS9jRPg8FFo9oeg==",
   "success": true,
   "projectFilePath": "D:\\Programming\\Office\\LotteryApp\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yesha\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\yesha\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
+    "C:\\Users\\yesha\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\yesha\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
     "C:\\Users\\yesha\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\yesha\\.nuget\\packages\\k4os.compression.lz4\\1.3.5\\k4os.compression.lz4.1.3.5.nupkg.sha512",

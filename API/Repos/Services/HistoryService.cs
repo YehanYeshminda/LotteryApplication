@@ -2,6 +2,7 @@
 using API.Repos.Dtos;
 using API.Repos.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using API.Models;
 
 namespace API.Repos.Services
 {

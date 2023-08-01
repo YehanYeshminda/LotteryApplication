@@ -1,5 +1,5 @@
 using API.Helpers;
-using API.Repos;
+using API.Models;
 using API.Repos.Interfaces;
 using API.Repos.Services;
 using Microsoft.EntityFrameworkCore;

@@ -12,11 +12,13 @@ import { MegaDrawResolver } from './components/mega-draw/resolvers/mega-draw.res
 import { DrawHistoryResolver } from './components/home/resolvers/draw-history.resolver';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { SearchHistoryComponent } from './components/search-history/search-history.component';
+import { UserHomeComponent } from './components/user-home/user-home.component';
 
 const routes: Routes = [
   {
     path: '', component: DashboardComponent, resolve: { CartItems: CartResolver }, canActivate: [AuthGuard], children: [
       { path: 'home', component: HomeComponent, resolve: { CartItems: CartResolver, HomeItems: SequenceNoResolver, DrawHistory: DrawHistoryResolver } },
+      { path: 'user-home', component: UserHomeComponent },
       { path: 'easy-draw', component: EasyDrawComponent, resolve: { CartItems: CartResolver, DrawHistory: DrawHistoryResolver } },
       { path: 'mega-draw', component: MegaDrawComponent, resolve: { CartItems: CartResolver, drawNumbers: MegaDrawResolver, DrawHistory: DrawHistoryResolver } },
       { path: 'cart', component: CartComponent, resolve: { CartItems: CartResolver } },
@@ -25,6 +27,8 @@ const routes: Routes = [
     ]
   },
   { path: 'history', loadChildren: () => import('./user-history/user-history.module').then(m => m.UserHistoryModule), canActivate: [AuthGuard] },
+  { path: 'info', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule), canActivate: [AuthGuard] },
+  { path: 'user-package', loadChildren: () => import('./user-packages/user-packages.module').then(m => m.UserPackagesModule), canActivate: [AuthGuard] },
 ];
 
 @NgModule({

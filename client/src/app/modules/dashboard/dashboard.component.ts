@@ -20,12 +20,14 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.routerState$ = this.store.pipe(select('router'));
-
-    // if (this.count == 1) {
-    this.loading = false;
-    // this.startLoading();
-    // this.count++;
-    // }
+    this.routerState$.subscribe({
+      next: response => {
+        if (response.navigationId === 2) {
+          this.loading = false;
+          // this.startLoading();
+        }
+      }
+    })
   }
 
   setDelayedLoadingValue(value: number, delay: number): void {

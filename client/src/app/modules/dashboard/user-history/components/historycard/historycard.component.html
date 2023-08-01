@@ -4,7 +4,7 @@
         </div>
         <div class="card-body pt-0" [ngClass]="userHistoryData.isWin ? 'bg-success' : ''">
           <div class="row">
-            <div class="col-8">
+            <div class="col-9">
               <h2 class="lead mt-2" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><b>Ticket No: {{ userHistoryData.ticketNumber }}</b></h2>
               <ul class="ml-0 mb-0 fa-ul text-muted">
                 <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-id-card" aria-hidden="true"></i></span> Unique Raffle Id: {{ userHistoryData.uniqueRaffleId }}</li>
@@ -13,9 +13,9 @@
                 <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-location-arrow" aria-hidden="true"></i></span> {{ getUserTimeZone() }}</li>
               </ul>
             </div>
-            <div class="col-4 text-center">
-              <img src="assets/MEGADRAW.svg" *ngIf="userHistoryData.raffleId == 1" alt="MEGA DRAW" class="img-circle img-fluid bg-danger h-100 w-100 p-2">
-              <img src="assets/EASYDRAW.svg" *ngIf="userHistoryData.raffleId == 2" alt="EASY DRAW" class="img-circle img-fluid bg-success h-100 w-100 p-2">
+            <div class="col-3 text-center d-flex justify-content-center align-items-center">
+              <img src="assets/MEGADRAW.svg" *ngIf="userHistoryData.raffleId == 1" alt="MEGA DRAW" class="img-circle img-fluid bg-danger h-75 w-100 p-2">
+              <img src="assets/EASYDRAW.svg" *ngIf="userHistoryData.raffleId == 2" alt="EASY DRAW" class="img-circle img-fluid bg-success h-75 w-100 p-2">
             </div>
           </div>
         </div>

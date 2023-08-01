@@ -11,6 +11,7 @@ import { CartEntityService } from 'src/app/modules/dashboard/components/cart/ser
 import { clearCartEntities } from 'src/app/modules/dashboard/components/cart/features/cart.action';
 import { HomeEntityService } from 'src/app/modules/dashboard/components/home/services/home-entity.service';
 import { RestoreInitialState } from 'src/app/modules/dashboard/user-history/features/history.actions';
+import { RestoreSingleUserInfoInitialState } from 'src/app/modules/dashboard/user-info/features/user-info.actions';
 
 @Component({
   selector: 'app-navbar',
@@ -30,6 +31,7 @@ export class NavbarComponent implements OnInit {
     this.cartEntityService.clearCache();
     this.homeEntityService.clearCache();
     this.store.dispatch(RestoreInitialState());
+    this.store.dispatch(RestoreSingleUserInfoInitialState());
   }
 
   ngOnInit(): void {

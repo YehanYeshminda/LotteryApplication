@@ -103,3 +103,9 @@ D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\runtimes\win\lib\net6.0\Sy
 D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\API.staticwebassets.runtime.json
+D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\publish\web.config
+D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\publish\API.deps.json
+D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\publish\API.runtimeconfig.json
+D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\publish\appsettings.Development.json
+D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\publish\appsettings.json
+D:\Programming\Office\LotteryApp\API\bin\Debug\net6.0\BCrypt.Net-Next.dll

@@ -1,5 +1,5 @@
 ﻿using API.Repos.Interfaces;
-using API.Repos.Models;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repos.Services
