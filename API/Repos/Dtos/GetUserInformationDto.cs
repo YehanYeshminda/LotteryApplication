@@ -9,6 +9,7 @@
         public string? Mobile { get; set; }
         public string? AlternatePhone { get; set; }
         public string? ContactNo { get; set; }
+        public decimal? AccountBalance { get; set; }
         public DateTime? AddOn { get; set; }
     }
 }

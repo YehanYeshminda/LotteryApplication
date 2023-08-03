@@ -1,132 +1,136 @@
-$primary: #fff;
-$secondary: #ccc;
-$ternary: #272727;
-$dark: #444444;
-$cart-badge-color: #9747FF;
-$cart-background-color: white;
+//$primary: #fff;
+//$secondary: #ccc;
+//$ternary: #272727;
+//$dark: #444444;
+//$cart-badge-color: #9747FF;
+//$cart-background-color: white;
+//
+//.cart-btn-custom {
+//  background: $cart-badge-color;
+//  color: $primary;
+//  border: 0px black solid;
+//  width: 90px;
+//  height: 35px;
+//  border-radius: 5px;
+//  font-weight: bold;
+//}
+//
+//.cart-btn-custom:hover {
+//  background: white;
+//  color: black;
+//  border: 1px black solid;
+//  font-weight: bold;
+//}
+//
+//body {
+//  background: $secondary;
+//  color: $ternary;
+//  font-size: 14px;
+//  margin: 0;
+//
+//}
+//
+//.logo img {
+//    width: 76px;
+//    height: 79px;
+//    flex-shrink: 0;
+//}
+//
+//.navbar {
+//  align-items: center;
+//  background: $primary;
+//  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+//  display: flex;
+//  flex-direction: row;
+//  font-family: sans-serif;
+//  padding: 10px 50px;
+//}
+//
+//.push-left {
+//  margin-left: auto;
+//}
+//
+//.show-cart-in-sm {
+//    display: none;
+//
+//    @media screen and (max-width: 575px) {
+//        position: relative;
+//        display: flex;
+//    }
+//}
+//
+//.show-cart-in-sm-btn {
+//  display: none;
+//
+//    @media screen and (max-width: 575px) {
+//        position: relative;
+//        display: block;
+//    }
+//}
+//
+//.fa-cart-shopping {
+//  font-size: 24px;
+//  color: $cart-badge-color;
+//}
+//
+//.show-cart-in-md {
+//    margin-right: 10px;
+//    position: relative;
+//    display: flex;
+//    justify-content: space-between;
+//    align-items: center;
+//    gap: 30px;
+//
+//
+//    @media screen and (max-width: 575px) {
+//      display: none;
+//  }
+//}
+//
+//.cart-btn {
+//  position: relative;
+//}
+//
+//.cart-badge h3 {
+//  position: absolute;
+//  color: $cart-badge-color;
+//  background: white;
+//  border-radius: 20px;
+//  width: 22px;
+//  height: 20px;
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  font-size: 15px;
+//  font-weight: bolder;
+//  left: 30px;
+//  bottom: 15px;
+//}
+//
+//.btn {
+//  outline: none;
+//}
+//
+//.logout-btn {
+//  border: 1px solid blue;
+//  border-radius: 5px;
+//  background: blue;
+//  color: white;
+//  width: 80px;
+//  height: 40px;
+//  text-align: center;
+//}
+//
+//.logout-btn:hover {
+//  background: white;
+//  color: blue;
+//  cursor: pointer;
+//}
+//
+//.navbar {
+//  background: #63D7FC;
+//}
 
-.cart-btn-custom {
-  background: $cart-badge-color;
-  color: $primary;
-  border: 0px black solid;
-  width: 90px;
-  height: 35px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.cart-btn-custom:hover {
-  background: white;
-  color: black;
-  border: 1px black solid;
-  font-weight: bold;
-}
-
-body {
-  background: $secondary;
-  color: $ternary;
-  font-size: 14px;
-  margin: 0;
-
-}
-
-.logo img {
-    width: 76px;
-    height: 79px;
-    flex-shrink: 0;
-}
-
-.navbar {
-  align-items: center;
-  background: $primary;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: row;
-  font-family: sans-serif;
-  padding: 10px 50px;
-}
-
-.push-left {
-  margin-left: auto;
-}
-
-.show-cart-in-sm {
-    display: none;
-
-    @media screen and (max-width: 575px) {
-        position: relative;
-        display: flex;
-    }
-}
-
-.show-cart-in-sm-btn {
-  display: none;
-
-    @media screen and (max-width: 575px) {
-        position: relative;
-        display: block;
-    }
-}
-
-.fa-cart-shopping {
-  font-size: 24px;
-  color: $cart-badge-color;
-}
-
-.show-cart-in-md {
-    margin-right: 10px;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px;
-
-
-    @media screen and (max-width: 575px) {
-      display: none;
-  }
-}
-
-.cart-btn {
-  position: relative;
-}
-
-.cart-badge h3 {
-  position: absolute;
-  color: $cart-badge-color;
-  background: white;
-  border-radius: 20px;
-  width: 22px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 15px;
-  font-weight: bolder;
-  left: 30px;
-  bottom: 15px;
-}
-
-.btn {
-  outline: none;
-}
-
-.logout-btn {
-  border: 1px solid blue;
-  border-radius: 5px;
-  background: blue;
-  color: white;
-  width: 80px;
-  height: 40px;
-  text-align: center;
-}
-
-.logout-btn:hover {
-  background: white;
-  color: blue;
-  cursor: pointer;
-}
-
-.navbar {
-  background: #63D7FC;
+.green-color {
+  color: green;
 }

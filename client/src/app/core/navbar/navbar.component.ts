@@ -12,6 +12,7 @@ import { clearCartEntities } from 'src/app/modules/dashboard/components/cart/fea
 import { HomeEntityService } from 'src/app/modules/dashboard/components/home/services/home-entity.service';
 import { RestoreInitialState } from 'src/app/modules/dashboard/user-history/features/history.actions';
 import { RestoreSingleUserInfoInitialState } from 'src/app/modules/dashboard/user-info/features/user-info.actions';
+import {AuthDetails} from "../../shared/models/auth";
 
 @Component({
   selector: 'app-navbar',
@@ -23,6 +24,8 @@ export class NavbarComponent implements OnInit {
   navbarCollapsed = true;
   cartNo: number = 0;
   cartItems$: Observable<CartReponse[]> = of([]);
+  isUser$: Observable<boolean> = of(false);
+  userDetails: AuthDetails | null = null
 
   constructor(private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService, private homeEntityService: HomeEntityService) { }
 
@@ -37,6 +40,8 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
       this.cartItems$ = this.cartEntityService.entities$;
+      this.isUser$ = of(true);
+      this.userDetails = getAuthDetails(this.cookieService.get('user'))
     }
   }
 

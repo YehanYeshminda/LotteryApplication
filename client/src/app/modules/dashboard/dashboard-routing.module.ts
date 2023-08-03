@@ -29,6 +29,7 @@ const routes: Routes = [
   { path: 'history', loadChildren: () => import('./user-history/user-history.module').then(m => m.UserHistoryModule), canActivate: [AuthGuard] },
   { path: 'info', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule), canActivate: [AuthGuard] },
   { path: 'user-package', loadChildren: () => import('./user-packages/user-packages.module').then(m => m.UserPackagesModule), canActivate: [AuthGuard] },
+  { path: 'tournaments', loadChildren: () => import('./tournaments/tournaments.module').then(m => m.TournamentsModule), canActivate: [AuthGuard] },
 ];
 
 @NgModule({

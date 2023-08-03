@@ -71,7 +71,7 @@ namespace API.Controllers
                 {
                     Username = loginResult.Username,
                     Email = loginResult.Email,
-                    Hash = loginResult.Hash
+                    Hash = loginResult.Hash,
                 });
             }
             else
@@ -201,7 +201,8 @@ namespace API.Controllers
                     CustName = user.CustName,
                     Email = user.Email,
                     Mobile = user.Mobile,
-                    Nic = user.Nic
+                    Nic = user.Nic,
+                    AccountBalance = user.AccountBalance
                 };
 
                 return Ok(userInfo);
@@ -234,36 +235,49 @@ namespace API.Controllers
 
             if (currentDate < decryptedDateWithOffset.Date)
             {
-                var user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == _user.Email);
-
-                //var existingUser = await _registerRepository.GetUserByEmailOrNicOrContactNo(data.Email, data.Nic, data.ContactNo, data.CustName);
-
-                if (user == null) return null;
-
-                user.CustName = data.CustName;
-                user.Nic = data.Nic;
-                user.Email = data.Email;
-                user.CustAddress = data.CustAddress;
-                user.Mobile = data.Mobile;
-                user.AlternatePhone = data.AlternatePhone;
-                user.ContactNo = data.ContactNo;
-
-                _lotteryContext.Tblregisters.Update(user);
-                await _lotteryContext.SaveChangesAsync();
-
-                var userInfo = new GetUserInformationDto
+                try
                 {
-                    AddOn = user.AddOn,
-                    AlternatePhone = user.AlternatePhone,
-                    ContactNo = user.ContactNo,
-                    CustAddress = user.CustAddress,
-                    CustName = user.CustName,
-                    Email = user.Email,
-                    Mobile = user.Mobile,
-                    Nic = user.Nic
-                };
+                    var user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == _user.Email);
 
-                return Ok(userInfo);
+                    var existingUser = await _registerRepository.GetUserByNicOrContactNo(data.Nic, data.ContactNo, data.CustName);
+
+                    if (existingUser != null)
+                    {
+                        return null;
+                    }
+
+                    if (user == null) return null;
+
+                    user.CustName = data.CustName;
+                    user.Nic = data.Nic;
+                    user.Email = data.Email;
+                    user.CustAddress = data.CustAddress;
+                    user.Mobile = data.Mobile;
+                    user.AlternatePhone = data.AlternatePhone;
+                    user.ContactNo = data.ContactNo;
+
+                    _lotteryContext.Tblregisters.Update(user);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    var userInfo = new GetUserInformationDto
+                    {
+                        AddOn = user.AddOn,
+                        AlternatePhone = user.AlternatePhone,
+                        ContactNo = user.ContactNo,
+                        CustAddress = user.CustAddress,
+                        CustName = user.CustName,
+                        Email = user.Email,
+                        Mobile = user.Mobile,
+                        Nic = user.Nic,
+                    };
+
+                    return Ok(userInfo);
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error while updating user! " + ex.Message);
+                }
             }
             else
             {

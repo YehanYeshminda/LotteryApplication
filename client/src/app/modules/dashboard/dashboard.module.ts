@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -60,24 +60,25 @@ const entityMetaData: EntityMetadataMap = {
     SearchHistoryComponent,
     UserHomeComponent,
   ],
-  imports: [
-    CommonModule,
-    DashboardRoutingModule,
-    CoreModule,
-    SharedModule,
-    NgxSpinnerModule,
-    ModalModule.forRoot(),
-    ProgressbarModule.forRoot(),
-    NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
-    FormsModule,
-    ReactiveFormsModule,
-    CarouselModule.forRoot(),
-    StoreModule.forFeature('drawHistory', drawHistoryReducer),
-    MatStepperModule,
-    MatButtonModule,
-    MatIconModule,
-    UserHistoryModule
-  ],
+    imports: [
+        CommonModule,
+        DashboardRoutingModule,
+        CoreModule,
+        SharedModule,
+        NgxSpinnerModule,
+        ModalModule.forRoot(),
+        ProgressbarModule.forRoot(),
+        NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
+        FormsModule,
+        ReactiveFormsModule,
+        CarouselModule.forRoot(),
+        StoreModule.forFeature('drawHistory', drawHistoryReducer),
+        MatStepperModule,
+        MatButtonModule,
+        MatIconModule,
+        UserHistoryModule,
+        NgOptimizedImage
+    ],
   providers: [
     CartEntityService,
     CartHttpService,

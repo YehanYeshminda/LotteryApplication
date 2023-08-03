@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AuthActions } from './action-types';
-import { tap } from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CookieService } from 'ngx-cookie-service';
+import {empty} from "rxjs";
 
 @Injectable()
 export class AuthEffects {
@@ -11,11 +12,25 @@ export class AuthEffects {
 		() =>
 			this.actions$.pipe(
 				ofType(AuthActions.login),
-				tap((action) =>
-					this.cookieService.set('user', JSON.stringify(action.user), {
+				switchMap((action) => {
+					const user = JSON.stringify(action.user);
+					const existingUser = this.cookieService.get('user');
+
+					if (existingUser) {
+						this.cookieService.delete('user');
+						console.log(true)
+					}
+
+					console.log(false)
+
+
+					this.cookieService.set('user', user, {
 						expires: new Date(new Date().getTime() + 1000 * 60 * 24 * 30 * 14),
-					})
-				)
+					});
+
+					// Return an empty observable as there's no need to dispatch any action
+					return empty();
+				})
 			),
 		{ dispatch: false }
 	);

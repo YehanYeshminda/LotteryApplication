@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable, of, Subject, takeUntil} from 'rxjs';
 import { SingleUserInfo, UpdateSingleUserInfo } from '../../models/single-user';
 import { AppState } from 'src/app/reducer';
 import { Store } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { SingleUserHttpService } from '../../services/single-user-http.service';
 import { AuthDetails } from 'src/app/shared/models/auth';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { confirmApproveNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import {confirmApproveNotification, errorNotification, successNotification} from 'src/app/shared/alerts/sweetalert';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,9 +17,10 @@ import { Router } from '@angular/router';
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss']
 })
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, OnDestroy {
   singleUserInfo$: Observable<SingleUserInfo | undefined> = of();
   form: FormGroup = new FormGroup({});
+  private destroy$ = new Subject<void>();
 
   constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService, private router: Router) { }
 
@@ -27,12 +28,14 @@ export class EditUserComponent implements OnInit {
     this.intializeForm();
     this.singleUserInfo$ = this.store.select(selectSingleUserInfo);
 
-    this.singleUserInfo$.subscribe({
+    this.singleUserInfo$.pipe(
+        takeUntil(this.destroy$)
+    ).subscribe({
       next: response => {
         if (!response) return;
-        this.form.patchValue(response)
+        this.form.patchValue(response);
       }
-    })
+    });
   }
 
   intializeForm() {
@@ -73,15 +76,14 @@ export class EditUserComponent implements OnInit {
       authDto: auth
     };
 
-    console.log(values);
-
     this.singleUserHttpService.updateSingleUserHistory(values).subscribe({
       next: response => {
-        successNotification(`User with the email ${response.custName} been successfully Edited`)
+        if (response == null) {
+          errorNotification("User with this information already exist!");
+        } else {
+          successNotification(`User with the email ${response.email} been successfully Edited`)
+        }
       },
-      error: err => {
-        console.log(err)
-      }
     })
   }
 
@@ -95,5 +97,10 @@ export class EditUserComponent implements OnInit {
     } else {
       this.router.navigateByUrl("/dashboard/home")
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

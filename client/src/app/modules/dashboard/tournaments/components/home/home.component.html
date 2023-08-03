@@ -1,0 +1,173 @@
+<div class="tunament padding-top padding-bottom add-padding">
+    <div class="container">
+        <div class="section-wrapper">
+            <div class="achievement-area">
+                <ul class="nav nav-tabs align-items-center" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation" title="ALL">
+                        <button class="nav-link active" id="tabAll-tab" data-bs-toggle="tab" data-bs-target="#tabAll" type="button" role="tab" aria-controls="tabAll" aria-selected="true">DRAWS</button>
+                    </li>
+                    <li class="nav-item" role="presentation" title="Blackjack">
+                        <button class="nav-link" id="tabOne-tab" data-bs-toggle="tab" data-bs-target="#tabOne" type="button" role="tab" aria-controls="tabOne" aria-selected="false">Blackjack</button>
+                    </li>
+                    <li class="nav-item" role="presentation" title="Slots">
+                        <button class="nav-link" id="tabTwo-tab" data-bs-toggle="tab" data-bs-target="#tabTwo" type="button" role="tab" aria-controls="tabTwo" aria-selected="false">Slots</button>
+                    </li>
+                    <li class="nav-item" role="presentation" title="Texas hold'em">
+                        <button class="nav-link" id="tabThree-tab" data-bs-toggle="tab" data-bs-target="#tabThree" type="button" role="tab" aria-controls="tabThree" aria-selected="false">Texas hold'em</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tabAll" role="tabpanel" aria-labelledby="tabAll-tab">
+                        <table class="table text-white">
+                            <thead>
+                                <tr>
+                                    <th>DRAW</th>
+                                    <th>Starts In</th>
+                                    <th>Ends In</th>
+                                    <th>Prize($)</th>
+                                    <th>Price</th>
+                                    <th>Draw Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <ng-container *ngIf="(tournamentDraws$ | async) as data">
+                                <tr *ngFor="let item of data">
+                                    <td>{{ item.raffleName }}</td>
+                                    <td>{{ item.raffleDate | timezoneConverter: getUserTimeZone() }}</td>
+                                    <td>{{ item.endOn | timezoneConverter: getUserTimeZone() }}</td>
+                                    <td>{{ item.winAmount }} </td>
+                                    <td>{{ item.rafflePrice }}</td>
+                                    <td>{{ item.drawCount }}</td>
+                                </tr>
+                            </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="tabOne" role="tabpanel" aria-labelledby="tabOne-tab">
+                        <table class="table text-white">
+                            <thead>
+                            <tr>
+                                <th>Tournament</th>
+                                <th>Starts In</th>
+                                <th>Ends In</th>
+                                <th>Players</th>
+                                <th>Prize($)</th>
+                                <th>Entry Fee</th>
+                                <th>Bonus</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>100 4hr reloder</td>
+                                <td>12:00</td>
+                                <td>12:40</td>
+                                <td>542</td>
+                                <td>$1500</td>
+                                <td>$50</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Master Of The Table</td>
+                                <td>1:00</td>
+                                <td>1:40</td>
+                                <td>352</td>
+                                <td>$800</td>
+                                <td>$10</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>The Wild Card</td>
+                                <td>4:00</td>
+                                <td>4:40</td>
+                                <td>258</td>
+                                <td>$1500</td>
+                                <td>$100</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>$10k Midweek Moolha</td>
+                                <td>11:40</td>
+                                <td>12:00</td>
+                                <td>232</td>
+                                <td>$1000</td>
+                                <td>$5</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>100 4hr reloder</td>
+                                <td>12:00</td>
+                                <td>12:40</td>
+                                <td>542</td>
+                                <td>$1500</td>
+                                <td>$50</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Master Of The Table</td>
+                                <td>1:00</td>
+                                <td>1:40</td>
+                                <td>352</td>
+                                <td>$800</td>
+                                <td>$10</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>The Wild Card</td>
+                                <td>4:00</td>
+                                <td>4:40</td>
+                                <td>258</td>
+                                <td>$1500</td>
+                                <td>$100</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>$10k Midweek Moolha</td>
+                                <td>11:40</td>
+                                <td>12:00</td>
+                                <td>232</td>
+                                <td>$1000</td>
+                                <td>$5</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>100 4hr reloder</td>
+                                <td>12:00</td>
+                                <td>12:40</td>
+                                <td>542</td>
+                                <td>$1500</td>
+                                <td>$50</td>
+                                <td>Yes</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-center tunament__footer">
+                            <div class="tunament__left">
+                                <h5>102 Tournament results</h5>
+                            </div>
+                            <div class="tunament__right">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination mb-0 pb-0">
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

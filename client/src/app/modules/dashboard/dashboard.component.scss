@@ -1,0 +1,9 @@
+.container-for-margin-top-dashbaord {
+  padding-top: 120px;
+}
+
+@media only screen and (max-width: 991px) {
+  .container-for-margin-top-dashbaord {
+    padding-top: 80px;
+  }
+}

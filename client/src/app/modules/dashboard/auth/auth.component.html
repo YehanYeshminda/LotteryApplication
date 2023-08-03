@@ -1,79 +1,218 @@
-<div class="container h-100 flex-container">
-  <form [formGroup]="form">
+<!--<div class="container h-100 flex-container">-->
+<!--  <form [formGroup]="form">-->
 
-    <div class="row">
-      <div class="col-12">
-        <app-input [formControl]="$any(form.controls['custName'])" [label]="'Username'"></app-input>
-      </div>
+<!--    <div class="row">-->
+<!--      <div class="col-12">-->
+<!--        <app-input [formControl]="$any(form.controls['custName'])" [label]="'Username'"></app-input>-->
+<!--      </div>-->
 
-      <ng-container *ngIf="registerMode">
+<!--      <ng-container *ngIf="registerMode">-->
 
-        <div class="col-12">
-          <app-input [formControl]="$any(form.controls['nic'])" [label]="'NIC'"></app-input>
-        </div>
-
-
-        <div class="col-12">
-          <app-input [formControl]="$any(form.controls['email'])" [label]="'Email'"></app-input>
-        </div>
+<!--        <div class="col-12">-->
+<!--          <app-input [formControl]="$any(form.controls['nic'])" [label]="'NIC'"></app-input>-->
+<!--        </div>-->
 
 
-        <div class="col-12">
-          <app-input [formControl]="$any(form.controls['custAddress'])" [label]="'Address'"></app-input>
-        </div>
+<!--        <div class="col-12">-->
+<!--          <app-input [formControl]="$any(form.controls['email'])" [label]="'Email'"></app-input>-->
+<!--        </div>-->
 
-        <div class="col-12">
-          <div class="row">
-            <div class="col-12">
-              <div class="form-group m-2">
-                <div class="row">
-                  <div class="col-12 col-sm-12 col-md-12">
-                    <label class="form-label">Mobile No</label>
-                  </div>
 
-                  <div class="col-12 col-sm-12 col-md-9">
-                    <input type="text" class="form-control w-100" placeholder="Country Code + Phone number" formControlName="mobile">
-                  </div>
+<!--        <div class="col-12">-->
+<!--          <app-input [formControl]="$any(form.controls['custAddress'])" [label]="'Address'"></app-input>-->
+<!--        </div>-->
 
-                  <div class="col-12 col-sm-12 col-md-3 text-center">
-                    <button (click)="sendOtp()" [disabled]="otpSent" type="button" class="btn btn-primary w-100" >OTP</button>
-                    <ng-container *ngIf="otpSent">
-                      <span #timerSpan></span>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
+<!--        <div class="col-12">-->
+<!--          <div class="row">-->
+<!--            <div class="col-12">-->
+<!--              <div class="form-group m-2">-->
+<!--                <div class="row">-->
+<!--                  <div class="col-12 col-sm-12 col-md-12">-->
+<!--                    <label class="form-label">Mobile No</label>-->
+<!--                  </div>-->
+
+<!--                  <div class="col-12 col-sm-12 col-md-9">-->
+<!--                    <input type="text" class="form-control w-100" placeholder="Country Code + Phone number" formControlName="mobile">-->
+<!--                  </div>-->
+
+<!--                  <div class="col-12 col-sm-12 col-md-3 text-center">-->
+<!--                    <button (click)="sendOtp()" [disabled]="otpSent" type="button" class="btn btn-primary w-100" >OTP</button>-->
+<!--                    <ng-container *ngIf="otpSent">-->
+<!--                      <span #timerSpan></span>-->
+<!--                    </ng-container>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="col-12">-->
+<!--          <app-input [formControl]="$any(form.controls['alternatePhone'])" [label]="'Alternate Mobile No'"></app-input>-->
+<!--        </div>-->
+
+<!--        <div class="col-12">-->
+<!--          <app-input [formControl]="$any(form.controls['contactNo'])" [label]="'Contact No'"></app-input>-->
+<!--        </div>-->
+<!--      </ng-container>-->
+
+
+<!--      <div class="col-12">-->
+<!--        <app-input [formControl]="$any(form.controls['custPassword'])" [label]="'Password'" [type]="'password'"></app-input>-->
+<!--      </div>-->
+
+<!--      <div class="col-12 justify-content-center align-items-center d-flex flex-column mt-2">-->
+<!--        <ng-container *ngIf="!registerMode">-->
+<!--          <button [disabled]="isDisabled || form.invalid" class="btn btn-primary w-50" (click)="onSubmit()">Login</button>-->
+<!--          <p>Don't have an Account?-->
+<!--            <span (click)="toggleRegisterMode()" class="link-danger">Register</span>-->
+<!--          </p>-->
+<!--        </ng-container>-->
+
+<!--        <ng-container *ngIf="registerMode">-->
+<!--          <button [disabled]="isDisabled || form.invalid || otpSent" class="btn btn-primary w-50" (click)="onSubmit()">Register</button>-->
+<!--          <p>Already have an Account? <span (click)="toggleRegisterMode()" class="link-danger">Login</span> </p>-->
+<!--        </ng-container>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->
+<!--</div>-->
+
+<ng-container *ngIf="registerMode;else loginPage">
+  <div class="login-section padding-top padding-bottom">
+    <div class=" container">
+      <div class="account-wrapper">
+        <h3 class="title">Register Now</h3>
+        <form class="account-form text-start">
+          <div class="select-gender mb-3">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <label class="form-check-label" for="inlineRadio1">Mr</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <label class="form-check-label" for="inlineRadio2">Mrs</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+              <label class="form-check-label" for="inlineRadio3">Others</label>
             </div>
           </div>
+          <div class="form-group">
+            <label>Firstname:</label>
+            <input type="text" placeholder="First Name" name="Fname">
+          </div>
+          <div class="form-group">
+            <label>Surname:</label>
+            <input type="text" name="surname">
+          </div>
+          <div class="birth-select">
+            <label>Date Of Birth:</label>
+            <select class="form-select ms-0">
+              <option selected>Days</option>
+              <option *ngFor="let item of dates" [value]="item.Value">{{ item.text }}</option>
+            </select>
+            <select class="form-select">
+              <option selected>Months</option>
+              <option *ngFor="let item of months" [value]="item.Value">{{ item.text }}</option>
+            </select>
+            <select class="form-select">
+              <option selected>Year</option>
+              <option *ngFor="let item of populateYears" [value]="item.Value">{{ item.text }}</option>
+            </select>
+          </div>
+          <div class="country">
+            <label>Country Of Residence:</label>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Open this select menu</option>
+              <option *ngFor="let item of populateCountries" [value]="item.code">{{ item.name }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Address:</label>
+            <input type="text" name="Address">
+          </div>
+          <div class="form-group">
+            <label>City:</label>
+            <input type="text" name="City">
+          </div>
+          <div class="provency-group">
+            <label>Provency:</label>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>select Provency</option>
+              <option value="Dhaka">Dhaka</option>
+              <option value="Dhanmondi">Dhanmondi</option>
+              <option value="Bonani">Bonani</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Postal Code</label>
+            <input type="text" name="Postal">
+          </div>
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="text" name="email">
+          </div>
+          <div class="number-group">
+            <label>Phone Number:</label>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>+98</option>
+              <option value="1">+88</option>
+              <option value="2">+99</option>
+              <option value="3">+77</option>
+            </select>
+            <input type="text" name="number">
+          </div>
+          <div class="form-group">
+            <button class="d-block default-button"><span>Get Started Now</span></button>
+          </div>
+        </form>
+        <div class="account-bottom">
+          <span class="d-block cate pt-10">Are you a member? <a (click)="toggleRegisterMode()">Login</a></span>
+          <span class="or"><span>or</span></span>
+          <h5 class="subtitle">Register With Social Media</h5>
+          <ul class="match-social-list d-flex flex-wrap align-items-center justify-content-center mt-4">
+            <li><a href="#"><img src="assets/images/match/social-1.png" alt="vimeo"></a></li>
+            <li><a href="#"><img src="assets/images/match/social-2.png" alt="youtube"></a></li>
+            <li><a href="#"><img src="assets/images/match/social-3.png" alt="twitch"></a></li>
+          </ul>
         </div>
-
-        <div class="col-12">
-          <app-input [formControl]="$any(form.controls['alternatePhone'])" [label]="'Alternate Mobile No'"></app-input>
-        </div>
-
-        <div class="col-12">
-          <app-input [formControl]="$any(form.controls['contactNo'])" [label]="'Contact No'"></app-input>
-        </div>
-      </ng-container>
-
-
-      <div class="col-12">
-        <app-input [formControl]="$any(form.controls['custPassword'])" [label]="'Password'" [type]="'password'"></app-input>
-      </div>
-
-      <div class="col-12 justify-content-center align-items-center d-flex flex-column mt-2">
-        <ng-container *ngIf="!registerMode">
-          <button [disabled]="isDisabled || form.invalid" class="btn btn-primary w-50" (click)="onSubmit()">Login</button>
-          <p>Don't have an Account?
-            <span (click)="toggleRegisterMode()" class="link-danger">Register</span>
-          </p>
-        </ng-container>
-
-        <ng-container *ngIf="registerMode">
-          <button [disabled]="isDisabled || form.invalid || otpSent" class="btn btn-primary w-50" (click)="onSubmit()">Register</button>
-          <p>Already have an Account? <span (click)="toggleRegisterMode()" class="link-danger">Login</span> </p>
-        </ng-container>
       </div>
     </div>
-  </form>
-</div>
+  </div>
+</ng-container>
+
+<ng-template #loginPage>
+  <div class="login-section padding-top padding-bottom">
+    <div class=" container">
+      <div class="account-wrapper">
+        <h3 class="title">Login</h3>
+        <form class="account-form text-start" [formGroup]="form">
+          <div class="form-group">
+            <label>User Name:</label>
+            <input formControlName="custName" type="text" name="username">
+          </div>
+          <div class="form-group">
+            <label>Password:</label>
+            <input formControlName="custPassword" type="password" name="password">
+          </div>
+          <div class="form-group">
+            <div class="d-flex justify-content-between flex-wrap pt-sm-2">
+              <div class="checkgroup">
+                <input type="checkbox" name="remember" id="remember">
+                <label for="remember">Remember Me</label>
+              </div>
+              <a routerLink="">Forget Password?</a>
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="d-block default-button" [disabled]="isDisabled || form.invalid || otpSent" (click)="onSubmit()"><span>Submit Now</span></button>
+          </div>
+        </form>
+        <div class="account-bottom">
+          <span class="d-block cate pt-10">Don’t Have any Account? <a (click)="toggleRegisterMode()"> Sign Up</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

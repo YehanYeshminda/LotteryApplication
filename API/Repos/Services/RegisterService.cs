@@ -31,6 +31,19 @@ namespace API.Repos.Services
             return null;
         }
 
+        public async Task<Tblregister> GetUserByNicOrContactNo(string nic, string contactNo, string custName)
+        {
+            var user = await _lotteryContext.Tblregisters
+                .FirstOrDefaultAsync(x => x.Nic == nic || x.ContactNo == contactNo || x.CustName == custName);
+
+            if (user != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
         public async Task<Tblregister> GetUserByUsername(string username)
         {
             var user = await _lotteryContext.Tblregisters

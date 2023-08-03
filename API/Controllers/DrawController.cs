@@ -79,6 +79,7 @@ namespace API.Controllers
                         TicketNo = createEasyDrawDto.TicketNo.ToString(),
                         RaffleName = createEasyDrawDto.RaffleName,
                         UniqueRaffleId = _generators.GenerateRandomString(6),
+                        WinAmount = createEasyDrawDto.WinAmount ?? 0
                     };
 
                     await _lotteryContext.Tblraffles.AddAsync(draw);
@@ -183,6 +184,68 @@ namespace API.Controllers
 
                     // Return the list of OldRafflesReponse
                     return Ok(oldRafflesResponseList);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occurred while getting Draw Histories!" + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        public class GetAllDrawsDto
+        {
+            public int Id { get; set; }
+            public DateTime? RaffleDate { get; set; }
+            public DateTime? EndOn { get; set; }
+            public string? RaffleName { get; set; }
+            public int? DrawCount { get; set; }
+            public decimal? WinAmount { get; set; }
+            public int? RafflePrice { get; set; }
+        }
+
+        [HttpPost("GetAllRaffles")]
+        public async Task<ActionResult<IEnumerable<GetAllDrawsDto>>> GetAllRaffles(AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var allRaffles = await _lotteryContext.Tblraffles
+                        .Select(item => new GetAllDrawsDto
+                        {
+                            Id = (int)item.Id,
+                            DrawCount = item.DrawCount,
+                            EndOn = item.EndOn,
+                            RaffleDate = item.RaffleDate,
+                            RaffleName = item.RaffleName,
+                            WinAmount = item.WinAmount,
+                            RafflePrice = (int)item.RafflePrice
+                        })
+                        .ToListAsync();
+
+                    return Ok(allRaffles);
+
                 }
                 catch (Exception ex)
                 {

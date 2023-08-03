@@ -6,6 +6,7 @@ namespace API.Repos.Interfaces
     {
         Task<IEnumerable<Tblregister>> GetAllUsers();
         Task<Tblregister> GetUserByEmailOrNicOrContactNo(string email, string nic, string contactNo, string custName);
+        Task<Tblregister> GetUserByNicOrContactNo(string nic, string contactNo, string custName);
         Task<Tblregister> GetUserByUsername(string username);
         Task AddUser(Tblregister user);
         Task UpdateUser(Tblregister user);

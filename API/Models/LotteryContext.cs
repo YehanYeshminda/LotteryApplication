@@ -275,6 +275,7 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.UniqueRaffleId)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.WinAmount).HasPrecision(10);
         });
 
         modelBuilder.Entity<Tblregister>(entity =>

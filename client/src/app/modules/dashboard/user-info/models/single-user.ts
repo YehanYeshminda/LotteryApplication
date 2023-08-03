@@ -6,16 +6,14 @@ export interface SingleUserInfo {
     nic: string
     email: string
     custAddress: string
-    mobile: string
+    mobile: any
     alternatePhone: string
     contactNo: string
     otp: string
-    custPassword: string
     addOn: string
     photo: string
     custStatus: number
-    accountBalance: any
-    hash: string
+    accountBalance: number
 }
 
 export interface UpdateSingleUserInfo {

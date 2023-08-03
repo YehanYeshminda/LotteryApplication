@@ -41,9 +41,7 @@ export class UserPackageHomeComponent implements OnInit {
       this.cartEntityService.add(newCartItem).subscribe({
         next: response => {
           console.log(response)
-          successNotification(" has been successfully added to the cart!");
-        }, error: error => {
-          errorNotification("Lottery number already inside of cart!");
+          successNotification("successfully added to the cart!");
         }
       });
     } else {

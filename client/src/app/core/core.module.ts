@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { FooterComponent } from './footer/footer.component';
@@ -10,11 +10,12 @@ import { FooterComponent } from './footer/footer.component';
     NavbarComponent,
     FooterComponent
   ],
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-  ],
+    imports: [
+        CommonModule,
+        RouterLink,
+        RouterLinkActive,
+        NgOptimizedImage,
+    ],
     exports: [
         NavbarComponent,
         FooterComponent

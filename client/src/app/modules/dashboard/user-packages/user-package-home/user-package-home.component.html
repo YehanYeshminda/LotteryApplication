@@ -1,23 +1,61 @@
 
-<div class="row">
-  <ng-container *ngIf="(userPackages$ | async) as data; else loadingUserPackageTemplate">
-    <div class="col-4" *ngFor="let item of data">
-      <div class="card" style="width: 18rem;">
-        <div class="card-body text-center">
-          <h5 class="card-title text-decoration-underline">{{ item.packageName }}</h5>
-          <p class="card-text">{{ item.packagePrice }}</p>
-          <a>{{ item.packgeUniqueId }}</a>
-        </div>
-        <div class="card-footer text-center">
-            <button class="btn btn-primary" (click)="buyNewPackage(item.id.toString(), item.packgeUniqueId, item.packageName)">Buy Package</button>
+<!--<div class="row">-->
+<!--  <ng-container *ngIf="(userPackages$ | async) as data; else loadingUserPackageTemplate">-->
+<!--    <div class="col-4" *ngFor="let item of data">-->
+<!--      <div class="card" style="width: 18rem;">-->
+<!--        <div class="card-body text-center">-->
+<!--          <h5 class="card-title text-decoration-underline">{{ item.packageName }}</h5>-->
+<!--          <p class="card-text">{{ item.packagePrice }}</p>-->
+<!--          <a>{{ item.packgeUniqueId }}</a>-->
+<!--        </div>-->
+<!--        <div class="card-footer text-center">-->
+<!--            <button class="btn btn-primary" (click)="buyNewPackage(item.id.toString(), item.packgeUniqueId, item.packageName)">Buy Package</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </ng-container>-->
+
+<!--  <ng-template #loadingUserPackageTemplate>-->
+<!--    <div>-->
+<!--      <h1>Loading...</h1>-->
+<!--    </div>-->
+<!--  </ng-template>-->
+<!--</div>-->
+
+
+<section class="pricing-section padding-top padding-bottom">
+  <div class="container mt-5">
+    <div class="section-header">
+      <h2>Choose Our Packages</h2>
+    </div>
+    <div class="section-wrapper mt-4">
+      <div class="pricing-plan-wrapper">
+        <div class="row g-4 justify-content-center">
+            <ng-container *ngIf="(userPackages$ | async) as data; else loadingUserPackageTemplate">
+          <div class="col-lg-4 col-sm-6" *ngFor="let item of data" >
+              <div class="price-item">
+                <div class="price-item-inner">
+                  <div class="price-top">
+                    <h6>{{ item.packageName }}</h6>
+                    <h2>{{ item.packagePrice }}</h2>
+                    <p class="text-white">{{ item.packgeUniqueId }}</p>
+                  </div>
+                  <div class="price-bottom">
+                    <a  (click)="buyNewPackage(item.id.toString(), item.packgeUniqueId, item.packageName)" class="default-button"><span>Purchase Now</span></a>
+                  </div>
+                </div>
+              </div>
+          </div>
+            </ng-container>
+
+        <ng-template #loadingUserPackageTemplate>
+          <div>
+            <h1>Loading...</h1>
+          </div>
+        </ng-template>
         </div>
       </div>
     </div>
-  </ng-container>
-
-  <ng-template #loadingUserPackageTemplate>
-    <div>
-      <h1>Loading...</h1>
-    </div>
-  </ng-template>
-</div>
+  </div>
+</section>
+<!-- ==========pricing plan Section Ends Here========== -->

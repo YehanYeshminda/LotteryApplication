@@ -1,16 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-/* Importing Bootstrap SCSS file. */
-@import "./node_modules/bootstrap/scss/bootstrap";
-
-/* Importing Datepicker SCSS file. */
-@import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
-
-@import url('https://fonts.cdnfonts.com/css/avenir-lt-pro');
-
 .navbar {
     padding: 10px 4px !important;
 }
@@ -27,7 +14,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         }
     }
 }
-
+//
 @mixin styleEditedStepIcon($index) {
     .mat-horizontal-stepper-header:nth-child(#{$index}) {
         .mat-step-icon:not(.mat-step-icon-selected) {
@@ -35,7 +22,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         }
     }
 }
-
+//
 @mixin styleUnEditedStepIcon($index) {
     .mat-horizontal-stepper-header:nth-child(#{$index}) {
         .mat-step-icon:not(.mat-step-icon-selected) {

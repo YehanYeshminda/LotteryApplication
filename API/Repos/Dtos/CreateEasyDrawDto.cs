@@ -8,6 +8,7 @@
         public ulong? CustStatus { get; set; }
         public long? TicketNo { get; set; }
         public string? RaffleName { get; set; }
+        public decimal? WinAmount { get; set; }
         public AuthDto AuthDto { get; set; }
     }
 }

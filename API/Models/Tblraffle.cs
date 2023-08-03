@@ -24,4 +24,6 @@ public partial class Tblraffle
     public int? DrawCount { get; set; }
 
     public string? UniqueRaffleId { get; set; }
+
+    public decimal WinAmount { get; set; }
 }
