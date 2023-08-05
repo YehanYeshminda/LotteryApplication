@@ -15,5 +15,6 @@
         public string? Photo { get; set; }
         public ulong? CustStatus { get; set; }
         public decimal? AccountBalance { get; set; }
+        public string? Role { get; set; } = "Customer";
     }
 }

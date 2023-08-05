@@ -1,3 +1,4 @@
+using API.Controllers;
 using API.Helpers;
 using API.Models;
 using API.Repos.Interfaces;
@@ -49,5 +50,14 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var serviceProvider = scope.ServiceProvider;
+//    var lotteryContext = serviceProvider.GetRequiredService<LotteryContext>();
+//    var generators = serviceProvider.GetRequiredService<Generators>();
+//    var yourApiController = new GeneratorController(lotteryContext, generators);
+//    var cronJob = new CronJob(serviceProvider);
+//}
 
 app.Run();

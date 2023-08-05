@@ -34,4 +34,8 @@ public partial class Tblregister
     public decimal? AccountBalance { get; set; }
 
     public string? Hash { get; set; }
+
+    public int? AvatarNo { get; set; }
+
+    public string? Role { get; set; }
 }

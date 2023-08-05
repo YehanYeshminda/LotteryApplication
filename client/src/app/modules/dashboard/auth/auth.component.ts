@@ -379,9 +379,18 @@ export class AuthComponent implements OnInit {
           .pipe(
             tap((user) => {
               this.store.dispatch(login({ user }));
-              this.router.navigate(['/dashboard/user-home']).then(() => {
-                this.isDisabled = false;
-              });
+
+              if (user.role === "Admin")
+              {
+                this.router.navigate(['/admin/home']).then(() => {
+                  this.isDisabled = false;
+                });
+              } else if (user.role === "Customer")
+              {
+                this.router.navigate(['/dashboard/user-home']).then(() => {
+                  this.isDisabled = false;
+                });
+              }
             })
           )
           .subscribe({

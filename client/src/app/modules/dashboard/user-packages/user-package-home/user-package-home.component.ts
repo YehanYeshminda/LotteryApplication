@@ -5,7 +5,7 @@ import {Observable, of} from "rxjs";
 import {UserPackage} from "../models/user-package";
 import {selectUserPackageData} from "../features/user-packages.selectors";
 import {getAuthDetails} from "../../../../shared/methods/methods";
-import {errorNotification, successNotification} from "../../../../shared/alerts/sweetalert";
+import {confirmApproveNotification, errorNotification, successNotification} from "../../../../shared/alerts/sweetalert";
 import {CookieService} from "ngx-cookie-service";
 import {CartEntityService} from "../../components/cart/services/cart-entity.service";
 
@@ -24,28 +24,32 @@ export class UserPackageHomeComponent implements OnInit {
   }
 
   buyNewPackage(itemId: string, uniqueId: string, packageName: string) {
-    if (getAuthDetails(this.cookieService.get('user')) != null) {
-      const newCartItem = {
-        cartNumbers: [],
-        paid: 0,
-        name: packageName,
-        addOn: new Date().toISOString(),
-        authDto: getAuthDetails(this.cookieService.get('user')),
-        price: 0,
-        raffleId: uniqueId,
-        lotteryStatus: 1,
-        raffleNo: uniqueId,
-        userId: 0
-      };
 
-      this.cartEntityService.add(newCartItem).subscribe({
-        next: response => {
-          console.log(response)
-          successNotification("successfully added to the cart!");
+    confirmApproveNotification(`Are you sure you want to buy the package ${packageName}?`).then(response => {
+      if (response.isConfirmed) {
+        if (getAuthDetails(this.cookieService.get('user')) != null) {
+          const newCartItem = {
+            cartNumbers: [],
+            paid: 0,
+            name: packageName,
+            addOn: new Date().toISOString(),
+            authDto: getAuthDetails(this.cookieService.get('user')),
+            price: 0,
+            raffleId: uniqueId,
+            lotteryStatus: 1,
+            raffleNo: uniqueId,
+            userId: 0
+          };
+
+          this.cartEntityService.add(newCartItem).subscribe({
+            next: response => {
+              successNotification("Successfully added to the cart!");
+            }
+          });
+        } else {
+          errorNotification('Please login to add to cart');
         }
-      });
-    } else {
-      errorNotification('Please login to add to cart');
-    }
+      }
+    })
   }
 }

@@ -60,6 +60,52 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost("AssignUser")]
+        public async Task<ActionResult> AssignUser(AssignUserToAdminDto model)
+        {
+            if (model.AuthDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(model.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == model.AuthDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                if (_user.Role == "Admin")
+                {
+                    var getUserWithId = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == model.UserEmail);
+
+                    if (getUserWithId == null)
+                    {
+                        return BadRequest("Unable to find user with this id");
+                    }
+
+                    getUserWithId.Role = model.Role;
+                    _lotteryContext.Tblregisters.Update(getUserWithId);
+                    await _lotteryContext.SaveChangesAsync();
+                    return Ok();
+                } else
+                {
+                    return BadRequest("You are not a admin!");
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
         [HttpPost("Login")]
         public async Task<ActionResult<LoginReponseDto>> LoginUser(LoginDto loginDto)
         {
@@ -72,6 +118,7 @@ namespace API.Controllers
                     Username = loginResult.Username,
                     Email = loginResult.Email,
                     Hash = loginResult.Hash,
+                    Role = loginResult.Role
                 });
             }
             else
@@ -308,6 +355,39 @@ namespace API.Controllers
             if (currentDate < decryptedDateWithOffset.Date)
             {
                 return Ok(_user);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        [HttpPost("SetAvatarNo")]
+        public async Task<IActionResult> SetAvatarNo(SetAvatarDto setAvatarDto)
+        {
+            if (setAvatarDto.AuthDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(setAvatarDto.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == setAvatarDto.AuthDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                _user.AvatarNo = setAvatarDto.AvatarNo;
+                _lotteryContext.Tblregisters.Update(_user);
+                await _lotteryContext.SaveChangesAsync();
+                return Ok();
             }
             else
             {

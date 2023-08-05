@@ -3,6 +3,7 @@ export interface User {
     password: string;
     hash: string;
     email?: string
+    role?: string
 }
 
 export interface MakeLogin {

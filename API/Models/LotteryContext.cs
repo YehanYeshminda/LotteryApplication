@@ -35,10 +35,6 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=127.0.0.1;port=3306;database=lottery;uid=root;pwd=123;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tblcashgiven>(entity =>
@@ -294,6 +290,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AlternatePhone)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.AvatarNo)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.ContactNo)
                 .HasMaxLength(100)
                 .HasDefaultValueSql("'NULL'");
@@ -328,6 +327,9 @@ public partial class LotteryContext : DbContext
                 .HasColumnName("OTP");
             entity.Property(e => e.Photo)
                 .HasMaxLength(500)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Role)
+                .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
         });
 

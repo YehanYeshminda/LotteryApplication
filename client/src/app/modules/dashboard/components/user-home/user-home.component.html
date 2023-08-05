@@ -257,7 +257,7 @@
                                     <h4>UPCOMING JACKPOTS</h4>
                                 </div>
                                 <div class="jaqport__title-gametime">
-                                    <ul class="countdown count-down" data-date="Nove 09, 2023 21:14:01">
+                                    <ul class="countdown count-down" data-date="Sep 09, 2023 21:14:01">
                                         <li class="clock-item">
                                             <span class="count-number days">56</span>
                                             <p class="count-text">Days</p>
@@ -282,48 +282,28 @@
                             </div>
                             <div class="jaqport__body">
                                 <div class="row g-4 justify-content-center">
-                                    <div class="col-lg-4 col-sm-6 col-12">
-                                        <div class="game__item item-layer">
-                                            <div class="game__inner text-center p-0">
-                                                <div class="game__thumb mb-0">
-                                                    <img src="assets/images/jaqport/01.jpg" alt="game-img" class="rounded-3 w-100">
-                                                </div>
-                                                <div class="game__overlay">
-                                                    <h4>poker games</h4>
-                                                    <p>$1,23,002</p>
-                                                    <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                                                </div>
-                                            </div>
+                                    <!--USED TO SHOW THE UPCOMING DRAWS-->
+                                  <ng-container *ngIf="(tournamentDraws$ | async) as data">
+                                    <div class="col-lg-4 col-sm-6 col-12" *ngFor="let item of data">
+                                      <div class="game__item item-layer">
+                                        <div class="game__inner text-center p-0">
+                                          <div class="game__thumb mb-0">
+                                            <img src="assets/images/jaqport/01.jpg" alt="game-img" class="rounded-3 w-100">
+                                          </div>
+                                          <div class="game__overlay">
+                                            <h4>{{ item.raffleName }}</h4>
+                                            <p>{{ item.winAmount | currency:"₹" }}</p>
+                                            <ng-container *ngIf="item.raffleName === 'MegaDraw'">
+                                              <a routerLink="/dashboard/mega-draw" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
+                                            </ng-container>
+                                            <ng-container *ngIf="item.raffleName === 'EasyDraw'">
+                                              <a routerLink="/dashboard/easy-draw" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
+                                            </ng-container>
+                                          </div>
                                         </div>
+                                      </div>
                                     </div>
-                                    <div class="col-lg-4 col-sm-6 col-12">
-                                        <div class="game__item item-layer">
-                                            <div class="game__inner text-center p-0">
-                                                <div class="game__thumb mb-0">
-                                                    <img src="assets/images/jaqport/02.jpg" alt="game-img" class="rounded-3 w-100">
-                                                </div>
-                                                <div class="game__overlay">
-                                                    <h4>poker games</h4>
-                                                    <p>$1,23,002</p>
-                                                    <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 col-12">
-                                        <div class="game__item item-layer">
-                                            <div class="game__inner text-center p-0">
-                                                <div class="game__thumb mb-0">
-                                                    <img src="assets/images/jaqport/03.jpg" alt="game-img" class="rounded-3 w-100">
-                                                </div>
-                                                <div class="game__overlay">
-                                                    <h4>poker games</h4>
-                                                    <p>$1,23,002</p>
-                                                    <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  </ng-container>
                                 </div>
                             </div>
                         </div>
@@ -476,8 +456,15 @@
                     <div class="game__item item-layer">
                         <div class="game__inner text-center p-0">
                             <div class="game__thumb mb-0">
+                              <ng-container *ngIf="item.raffleName === 'MegaDraw'; else easyDraw">
+                                  <img ngSrc="assets/images/game/megadraw.jpg" alt="game-img" class="rounded-3 w-100"
+                                       height="330" width="570">
+                              </ng-container>
+
+                              <ng-template #easyDraw>
                                 <img ngSrc="assets/images/game/easydraw.jpg" alt="game-img" class="rounded-3 w-100"
                                      height="330" width="570">
+                              </ng-template>
                             </div>
                             <div class="game__overlay">
                                 <div class="game__overlay-left">

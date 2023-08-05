@@ -157,10 +157,8 @@ namespace API.Controllers
                         lotteryWinners.Add(defaultLotteryWinner);
                     }
 
-                    // Create a list to hold DrawHistoryWithWinnerCountDto objects
                     var drawHistoryWithWinnerCountList = new List<DrawHistoryWithWinnerCountDto>();
 
-                    // Loop through each draw history record and count winners for each UniqueLotteryId
                     foreach (var drawHistory in drawHistories)
                     {
                         var winnerCount = lotteryWinners.Count(w => w.RaffleUniqueId == drawHistory.UniqueLotteryId);
@@ -172,7 +170,6 @@ namespace API.Controllers
                         drawHistoryWithWinnerCountList.Add(drawHistoryWithWinnerCount);
                     }
 
-                    // Create a list to hold OldRafflesReponse objects
                     var oldRafflesResponseList = drawHistoryWithWinnerCountList.Select(drawHistoryWithWinnerCount => new OldRafflesReponse
                     {
                         Id = drawHistoryWithWinnerCount.DrawHistory.Id,
@@ -182,7 +179,6 @@ namespace API.Controllers
                         WinnerCount = drawHistoryWithWinnerCount.WinnerCount
                     }).ToList();
 
-                    // Return the list of OldRafflesReponse
                     return Ok(oldRafflesResponseList);
                 }
                 catch (Exception ex)

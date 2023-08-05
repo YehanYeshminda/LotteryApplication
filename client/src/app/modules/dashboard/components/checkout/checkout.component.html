@@ -142,7 +142,7 @@
 
               <div class="card__body">
 
-                <img src="assets/512x512bb.jpg" class="card__avatar">
+                <img alt="card avatar" src="assets/512x512bb.jpg" class="card__avatar">
                 <div class="card__recipient-info" *ngIf="(userInformation$ | async) as data">
                   <p class="card__recipient">{{ data.username }}</p>
                   <p class="card__email">{{ data.email }}</p>

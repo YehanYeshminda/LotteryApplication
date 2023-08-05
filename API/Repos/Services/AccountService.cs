@@ -5,6 +5,7 @@ using API.Models;
 using System.Text;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Repos.Services
 {
@@ -52,11 +53,11 @@ namespace API.Repos.Services
                 Mobile = createUserDto.Mobile,
                 Otp = "This will be OTP",
                 Photo = "",
-                Hash = refreshToken
+                Hash = refreshToken,
+                Role = createUserDto.Role
             };
 
             await _registerRepository.AddUser(newUser);
-
             return RegistrationResult.Success(newUser);
         }
 
@@ -88,7 +89,7 @@ namespace API.Repos.Services
             existingUser.Hash = EncodeValue(existingUser.Id);
             await _registerRepository.UpdateUser(existingUser);
 
-            return LoginResult.Success(existingUser.CustName, existingUser.Email, existingUser.Hash);
+            return LoginResult.Success(existingUser.CustName, existingUser.Email, existingUser.Hash, existingUser.Role);
         }
 
         private string EncodeValue(int userId)
