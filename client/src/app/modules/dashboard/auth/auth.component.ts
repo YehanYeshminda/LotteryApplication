@@ -38,6 +38,7 @@ export class AuthComponent implements OnInit {
   isDisabled: boolean = false;
   remainingTime: number = 30;
   bsModalRef?: BsModalRef;
+  captcha: string = '';
   @ViewChild('timerSpan', { static: false }) timerSpan!: ElementRef;
 
   populateCountries: PopulateFieldsWithStrings[] = [
@@ -350,6 +351,8 @@ export class AuthComponent implements OnInit {
       this.form = this.fb.group({
         custName: ['', [Validators.required]],
         custPassword: ['', [Validators.required]],
+        captcha: ['', [Validators.required]],
+        enteredCaptcha: ['', [Validators.required]],
       });
     } else {
       this.form = this.fb.group({
@@ -363,10 +366,26 @@ export class AuthComponent implements OnInit {
         custPassword: ['', [Validators.required]],
       });
     }
+
+    this.captcha = this.getRandomCaptcha();
+    this.form.controls['captcha'].setValue(this.captcha);
+  }
+
+  generateCaptcha(): void {
+    this.captcha = this.getRandomCaptcha();
+    this.form.controls['captcha'].setValue(this.captcha);
+  }
+
+  private getRandomCaptcha(): string {
+    const min = 1000;
+    const max = 9999;
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    return randomNumber.toString();
   }
 
   onSubmit() {
-    if (this.form.valid) {
+    const validCaptcha = this.form.controls['enteredCaptcha'].value == this.captcha;
+    if (this.form.valid && validCaptcha) {
       if (!this.registerMode) {
         const data: MakeLogin = {
           username: this.form.value.custName,
@@ -422,6 +441,8 @@ export class AuthComponent implements OnInit {
             }
           });
       }
+      } else {
+      errorNotification("Captcha does not match");
     }
   }
 

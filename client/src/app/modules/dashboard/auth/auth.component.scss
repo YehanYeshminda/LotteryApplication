@@ -39,3 +39,21 @@
 .pageheader-section {
   padding-top: 100px;
 }
+
+.form-group-sm {
+
+  input {
+    background-color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+
+.container-formcontrol {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}

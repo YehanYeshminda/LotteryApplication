@@ -74,7 +74,7 @@
 <!--          <p>Already have an Account? <span (click)="toggleRegisterMode()" class="link-danger">Login</span> </p>-->
 <!--        </ng-container>-->
 <!--      </div>-->
-<!--    </div>-->x
+<!--    </div>-->
 <!--  </form>-->
 <!--</div>-->
 
@@ -83,28 +83,14 @@
     <div class=" container">
       <div class="account-wrapper">
         <h3 class="title">Register Now</h3>
-        <form class="account-form text-start">
-          <div class="select-gender mb-3">
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-              <label class="form-check-label" for="inlineRadio1">Mr</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-              <label class="form-check-label" for="inlineRadio2">Mrs</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
-              <label class="form-check-label" for="inlineRadio3">Others</label>
-            </div>
+        <form class="account-form text-start" [formGroup]="form">
+          <div class="form-group">
+            <label>Customer Name:</label>
+            <input type="text" placeholder="First Name" formControlName="custName">
           </div>
           <div class="form-group">
-            <label>Firstname:</label>
-            <input type="text" placeholder="First Name" name="Fname">
-          </div>
-          <div class="form-group">
-            <label>Surname:</label>
-            <input type="text" name="surname">
+            <label>NIC:</label>
+            <input type="text" placeholder="NIC" formControlName="nic">
           </div>
           <div class="birth-select">
             <label>Date Of Birth:</label>
@@ -130,38 +116,27 @@
           </div>
           <div class="form-group">
             <label>Address:</label>
-            <input type="text" name="Address">
-          </div>
-          <div class="form-group">
-            <label>City:</label>
-            <input type="text" name="City">
-          </div>
-          <div class="provency-group">
-            <label>Provency:</label>
-            <select class="form-select" aria-label="Default select example">
-              <option selected>select Provency</option>
-              <option value="Dhaka">Dhaka</option>
-              <option value="Dhanmondi">Dhanmondi</option>
-              <option value="Bonani">Bonani</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Postal Code</label>
-            <input type="text" name="Postal">
+            <input formControlName="custAddress" type="text" name="Address">
           </div>
           <div class="form-group">
             <label>Email:</label>
-            <input type="text" name="email">
+            <input type="email" formControlName="email">
           </div>
-          <div class="number-group">
-            <label>Phone Number:</label>
-            <select class="form-select" aria-label="Default select example">
-              <option selected>+98</option>
-              <option value="1">+88</option>
-              <option value="2">+99</option>
-              <option value="3">+77</option>
-            </select>
-            <input type="text" name="number">
+          <div class="form-group">
+            <label>Mobile Number:</label>
+            <input type="text" formControlName="mobile">
+          </div>
+          <div class="form-group">
+            <label>Alternate Phone Number:</label>
+            <input type="text" formControlName="alternatePhone">
+          </div>
+          <div class="form-group">
+            <label>Alternate Phone Number:</label>
+            <input type="text" formControlName="contactNo">
+          </div>
+          <div class="form-group">
+            <label>Password:</label>
+            <input type="password" formControlName="custPassword">
           </div>
           <div class="form-group">
             <button class="d-block default-button"><span>Get Started Now</span></button>
@@ -169,13 +144,6 @@
         </form>
         <div class="account-bottom">
           <span class="d-block cate pt-10">Are you a member? <a (click)="toggleRegisterMode()">Login</a></span>
-          <span class="or"><span>or</span></span>
-          <h5 class="subtitle">Register With Social Media</h5>
-          <ul class="match-social-list d-flex flex-wrap align-items-center justify-content-center mt-4">
-            <li><a href="#"><img src="assets/images/match/social-1.png" alt="vimeo"></a></li>
-            <li><a href="#"><img src="assets/images/match/social-2.png" alt="youtube"></a></li>
-            <li><a href="#"><img src="assets/images/match/social-3.png" alt="twitch"></a></li>
-          </ul>
         </div>
       </div>
     </div>
@@ -188,11 +156,26 @@
       <div class="account-wrapper">
         <h3 class="title">Login</h3>
         <form class="account-form text-start" [formGroup]="form">
-          <div class="form-group">
+          <div class="form-group-sm">
             <label>User Name:</label>
             <input formControlName="custName" type="text" name="username">
           </div>
-          <div class="form-group">
+          <div class="form-group-sm">
+            <div class="row">
+              <div class="col-8">
+                <label>CAPTCHA:</label>
+                <input formControlName="captcha" [readonly]="true" type="text" name="captha">
+              </div>
+              <div class="col-4 d-flex justify-content-center align-items-end">
+                <button class="btn btn-primary" type="button" (click)="generateCaptcha()">Generate Captcha</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group-sm">
+            <label>Enter the Above Captcha:</label>
+            <input formControlName="enteredCaptcha" type="text" name="enteredCaptcha">
+          </div>
+          <div class="form-group-sm">
             <label>Password:</label>
             <input formControlName="custPassword" type="password" name="password">
           </div>

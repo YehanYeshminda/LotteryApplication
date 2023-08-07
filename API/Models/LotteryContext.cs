@@ -17,11 +17,15 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblcashgiven> Tblcashgivens { get; set; }
 
+    public virtual DbSet<Tblcompany> Tblcompanies { get; set; }
+
     public virtual DbSet<Tbldrawhistory> Tbldrawhistories { get; set; }
 
     public virtual DbSet<Tbllotteryno> Tbllotterynos { get; set; }
 
     public virtual DbSet<Tbllotterywinner> Tbllotterywinners { get; set; }
+
+    public virtual DbSet<Tbllotto> Tbllottos { get; set; }
 
     public virtual DbSet<Tblmoneycredit> Tblmoneycredits { get; set; }
 
@@ -68,6 +72,21 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.UserId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Tblcompany>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tblcompany");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.CompanyCode)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.CompanyName)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
         });
 
         modelBuilder.Entity<Tbldrawhistory>(entity =>
@@ -148,6 +167,27 @@ public partial class LotteryContext : DbContext
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.TicketNo)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Tbllotto>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tbllotto");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
+            entity.Property(e => e.LottoNumbers)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.ReferenceId)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.UserId)

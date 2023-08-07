@@ -188,7 +188,8 @@
                                     </td>
                                     <td class="cat-price">{{ item.paid | currency: "₹"}}</td>
                                     <ng-container *ngIf="item.lotteryNo && item.lotteryNo.length > 1; else template">
-                                        <td class="cat-toprice">{{ item.lotteryReferenceId }} with Lottery No : {{ item.lotteryNo }}</td>\
+<!--                                      TODO: Keep a Space between the lottery numbers and fix the backend to only send 2 digit numbers -->
+                                        <td class="cat-toprice">{{ item.lotteryReferenceId }} with Lottery No : {{ item.lotteryNo }}</td>
                                     </ng-container>
                                     <ng-template #template>
                                         <td class="cat-toprice">{{ item.lotteryReferenceId }}</td>
