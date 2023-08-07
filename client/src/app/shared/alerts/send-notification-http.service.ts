@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../environments/environment.development";
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 interface ISendNotification {
   dateFrom: string
   dateTo: string
+}
+
+export interface GetNotificationResponse {
+    no: number
+    count: number
 }
 
 @Injectable({
@@ -16,16 +22,13 @@ export class SendNotificationHttpService {
   constructor(private http: HttpClient) { }
 
     getCurrentIndianTime(): Date {
-        // Calculate Indian Standard Time offset (IST is UTC+5:30)
         const istOffsetMinutes = 5 * 60 + 30;
-
-        // Get the current UTC time and add the IST offset
         const utcNow = new Date();
         utcNow.setMinutes(utcNow.getMinutes() + istOffsetMinutes);
         return utcNow;
     }
 
-    sendNotification() {
+    sendNotification(): Observable<GetNotificationResponse[]> {
         const indianTime = this.getCurrentIndianTime();
 
         const dateFrom = new Date(indianTime);
@@ -38,10 +41,6 @@ export class SendNotificationHttpService {
             dateTo: dateTo.toISOString(),
         };
 
-        console.log(requestData)
-
-        return this.http.post(this.baseUrl + "Lotto/CheckForNumberNoti", requestData);
+        return this.http.post<GetNotificationResponse[]>(this.baseUrl + "Lotto/CheckForNumberNoti", requestData);
     }
-
-
 }

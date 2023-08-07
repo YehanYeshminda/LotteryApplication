@@ -73,14 +73,14 @@ export function confirmUpdateNotification(message: string) {
   });
 }
 
-export function confirmApproveNotification(message: string) {
+export function confirmApproveNotification(message: string, confirmShowText: string = "Yes, Approve it!", cancelButtonText: string = "No, Don't Approve it!") {
   return Swal.fire({
     icon: 'warning',
     title: 'Are you sure?',
     text: message,
     showCancelButton: true,
-    confirmButtonText: 'Yes, Approve it!',
-    cancelButtonText: "No, Don't Approve it!",
+    confirmButtonText: confirmShowText,
+    cancelButtonText: cancelButtonText,
   });
 }
 

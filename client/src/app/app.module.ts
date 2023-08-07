@@ -12,10 +12,13 @@ import { EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
     AppComponent,
+    NotificationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { CookieService } from 'ngx-cookie-service';
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([]),
     EntityDataModule.forRoot({}),
+    ModalModule.forRoot()
   ],
   providers: [
     CookieService

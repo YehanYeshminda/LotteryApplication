@@ -4,6 +4,7 @@ using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
+using static API.Controllers.LottoController;
 
 namespace API.Controllers
 {
@@ -18,8 +19,13 @@ namespace API.Controllers
             _generators = generators;
         }
 
+        public class GetLottoNo
+        {
+            public string LottoNo { get; set; }
+        }
+
         [HttpPost("GetLottoNumbers")]
-        public async Task<IActionResult> GetLottoNumbers(AuthDto authDto)
+        public async Task<ActionResult<GetLottoNo>> GetLottoNumbers(AuthDto authDto)
         {
             if (authDto == null)
             {
@@ -54,7 +60,10 @@ namespace API.Controllers
 
                     string captcha = $"{company.CompanyCode}-0{randomNumber}";
 
-                    return Ok(captcha);
+                    return Ok(new GetLottoNo
+                    {
+                        LottoNo = captcha
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -138,6 +147,12 @@ namespace API.Controllers
             public DateTime DateTo { get; set; }
         }
 
+        public class LottoNumberCount
+        {
+            public int No { get; set; }
+            public int Count { get; set; }
+        }
+
         [HttpPost("CheckForNumberNoti")]
         public async Task<IActionResult> GetNoticationResultForNumbers(CheckForLottoNoDependingOnDates checkForLottoNoDto)
         {
@@ -147,11 +162,12 @@ namespace API.Controllers
                     .Where(x => x.AddOn >= checkForLottoNoDto.DateFrom && x.AddOn <= checkForLottoNoDto.DateTo)
                     .ToListAsync();
 
+                var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync();
                 var numberCounts = new Dictionary<int, int>();
 
                 foreach (var lotto in existingNumbers)
                 {
-                    if (lotto.LottoNumbers.StartsWith("RF-") && int.TryParse(lotto.LottoNumbers.Substring(3), out int number))
+                    if (lotto.LottoNumbers.StartsWith(existingCompany.CompanyCode + "-") && int.TryParse(lotto.LottoNumbers.Substring(3), out int number))
                     {
                         if (numberCounts.ContainsKey(number))
                         {
@@ -164,7 +180,9 @@ namespace API.Controllers
                     }
                 }
 
-                return Ok(numberCounts);
+                var response = numberCounts.Select(kv => new LottoNumberCount { No = kv.Key, Count = kv.Value }).ToList();
+
+                return Ok(response);
             }
             catch (Exception ex)
             {

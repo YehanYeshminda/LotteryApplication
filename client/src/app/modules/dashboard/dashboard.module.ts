@@ -36,6 +36,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { SearchHistoryComponent } from './components/search-history/search-history.component';
 import { UserHistoryModule } from './user-history/user-history.module';
 import { UserHomeComponent } from './components/user-home/user-home.component';
+import { LottoComponent } from './components/lotto/lotto.component';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -59,6 +60,7 @@ const entityMetaData: EntityMetadataMap = {
     CheckoutComponent,
     SearchHistoryComponent,
     UserHomeComponent,
+    LottoComponent,
   ],
     imports: [
         CommonModule,
