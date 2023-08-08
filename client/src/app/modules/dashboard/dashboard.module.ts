@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, ModuleWithProviders, NgModule } from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -37,6 +37,7 @@ import { SearchHistoryComponent } from './components/search-history/search-histo
 import { UserHistoryModule } from './user-history/user-history.module';
 import { UserHomeComponent } from './components/user-home/user-home.component';
 import { LottoComponent } from './components/lotto/lotto.component';
+import { companyReducer } from './components/lotto/features/company.reducer';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -62,25 +63,26 @@ const entityMetaData: EntityMetadataMap = {
     UserHomeComponent,
     LottoComponent,
   ],
-    imports: [
-        CommonModule,
-        DashboardRoutingModule,
-        CoreModule,
-        SharedModule,
-        NgxSpinnerModule,
-        ModalModule.forRoot(),
-        ProgressbarModule.forRoot(),
-        NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
-        FormsModule,
-        ReactiveFormsModule,
-        CarouselModule.forRoot(),
-        StoreModule.forFeature('drawHistory', drawHistoryReducer),
-        MatStepperModule,
-        MatButtonModule,
-        MatIconModule,
-        UserHistoryModule,
-        NgOptimizedImage
-    ],
+  imports: [
+    CommonModule,
+    DashboardRoutingModule,
+    CoreModule,
+    SharedModule,
+    NgxSpinnerModule,
+    ModalModule.forRoot(),
+    ProgressbarModule.forRoot(),
+    NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
+    FormsModule,
+    ReactiveFormsModule,
+    CarouselModule.forRoot(),
+    StoreModule.forFeature('drawHistory', drawHistoryReducer),
+    StoreModule.forFeature('company', companyReducer),
+    MatStepperModule,
+    MatButtonModule,
+    MatIconModule,
+    UserHistoryModule,
+    NgOptimizedImage
+  ],
   providers: [
     CartEntityService,
     CartHttpService,

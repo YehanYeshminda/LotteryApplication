@@ -13,7 +13,7 @@
         public class UpdateCompanyDto
         {
             public AuthDto AuthDto { get; set; }
-            public int CompanyId { get; set; }
+            public string CompanyId { get; set; }
             public string? CompanyName { get; set; }
 
             public string? CompanyCode { get; set; }

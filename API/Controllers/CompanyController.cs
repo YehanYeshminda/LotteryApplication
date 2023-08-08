@@ -69,6 +69,26 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("GetAllCompany")]
+        public async Task<IActionResult> GetAllCompany()
+        {
+            try
+            {
+                var existingCompany = await _lotteryContext.Tblcompanies.ToListAsync();
+
+                if (existingCompany == null)
+                {
+                    return NotFound("No company found");
+                }
+
+                return Ok(existingCompany);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occured while getting company! " + ex.Message);
+            }
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateCompany(UpdateCompanyDto companyDto)
         {
@@ -93,7 +113,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var companyToUpdate = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync(x => x.Id == companyDto.CompanyId);
+                    var companyToUpdate = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(companyDto.CompanyId));
 
                     if (companyToUpdate == null)
                     {
