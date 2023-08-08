@@ -14,6 +14,7 @@ import { CartEntityService } from "../cart/services/cart-entity.service";
 })
 export class LottoComponent implements OnInit {
   lottoNo$: Observable<GetLotto> = of();
+  selectedCompany: string = "";
 
   constructor(private lottoHttpService: LottoHttpService, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
