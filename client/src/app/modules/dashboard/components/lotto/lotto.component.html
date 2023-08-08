@@ -6,15 +6,15 @@
     <div class="LottoNoContainer">
         <ng-container *ngIf="(lottoNo$ | async) as data; else loadingTemplate">
             <h4>{{ data.lottoNo }}</h4>
+
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="getLottoNumber()">Get Lotto Number</button>
+            <button class="btn btn-primary"  (click)="buyNewLotto(data)">Add to cart</button>
+          </div>
         </ng-container>
 
         <ng-template #loadingTemplate>
             <h4>Draw a number</h4>
         </ng-template>
-    </div>
-
-    <div class="d-flex gap-2">
-        <button class="btn btn-primary" (click)="getLottoNumber()">Get Lotto Number</button>
-        <button class="btn btn-primary">Add to cart</button>
     </div>
 </div>

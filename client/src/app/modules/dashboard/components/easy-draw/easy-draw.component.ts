@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
 import { EasyDrawResponse } from './models/EasyDrawResponse';
 import { CookieService } from "ngx-cookie-service";
-import { getAuthDetails } from "../../../../shared/methods/methods";
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { CartEntityService } from '../cart/services/cart-entity.service';
+import { getAuthDetails } from '@shared/methods/methods';
 
 @Component({
   selector: 'app-easy-draw',
@@ -44,7 +44,8 @@ export class EasyDrawComponent {
         raffleId: "2",
         lotteryStatus: 0,
         raffleNo: "",
-        userId: 0
+        userId: 0,
+        type: "Draw"
       };
 
       this.cartEntityService.add(newCartItem).subscribe({

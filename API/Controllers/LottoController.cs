@@ -3,8 +3,7 @@ using API.Models;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
-using static API.Controllers.LottoController;
+using static API.Repos.Dtos.LottoDto;
 
 namespace API.Controllers
 {
@@ -17,11 +16,6 @@ namespace API.Controllers
         {
             _lotteryContext = lotteryContext;
             _generators = generators;
-        }
-
-        public class GetLottoNo
-        {
-            public string LottoNo { get; set; }
         }
 
         [HttpPost("GetLottoNumbers")]
@@ -76,12 +70,6 @@ namespace API.Controllers
             }
         }
 
-        public class BuyLottoDto
-        {
-            public string LottoNumber { get; set; }
-            public AuthDto AuthDto { get; set; }
-        }
-
         [NonAction]
         public string GenerateUniqueLottoNumber()
         {
@@ -118,15 +106,30 @@ namespace API.Controllers
             {
                 try
                 {
-                    var newLotto = new Tbllotto
+                    var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync(x => x.CompanyCode == lottoDto.CompanyCode);
+                    var existingLotto = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => x.LottoCompanyId == existingCompany.Id.ToString());
+
+                    if (existingCompany == null)
+                    {
+                        return BadRequest("Unable to find company with this id");
+                    }
+
+                    if (existingLotto.LottoPrice > _user.AccountBalance)
+                    {
+                        return BadRequest("Low Balance");
+                    }
+
+                    var newLotto = new Tbllottoorderhistory
                     {
                         LottoNumbers = lottoDto.LottoNumber,
-                        ReferenceId = GenerateUniqueLottoNumber(),
+                        ReferenceId = existingLotto.LottoUniqueId,
                         UserId = _user.Id,
                         AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                        LottoUnqueReferenceId = existingLotto.LottoUniqueId,
+                        Price = existingLotto.LottoPrice.ToString()
                     };
 
-                    await _lotteryContext.Tbllottos.AddAsync(newLotto);
+                    await _lotteryContext.Tbllottoorderhistories.AddAsync(newLotto);
                     await _lotteryContext.SaveChangesAsync();
                     return Ok(newLotto);
                 }
@@ -141,24 +144,12 @@ namespace API.Controllers
             }
         }
 
-        public class CheckForLottoNoDependingOnDates
-        {
-            public DateTime DateFrom { get; set; }
-            public DateTime DateTo { get; set; }
-        }
-
-        public class LottoNumberCount
-        {
-            public int No { get; set; }
-            public int Count { get; set; }
-        }
-
         [HttpPost("CheckForNumberNoti")]
         public async Task<IActionResult> GetNoticationResultForNumbers(CheckForLottoNoDependingOnDates checkForLottoNoDto)
         {
             try
             {
-                var existingNumbers = await _lotteryContext.Tbllottos
+                var existingNumbers = await _lotteryContext.Tbllottoorderhistories
                     .Where(x => x.AddOn >= checkForLottoNoDto.DateFrom && x.AddOn <= checkForLottoNoDto.DateTo)
                     .ToListAsync();
 
@@ -190,5 +181,66 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost("AddNewLotto")]
+        public async Task<IActionResult> AddNewLotto(AddNewLottoDto addNewLottoDto)
+        {
+            if (addNewLottoDto.AuthDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(addNewLottoDto.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == addNewLottoDto.AuthDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync(x => x.Id == addNewLottoDto.LottoCompanyId);
+
+                    if (existingCompany == null)
+                    {
+                        return BadRequest("Unable to find company with the Id");
+                    }
+
+                    var existingLottoForCompanyCode = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => Convert.ToInt32(x.LottoCompanyId) == addNewLottoDto.LottoCompanyId);
+
+                    if (existingLottoForCompanyCode != null)
+                    {
+                        return BadRequest("Lottery for this company already exists!");
+                    }
+
+                    var newLottoType = new Tbllotto
+                    {
+                        LottoCompanyId = existingCompany.Id.ToString(),
+                        LottoName = addNewLottoDto.LottoName ?? "",
+                        LottoPrice = addNewLottoDto.LottoPrice,
+                        LottoUniqueId = GenerateUniqueLottoNumber(),
+                    };
+
+                    await _lotteryContext.Tbllottos.AddAsync(newLottoType);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    return Ok(newLottoType);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occurred while buying lottos! " + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
     }
 }

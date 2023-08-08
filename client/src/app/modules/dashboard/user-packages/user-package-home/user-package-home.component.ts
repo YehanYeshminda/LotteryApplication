@@ -4,8 +4,8 @@ import {AppState} from "../../../../reducer";
 import {Observable, of} from "rxjs";
 import {UserPackage} from "../models/user-package";
 import {selectUserPackageData} from "../features/user-packages.selectors";
-import {getAuthDetails} from "../../../../shared/methods/methods";
-import {confirmApproveNotification, errorNotification, successNotification} from "../../../../shared/alerts/sweetalert";
+import {getAuthDetails} from "@shared/methods/methods";
+import {confirmApproveNotification, errorNotification, successNotification} from "@shared/alerts/sweetalert";
 import {CookieService} from "ngx-cookie-service";
 import {CartEntityService} from "../../components/cart/services/cart-entity.service";
 
@@ -17,7 +17,7 @@ import {CartEntityService} from "../../components/cart/services/cart-entity.serv
 export class UserPackageHomeComponent implements OnInit {
   userPackages$: Observable<UserPackage[] | undefined> = of([]);
 
-  constructor(private store: Store<AppState>, private cookieService: CookieService, private cartEntityService: CartEntityService,) { }
+  constructor(private store: Store<AppState>, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
   ngOnInit(): void {
     this.userPackages$ = this.store.select(selectUserPackageData);
@@ -38,7 +38,8 @@ export class UserPackageHomeComponent implements OnInit {
             raffleId: uniqueId,
             lotteryStatus: 1,
             raffleNo: uniqueId,
-            userId: 0
+            userId: 0,
+            type: "Package"
           };
 
           this.cartEntityService.add(newCartItem).subscribe({

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {GetLotto} from "../models/lotto";
-import {environment} from "../../../../../../environments/environment.development";
-import {AuthDetails} from "../../../../../shared/models/auth";
-import {getAuthDetails} from "../../../../../shared/methods/methods";
 import {CookieService} from "ngx-cookie-service";
+import {getAuthDetails} from "@shared/methods/methods";
+import {AuthDetails} from "@shared/models/auth";
+import {environment} from "@env/environment.development";
 
 @Injectable({
   providedIn: 'root'

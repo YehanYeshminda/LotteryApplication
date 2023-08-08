@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../../../environments/environment.development";
 import {CookieService} from "ngx-cookie-service";
-import {getAuthDetails} from "../../../../shared/methods/methods";
-import {AuthDetails} from "../../../../shared/models/auth";
 import {Observable} from "rxjs";
 import {UserPackage} from "../models/user-package";
+import {AuthDetails} from "@shared/models/auth";
+import {environment} from "@env/environment.development";
+import {getAuthDetails} from "@shared/methods/methods";
 
 @Injectable({
   providedIn: 'root'

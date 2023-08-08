@@ -27,6 +27,8 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tbllotto> Tbllottos { get; set; }
 
+    public virtual DbSet<Tbllottoorderhistory> Tbllottoorderhistories { get; set; }
+
     public virtual DbSet<Tblmoneycredit> Tblmoneycredits { get; set; }
 
     public virtual DbSet<Tblorderhistory> Tblorderhistories { get; set; }
@@ -38,6 +40,10 @@ public partial class LotteryContext : DbContext
     public virtual DbSet<Tblraffle> Tblraffles { get; set; }
 
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySQL("Server=127.0.0.1;port=3306;database=lottery;uid=root;pwd=123;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -132,7 +138,7 @@ public partial class LotteryContext : DbContext
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.LotteryStatus)
                 .HasDefaultValueSql("'NULL'")
-                .HasColumnType("bit(1)");
+                .HasColumnType("int(11)");
             entity.Property(e => e.Paid)
                 .HasPrecision(10)
                 .HasDefaultValueSql("'NULL'");
@@ -180,11 +186,40 @@ public partial class LotteryContext : DbContext
 
             entity.ToTable("tbllotto");
 
+            entity.HasIndex(e => e.LottoUniqueId, "LottoUniqueId_UNIQUE").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.LottoCompanyId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LottoName)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LottoPrice)
+                .HasPrecision(10)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LottoUniqueId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+        });
+
+        modelBuilder.Entity<Tbllottoorderhistory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tbllottoorderhistory");
+
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.AddOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
             entity.Property(e => e.LottoNumbers)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.LottoUnqueReferenceId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Price)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.ReferenceId)
@@ -348,6 +383,10 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.CustStatus)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("bit(1)");
+            entity.Property(e => e.Dob)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime")
+                .HasColumnName("DOB");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasDefaultValueSql("'NULL'");

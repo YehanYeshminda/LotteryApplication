@@ -24,4 +24,5 @@ export interface CartReponse {
     lotteryName?: string
     lotteryReferenceId?: string;
     authDto?: AuthDetails | null;
+    type: string
 }

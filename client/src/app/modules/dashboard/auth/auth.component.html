@@ -88,32 +88,17 @@
             <label>Customer Name:</label>
             <input type="text" placeholder="First Name" formControlName="custName">
           </div>
+
           <div class="form-group">
             <label>NIC:</label>
             <input type="text" placeholder="NIC" formControlName="nic">
           </div>
-          <div class="birth-select">
+
+          <div class="form-group">
             <label>Date Of Birth:</label>
-            <select class="form-select ms-0">
-              <option selected>Days</option>
-              <option *ngFor="let item of dates" [value]="item.Value">{{ item.text }}</option>
-            </select>
-            <select class="form-select">
-              <option selected>Months</option>
-              <option *ngFor="let item of months" [value]="item.Value">{{ item.text }}</option>
-            </select>
-            <select class="form-select">
-              <option selected>Year</option>
-              <option *ngFor="let item of populateYears" [value]="item.Value">{{ item.text }}</option>
-            </select>
+            <input formControlName="dob" type="date">
           </div>
-          <div class="country">
-            <label>Country Of Residence:</label>
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Open this select menu</option>
-              <option *ngFor="let item of populateCountries" [value]="item.code">{{ item.name }}</option>
-            </select>
-          </div>
+
           <div class="form-group">
             <label>Address:</label>
             <input formControlName="custAddress" type="text" name="Address">
@@ -124,22 +109,18 @@
           </div>
           <div class="form-group">
             <label>Mobile Number:</label>
-            <input type="text" formControlName="mobile">
+            <input type="text" formControlName="contactNo">
           </div>
           <div class="form-group">
             <label>Alternate Phone Number:</label>
             <input type="text" formControlName="alternatePhone">
           </div>
           <div class="form-group">
-            <label>Alternate Phone Number:</label>
-            <input type="text" formControlName="contactNo">
-          </div>
-          <div class="form-group">
             <label>Password:</label>
             <input type="password" formControlName="custPassword">
           </div>
           <div class="form-group">
-            <button class="d-block default-button"><span>Get Started Now</span></button>
+            <button class="d-block default-button" type="button" (click)="onSubmit()"><span>Get Started Now</span></button>
           </div>
         </form>
         <div class="account-bottom">

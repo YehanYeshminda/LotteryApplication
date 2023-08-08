@@ -38,4 +38,6 @@ public partial class Tblregister
     public int? AvatarNo { get; set; }
 
     public string? Role { get; set; }
+
+    public DateTime? Dob { get; set; }
 }

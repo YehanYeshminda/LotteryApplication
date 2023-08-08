@@ -114,7 +114,7 @@ namespace API.Helpers
 
         public bool IsUniqueLotto(string referenceId)
         {
-            return !_context.Tbllottos.Any(l => l.ReferenceId == referenceId);
+            return !_context.Tbllottos.Any(l => l.LottoUniqueId == referenceId);
         }
     }
 }

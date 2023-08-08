@@ -28,6 +28,7 @@ namespace API.Controllers
             public string Name { get; set; }
             public decimal Paid { get; set; }
             public decimal Price { get; set; }
+            public string Type { get; set; }
         }
 
         [NonAction]
@@ -67,7 +68,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    if (addToCartDto.CartNumbers.Count > 0) 
+                    if (addToCartDto.Type == "Draw") 
                     {
                         var existingRaffle = await _lotteryContext.Tblraffles.SingleOrDefaultAsync(x => x.Id == Convert.ToInt32(addToCartDto.RaffleId));
 
@@ -93,7 +94,7 @@ namespace API.Controllers
                             AmountToPay = addToCartDto.Price,
                             Paid = selectedRaffle.RafflePrice,
                             RaffleNo = addToCartDto.RaffleId.ToString(),
-                            LotteryStatus = (ulong?)addToCartDto.LotteryStatus,
+                            LotteryStatus = addToCartDto.LotteryStatus,
                             UserId = _user.Id,
                             LotteryNo = convertedNumbers,
                             LotteryReferenceId = GenerateUniqueLotteryNumber(),
@@ -117,7 +118,7 @@ namespace API.Controllers
                         };
 
                         return Ok(lotteryToReturn);
-                    } else
+                    } else if (addToCartDto.Type == "Package")
                     {
                         var existingPackage = await _lotteryContext.Tblpackages.FirstOrDefaultAsync(x => x.PackgeUniqueId == addToCartDto.RaffleId);
 
@@ -133,7 +134,39 @@ namespace API.Controllers
                             AmountToPay = addToCartDto.Price,
                             Paid = _lotteryContext.Tblpackages.FirstOrDefault(x => x.Id == existingPackage.Id).PackagePrice,
                             RaffleNo = addToCartDto.RaffleId.ToString(),
-                            LotteryStatus = (ulong?)addToCartDto.LotteryStatus,
+                            LotteryStatus = addToCartDto.LotteryStatus,
+                            UserId = _user.Id,
+                            LotteryNo = "0",
+                            LotteryReferenceId = GenerateUniqueLotteryNumber(),
+                        };
+
+                        await _lotteryContext.Tbllotterynos.AddAsync(lotteryNo);
+                        await _lotteryContext.SaveChangesAsync();
+                        return Ok(lotteryNo);
+                    } else if (addToCartDto.Type == "Lotto")
+                    {
+                        var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync(x => x.CompanyCode == addToCartDto.RaffleId);
+
+                        if (existingCompany == null)
+                        {
+                            return BadRequest("Missing Company");
+                        }
+
+                        var existingLotto = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => Convert.ToInt32(x.LottoCompanyId) == existingCompany.Id);
+
+                        if (existingLotto == null)
+                        {
+                            return BadRequest("Unable to find package with this Id");
+                        }
+
+                        var lotteryNo = new Tbllotteryno
+                        {
+                            LotteryName = existingLotto.LottoName,
+                            AddOn = DateTime.UtcNow,
+                            AmountToPay = addToCartDto.Price,
+                            Paid = existingLotto.LottoPrice,
+                            RaffleNo = existingLotto.LottoUniqueId,
+                            LotteryStatus = addToCartDto.LotteryStatus,
                             UserId = _user.Id,
                             LotteryNo = "0",
                             LotteryReferenceId = GenerateUniqueLotteryNumber(),
@@ -143,6 +176,8 @@ namespace API.Controllers
                         await _lotteryContext.SaveChangesAsync();
                         return Ok(lotteryNo);
                     }
+
+                    return Ok();
 
                 }
                 catch (Exception ex)
@@ -315,6 +350,28 @@ namespace API.Controllers
                             };
 
                             _lotteryContext.Tblorderhistories.AddRange(newOrder);
+                            raffleId = orderList.Select(x => x.RaffleUniqueId).Distinct().ToList();
+                        } else if (item.LotteryStatus == 2)
+                        {
+                            var existingLottery = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => x.LottoUniqueId == item.RaffleNo);
+
+                            if (existingLottery == null)
+                            {
+                                return BadRequest("Unable to find lottery with this id");
+                            }
+
+                            var newOrder = new Tbllottoorderhistory
+                            {
+                                AddOn = DateTime.UtcNow,
+                                LottoUnqueReferenceId = item.LotteryReferenceId,
+                                ReferenceId = existingLottery.LottoUniqueId,
+                                LottoNumbers = item.RaffleNo,
+                                UserId = _user.Id,
+                                Price = existingLottery.LottoPrice.ToString()
+                            };
+
+                            _lotteryContext.Tbllottoorderhistories.AddRange(newOrder);
+                            _user.AccountBalance -= existingLottery.LottoPrice;
                             raffleId = orderList.Select(x => x.RaffleUniqueId).Distinct().ToList();
                         }
                     }

@@ -54,7 +54,8 @@ export class MegaDrawComponent implements OnInit {
         raffleId: "1",
         lotteryStatus: 0,
         raffleNo: "",
-        userId: 0
+        userId: 0,
+        type: "Draw"
       };
 
       this.cartEntityService.add(newCartItem).subscribe(

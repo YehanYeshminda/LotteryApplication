@@ -7,11 +7,11 @@ public partial class Tbllotto
 {
     public int Id { get; set; }
 
-    public string? LottoNumbers { get; set; }
+    public string? LottoName { get; set; }
 
-    public int? UserId { get; set; }
+    public string? LottoUniqueId { get; set; }
 
-    public string? ReferenceId { get; set; }
+    public decimal? LottoPrice { get; set; }
 
-    public DateTime? AddOn { get; set; }
+    public string? LottoCompanyId { get; set; }
 }
