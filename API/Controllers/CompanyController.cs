@@ -136,5 +136,35 @@ namespace API.Controllers
                 return Unauthorized("Invalid Authentication Details");
             }
         }
+
+        public class GetCompanyCodeDto
+        {
+            public string CompanyCode { get; set; }
+        }
+
+        [HttpGet("CompanyCode")]
+        public async Task<IActionResult> GetCompanyCode()
+        {
+            try
+            {
+                var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync();
+
+                if (existingCompany == null)
+                {
+                    return NotFound("No company found");
+                }
+
+                var toReturn = new GetCompanyCodeDto
+                {
+                    CompanyCode = existingCompany.CompanyCode
+                };
+
+                return Ok(toReturn);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occured while getting company code! " + ex.Message);
+            }
+        }
     }
 }

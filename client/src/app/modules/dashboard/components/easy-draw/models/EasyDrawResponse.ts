@@ -25,3 +25,17 @@ export interface GetDrawResult {
     addOn: string
     lotteryReferenceId: string
 }
+
+export interface FullEasyDraw {
+    id: number
+    raffleDate: string
+    startOn: string
+    endOn: string
+    custStatus: number
+    ticketNo: string
+    raffleName: string
+    rafflePrice: number
+    drawCount: number
+    uniqueRaffleId: string
+    winAmount: number
+}

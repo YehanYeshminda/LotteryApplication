@@ -146,6 +146,15 @@ namespace API.Controllers
 
                     _response.Message = "Lotto bought successfully!";
                     _response.IsSuccess = true;
+
+                    var newLottoToReturn = new LottoToReturn
+                    {
+                        LottoNumbers = newLotto.LottoNumbers,
+                        LottoUnqueReferenceId = newLotto.LottoUnqueReferenceId,
+                        ReferenceId = newLotto.ReferenceId,
+                    };
+
+                    _response.Result = newLottoToReturn;
                     return _response;
                 }
                 catch (Exception ex)
@@ -177,18 +186,24 @@ namespace API.Controllers
 
                 foreach (var lotto in existingNumbers)
                 {
-                    if (lotto.LottoNumbers.StartsWith(existingCompany.CompanyCode + "-") && int.TryParse(lotto.LottoNumbers.Substring(3), out int number))
+                    if (lotto.LottoNumbers.StartsWith(existingCompany.CompanyCode + "-"))
                     {
-                        if (numberCounts.ContainsKey(number))
+                        string numberSubstring = lotto.LottoNumbers.Substring(existingCompany.CompanyCode.Length + 1);
+
+                        if (int.TryParse(numberSubstring, out int number))
                         {
-                            numberCounts[number]++;
-                        }
-                        else
-                        {
-                            numberCounts[number] = 1;
+                            if (numberCounts.ContainsKey(number))
+                            {
+                                numberCounts[number]++;
+                            }
+                            else
+                            {
+                                numberCounts[number] = 1;
+                            }
                         }
                     }
                 }
+
 
                 var response = numberCounts.Select(kv => new LottoNumberCount { No = kv.Key, Count = kv.Value }).ToList();
 

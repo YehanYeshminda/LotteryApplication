@@ -2,19 +2,56 @@
     <div class="text-container">
         <h1>Lotto</h1>
     </div>
+</div>
 
-    <div class="LottoNoContainer">
-        <ng-container *ngIf="(lottoNo$ | async) as data; else loadingTemplate">
-            <h4>{{ data.lottoNo }}</h4>
+<div class="container container-lotto-image">
+    <!-- <ng-container *ngIf="(lottoNo$ | async) as data; else loadingTemplate">
+        <div class="row justify-content-center align-items-center g-2 lottery-wheel">
+            <div class="col wheel-numbers wheel-index-0 flipX">{{ data.lottoNo.charAt(0) }}</div>
+            <div class="col wheel-numbers wheel-index-1 flipX">{{ data.lottoNo.charAt(1) }}</div>
+            <div class="col wheel-numbers wheel-index-2 flipX">{{ data.lottoNo.charAt(3) }}</div>
+            <div class="col wheel-numbers wheel-index-3 flipX">{{ data.lottoNo.charAt(4) }}</div>
+        </div>
+    
+        <div class="button-container-flex">
+            <button class="btn reshuffle-btn" (click)="getLottoNumber()"><i class="fa fa-refresh" aria-hidden="true"></i> RESHUFFLE</button>
+            <button class="btn buynow-btn" ><i class="fas fa-money-bill"></i> BUY NOW</button>
+        </div>
+    </ng-container> -->
 
-          <div class="d-flex gap-2">
-            <button class="btn btn-primary" (click)="getLottoNumber()">Get Lotto Number</button>
-            <button class="btn btn-primary"  (click)="buyNewLotto(data)">Add to cart</button>
-          </div>
-        </ng-container>
-
-        <ng-template #loadingTemplate>
-            <h4>Draw a number</h4>
-        </ng-template>
+    <div class="lotto-value-container">
+        <div class="lotto-value" *ngIf="(companyCode$ | async) as data">
+            <ng-container *ngIf="!selectedNumber && selectedNumber != 0">
+                <div class="lotto-value-number">{{ data.companyCode }}-01</div>
+            </ng-container>
+            <div class="lotto-value-number">{{ formatNumber(selectedNumber, data.companyCode) }}</div>
+        </div>
     </div>
+
+    <div class="number-container">
+        <div
+          class="number"
+          *ngFor="let num of numbers"
+          (click)="selectNumber(num)"
+          [ngClass]="{ 'selected': selectedNumber === num }"
+        >
+          {{ num }}
+        </div>
+      </div>
+    <div class="button-container-flex">
+        <button class="btn buynow-btn" (click)="buyNewLotto()"><i class="fas fa-money-bill"></i> BUY NOW</button>
+    </div>
+
+    <ng-template #loadingTemplate>
+        <div class="row justify-content-center align-items-center g-2 lottery-wheel">
+            <div class="col wheel-numbers wheel-index-0 flipX">0</div>
+            <div class="col wheel-numbers wheel-index-1 flipX">0</div>
+            <div class="col wheel-numbers wheel-index-2 flipX">0</div>
+            <div class="col wheel-numbers wheel-index-3 flipX">0</div>
+        </div>
+    
+        <div class="button-container-flex">
+            <button class="btn buynow-btn" ><i class="fas fa-money-bill"></i>BUY NOW</button>
+        </div>
+    </ng-template>
 </div>

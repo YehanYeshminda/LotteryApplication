@@ -100,6 +100,50 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost("GetEasyDrawInfo")]
+        public async Task<IActionResult> GetEasyDrawInfo(AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var draw = await _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.Id == 2);
+                    return Ok(draw);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occured while creating Draw!" + ex.Message);
+                }
+
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
         public class OldRafflesReponse
         {
             public int Id { get; set; }
@@ -333,7 +377,7 @@ namespace API.Controllers
 
                     var newOrder = new Tblorderhistory
                     {
-                        AddOn = DateTime.UtcNow,
+                        AddOn = IndianTimeHelper.GetIndianLocalTime(),
                         LotteryReferenceId = GenerateUniqueOrderHistoryNumber(),
                         RaffleId = Convert.ToInt32(existingRaffle.Id),
                         RaffleUniqueId = existingRaffle.UniqueRaffleId,
