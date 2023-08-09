@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   width: 900px;
+  margin-top: 20px;
 }
 
 .lottery-body li {
@@ -104,52 +105,228 @@ $east-draw-color: #CC49D3;
 }
 
 .image-container {
-    padding-left: 70px;
-    padding-right: 20px;
-    padding-top: 40px;
+  padding-left: 70px;
+  padding-right: 20px;
+  padding-top: 40px;
 }
 
 .text-container {
-    padding-top: 30px;
-    padding-left: 25px;
-    text-align: center;
-    font-family: $main-card-font;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+  padding-top: 30px;
+  padding-left: 25px;
+  text-align: center;
+  font-family: $main-card-font;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 
-    p {
+  p {
+    color: #FFF;
+  }
+}
+
+.digit-containers-mega-draw {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: 40px;
+  width: 90%;
+  margin-top: 50px;
+  flex-shrink: 0;
+  text-align: center;
+  margin-bottom: 10px;
+
+  .number {
+      width: 40px;
+      height: 40px;
+      border-radius: 30px;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      p {
+          color: $mega-draw-digit-color;
+          margin-top: 13px;
+          text-align: center;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+          font-family: $main-card-font;
+      }
+  }
+}
+
+.mega-row-container {
+  margin-top: 30px;
+  
+  .text-color-inside-card {
       color: #FFF;
-    }
+      text-align: center;
+      font-family: $main-card-font;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+  }
+
+  .add-margin-left {
+      margin-left: 70px;
+  }
 }
 
 .right-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    .line-up {
-        width: 10px;
-        height: 190px;
-        border-left: 3px dotted white;
-        margin-top: 15px;
-        padding-left: 70px;;
-    }
+  .line-up {
+      width: 10px;
+      height: 190px;
+      border-left: 3px dotted white;
+      margin-top: 15px;
+      padding-left: 70px;;
+  }
 }
 
 .mega-draw-number-container {
-    transform: rotate(90deg);
-    background: white;
-    border-radius: 15px;
-    position: absolute;
-    top: 100px;
-    font-family: $main-card-font;
-    height: 25px;
-    flex-shrink: 0;
-    text-align: center;
-    width: 120px;
+  transform: rotate(90deg);
+  background: white;
+  border-radius: 15px;
+  position: absolute;
+  top: 100px;
+  font-family: $main-card-font;
+  height: 25px;
+  flex-shrink: 0;
+  text-align: center;
+  width: 120px;
+
+  p {
+      margin-top: 2px;
+      transform: rotate(-180deg);
+      font-weight: bolder;
+      letter-spacing: 3px;
+      color: $mega-draw-digit-color;
+      font-family: $main-card-font;
+  }
+}
+
+.lottery-btn-container {
+  margin-bottom: 30px;
+}
+
+.btn-shuffle {
+  width: 200px;
+  height: 40px;
+  background-color: #1DCF00;
+  color: white;
+  font-size: 15px;
+}
+
+.btn-trash {
+  width: 200px;
+  height: 40px;
+  background-color: #F00;
+  color: white;
+  font-size: 15px;
+}
+
+.btn-buynow {
+  width: 200px;
+  height: 40px;
+  background-color: #257CFF;
+  color: white;
+  font-size: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .lottery-btn-container {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .btn-shuffle {
+    width: 200px;
+    font-size: 14px;
+  }
+  
+  .btn-trash {
+    width: 200px;
+    font-size: 14px;
+  }
+  
+  .btn-buynow {
+    width: 200px;
+    font-size: 14px;
+  }
+
+  .digit-containers-mega-draw {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 100%;
+
+    .number {
+        width: 30px;
+        height: 30px;
+
+        p {
+            color: $mega-draw-digit-color;
+            margin-top: 13px;
+            text-align: center;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            font-family: $main-card-font;
+        }
+    }
+  }
+
+  .mega-draw-container {
+    width: 340px;
+    height: 220px;
+    background: linear-gradient(90deg, #FFA400, #CE3B3B 100%);
+  }
+
+  .image-container {
+    padding-left: 30px;
+    padding-top: 20px;
+  }
+
+  .text-container {
+    padding-top: 10px;
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .mega-row-container {
+    margin-top: 20px;
+    display: flex;
+    margin-left: 5px;
+    justify-content: center;
+    align-items: center;
+    
+    .text-color-inside-card {
+        font-size: 10px;
+    }
+  }
+
+  .right-container {
+
+    .line-up {
+        height: 130px;
+    }
+  }
+
+  .mega-draw-number-container {
+    top: 70px;
 
     p {
         margin-top: 2px;
@@ -159,6 +336,13 @@ $east-draw-color: #CC49D3;
         color: $mega-draw-digit-color;
         font-family: $main-card-font;
     }
+  }
+
+  .lottery-body {
+    display: flex;
+    flex-wrap: wrap;
+    width: 350px;
+  }
 }
 
 .digit-containers-carousel {
@@ -186,39 +370,6 @@ $east-draw-color: #CC49D3;
 
         p {
             color: white;
-            margin-top: 13px;
-            text-align: center;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 600;
-            line-height: normal;
-            font-family: $main-card-font;
-        }
-    }
-}
-
-.digit-containers-mega-draw {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    margin-left: 40px;
-    width: 90%;
-    margin-top: 50px;
-    flex-shrink: 0;
-    text-align: center;
-    margin-bottom: 10px;
-
-    .number {
-        width: 40px;
-        height: 40px;
-        border-radius: 30px;
-        background: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        p {
-            color: $mega-draw-digit-color;
             margin-top: 13px;
             text-align: center;
             font-size: 16px;
@@ -317,24 +468,6 @@ $east-draw-color: #CC49D3;
   background-color: white;
   color: black;
   font-weight: bolder;
-} 
-
-.mega-row-container {
-    margin-top: 30px;
-    
-    .text-color-inside-card {
-        color: #FFF;
-        text-align: center;
-        font-family: $main-card-font;
-        font-size: 13px;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-    }
-
-    .add-margin-left {
-        margin-left: 70px;
-    }
 }
 
 // past winner

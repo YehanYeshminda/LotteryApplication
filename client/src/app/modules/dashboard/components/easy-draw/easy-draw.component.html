@@ -41,7 +41,7 @@
   </div>
 </div> -->
 
-<div class="flex-center-container">
+<div class="flex-center-container mt-3">
   <div class="easy-draw-container">
     <ng-container *ngIf="(easyDraw$ | async) as drawData">
       <div class="row">
@@ -67,7 +67,7 @@
                     <p class="text-color-inside-card">Draw No: {{ drawData.drawCount }}</p>
                 </div>
                 <div class="col-8">
-                    <p class="text-color-inside-card add-margin-left">Draws on: {{ drawData.raffleDate | date: "short" }}</p>
+                    <p class="text-color-inside-card add-margin-left">Draws on: {{ drawData.raffleDate | timezoneConverter: getUserTimeZone() }}</p>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
 
 <div class="container">
   <div class="button-container">
-    <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-play-circle" aria-hidden="true"></i> RESHUFFLE</button>
+    <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-random" aria-hidden="true"></i> RESHUFFLE</button>
     <button (click)="buyEasyDraw()" type="button" class="btnmain"><i class="fas fa-money-bill"></i> Buy Now</button>
   </div>
 </div>
