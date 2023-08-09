@@ -1,6 +1,7 @@
 .lottery-body {
   display: flex;
   flex-wrap: wrap;
+  width: 900px;
 }
 
 .lottery-body li {
@@ -11,10 +12,11 @@
   width: 50px;
   height: 50px;
   margin: 10px;
-  background: lightgreen;
+  background: #FEA302;
   border-radius: 40px;
   display: flex;
   justify-content: center;
+  color: white;
   align-items: center;
 }
 
@@ -23,6 +25,11 @@
   color: white;
   background: #f56565;
   border: 1px solid green;
+}
+
+.select-lottery {
+  color: white;
+  font-size: 25px;
 }
 
 .lottery-body-selected-list {
@@ -97,13 +104,13 @@ $east-draw-color: #CC49D3;
 }
 
 .image-container {
-    padding-left: 100px;
+    padding-left: 70px;
     padding-right: 20px;
     padding-top: 40px;
 }
 
 .text-container {
-    padding-top: 20px;
+    padding-top: 30px;
     padding-left: 25px;
     text-align: center;
     font-family: $main-card-font;
@@ -125,32 +132,10 @@ $east-draw-color: #CC49D3;
 
     .line-up {
         width: 10px;
-        height: 120px;
+        height: 190px;
         border-left: 3px dotted white;
         margin-top: 15px;
         padding-left: 70px;;
-    }
-}
-
-.number-container {
-    transform: rotate(90deg);
-    background: white;
-    border-radius: 15px;
-    position: absolute;
-    top: 52px;
-    font-family: $main-card-font;
-    height: 25px;
-    flex-shrink: 0;
-    text-align: center;
-    width: 99px;
-
-    p {
-        margin-top: 2px;
-        transform: rotate(-180deg);
-        font-weight: bolder;
-        letter-spacing: 3px;
-        color: #CC49D3;
-        font-family: $main-card-font;
     }
 }
 
@@ -159,12 +144,12 @@ $east-draw-color: #CC49D3;
     background: white;
     border-radius: 15px;
     position: absolute;
-    top: 52px;
+    top: 100px;
     font-family: $main-card-font;
     height: 25px;
     flex-shrink: 0;
     text-align: center;
-    width: 99px;
+    width: 120px;
 
     p {
         margin-top: 2px;
@@ -218,13 +203,14 @@ $east-draw-color: #CC49D3;
     align-items: center;
     margin-left: 40px;
     width: 90%;
-    margin-top: 10px;
+    margin-top: 50px;
     flex-shrink: 0;
     text-align: center;
+    margin-bottom: 10px;
 
     .number {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         border-radius: 30px;
         background: white;
         display: flex;
@@ -327,8 +313,14 @@ $east-draw-color: #CC49D3;
     }
 }
 
+.lottery-item.selected {
+  background-color: white;
+  color: black;
+  font-weight: bolder;
+} 
+
 .mega-row-container {
-    margin-top: 10px;
+    margin-top: 30px;
     
     .text-color-inside-card {
         color: #FFF;

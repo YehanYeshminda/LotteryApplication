@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { environment } from "../../../../../../environments/environment.development";
 import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw, GetDrawResult, Root } from "../models/EasyDrawResponse";
-import { AuthDetails } from "../../../../../shared/models/auth";
 import { getAuthDetails } from '@shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
+import { environment } from '@env/environment.development';
+import { AuthDetails } from '@shared/models/auth';
 
 @Injectable({
   providedIn: 'root'

@@ -1,75 +1,81 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, map, of, take } from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription, map, of, take } from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { confirmApproveNotification, errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { CartEntityService } from '../cart/services/cart-entity.service';
+import { FullMegaDraw } from './models/megaDraw';
+import { MegaDrawHttpService } from './services/mega-draw-http.service';
+import { BuyEasyDraw } from '../easy-draw/models/EasyDrawResponse';
+import { EasyDrawHttpService } from '../easy-draw/services/easy-draw-http.service';
 
 @Component({
   selector: 'app-mega-draw',
   templateUrl: './mega-draw.component.html',
   styleUrls: ['./mega-draw.component.scss']
 })
-export class MegaDrawComponent implements OnInit {
+export class MegaDrawComponent implements OnInit, OnDestroy {
   drawNumbers$: Observable<number[]> = of([]);
   selectedItems$: Observable<number[]> = of([]);
   latestNumbers: number[] = [];
-  constructor(private route: ActivatedRoute, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
+  megaDrawInfo$: Observable<FullMegaDraw> = of();
+  private selectedItemsSubscription!: Subscription;
+
+  constructor(private route: ActivatedRoute, private cookieService: CookieService, private cartEntityService: CartEntityService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService) { }
 
   ngOnInit(): void {
-    this.getRandomDraw();
+    this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
+    this.getRandomDraw();
   }
 
   selectDrawNumber(item: number) {
     this.selectedItems$.pipe(take(1)).subscribe((items) => {
-      if (items.length < 6 && !items.includes(item)) {
+      if (items.includes(item)) {
+        this.selectedItems$ = of(items.filter((num) => num !== item));
+      } else if (items.length < 6) {
         this.selectedItems$ = of([...items, item]);
       }
     });
   }
 
-  addToCart() {
+
+  buyMegaDraw() {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
 
-      this.selectedItems$.subscribe({
+      this.selectedItemsSubscription = this.selectedItems$.subscribe({
         next: response => {
-          if (!response) {
-            errorNotification("Please select some numbers!");
-            return;
+          const newEasyDraw: BuyEasyDraw = {
+            authDto: getAuthDetails(this.cookieService.get('user')),
+            raffleId: "1",
+            ticketNo: response.join(""),
           }
 
-          this.latestNumbers = response;
+          confirmApproveNotification('Are you sure you want to buy this ticket?').then((result) => {
+            if (result.isConfirmed) {
+              this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
+                next: response => {
+                  if (response.isSuccess) {
+                    successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
+                    this.getRandomDraw();
+                  } else {
+                    errorNotification(response.message);
+                  }
+                },
+              });
+            }
+          })
         }
       })
 
-
-      const newCartItem = {
-        cartNumbers: this.latestNumbers,
-        paid: 100,
-        name: "Mega Draw",
-        addOn: new Date().toISOString(),
-        authDto: getAuthDetails(this.cookieService.get('user')),
-        price: 100,
-        raffleId: "1",
-        lotteryStatus: 0,
-        raffleNo: "",
-        userId: 0,
-        type: "Draw"
-      };
-
-      this.cartEntityService.add(newCartItem).subscribe(
-        () => {
-          successNotification('Added to cart');
-        },
-        (error) => {
-          errorNotification("Lottery number already inside of cart!");
-        }
-      );
     } else {
       errorNotification('Please login to add to cart');
     }
+  }
+
+  ngOnDestroy(): void {
+    this.selectedItemsSubscription.unsubscribe();
   }
 
   getRandomDraw() {
@@ -88,5 +94,9 @@ export class MegaDrawComponent implements OnInit {
         this.selectedItems$ = of(newNumbers);
       }
     })
+  }
+
+  clearAll() {
+    this.selectedItems$ = of([]);
   }
 }

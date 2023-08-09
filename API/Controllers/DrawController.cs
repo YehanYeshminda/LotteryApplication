@@ -144,6 +144,50 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost("GetMegaDrawInfo")]
+        public async Task<IActionResult> GetMegaDrawInfo(AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var draw = await _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.Id == 1);
+                    return Ok(draw);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occured while creating Draw!" + ex.Message);
+                }
+
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
         public class OldRafflesReponse
         {
             public int Id { get; set; }

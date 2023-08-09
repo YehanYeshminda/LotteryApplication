@@ -1,47 +1,52 @@
 <div class="flex-center-container mt-5">
-  <div class="mega-draw-container">
-      <div class="row">
-          <div class="col-12">
-              <div class="image-container">
-                  <img src="assets/MEGADRAW.svg" alt="MEGADRAW">
-              </div>
-          </div>
-          
-          <div class="col-9">
-              <div class="text-container">
-                  <p>Leave Hey it all to chance and let fate reveal your winning combination!</p>
-              </div>
-              
-              <ng-container *ngIf="(selectedItems$ | async) as items; else loadingTemplate">
-                <div class="digit-containers-mega-draw">
-                    <div *ngFor="let number of items" class="number">
-                        <p>{{ number }}</p>
+  <ng-container *ngIf="(megaDrawInfo$ | async) as data">
+    <div class="mega-draw-container">
+        <div class="row">
+            <div class="col-12">
+                <div class="image-container">
+                    <img src="assets/MEGADRAW.svg" alt="MEGADRAW">
+                </div>
+            </div>
+            
+            <div class="col-9">
+                <div class="text-container">
+                    <p>Leave Hey it all to chance and let fate reveal your winning combination!</p>
+                </div>
+                
+                <ng-container *ngIf="(selectedItems$ | async) as items; else loadingTemplate">
+                  
+                  <ng-container *ngIf="items.length > 0; else noItemsTemplate">
+                    <div class="digit-containers-mega-draw">
+                        <div *ngFor="let number of items" class="number">
+                          <p>{{ number | number: '2.0-0' }}</p>
+                        </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+  
+                <div class="row mega-row-container">
+                    <div class="col-4">
+                        <p class="text-color-inside-card">Draw No: {{ data.drawCount }}</p>
+                    </div>
+                    <div class="col-8">
+                        <p class="text-color-inside-card add-margin-left">Draws on: {{ data.raffleDate | date: "short" }}</p>
                     </div>
                 </div>
-              </ng-container>
-
-              <div class="row mega-row-container">
-                  <div class="col-6">
-                      <p class="text-color-inside-card">count</p>
-                  </div>
-                  <div class="col-6">
-                      <p class="text-color-inside-card add-margin-left">drawdate</p>
-                  </div>
-              </div>
-          </div>
-  
-          <div class="col-3 right-line">
-              <div class="right-container">
-                  <div class="line-up"></div>
-  
-                  <div class="mega-draw-number-container">
-                      <p>uniqueNo</p>
-                  </div>
-              </div>
-          </div>
-          <div class="col-3"></div>
-      </div>
-  </div>
+            </div>
+    
+            <div class="col-3 right-line">
+                <div class="right-container">
+                    <div class="line-up"></div>
+    
+                    <div class="mega-draw-number-container">
+                        <p>{{ data.uniqueRaffleId }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+  </ng-container>
 </div>
 
 <div class="container-parent-mega-draw">
@@ -49,21 +54,30 @@
     <ng-template #loadingTemplate>
       <li>Loading....</li>
     </ng-template>
+
+    <ng-template #noItemsTemplate>
+      <li class="select-lottery">Select a Lottery No....</li>
+    </ng-template>
   </div>
 
-  <ul class="lottery-body">
+<ul class="lottery-body">
     <li class="lottery-item" *ngFor="let item of drawNumbers$ | async"
         [class.selected]="(selectedItems$ | async)?.includes(item)"
+        [class.disabled]="(selectedItems$ | async)?.includes(item)"
         (click)="selectDrawNumber(item)">
-      {{ item }}
+      {{ item < 10 ? '0' + item : item }}
     </li>
-  </ul>
+</ul>
 
   <div class="btn-container" *ngIf="(selectedItems$ | async) as selectedItems">
-    <button class="btn btn-primary" (click)="addToCart()" [disabled]="selectedItems.length < 6">Add to cart</button>
+    <button class="btn btn-primary" (click)="buyMegaDraw()" [disabled]="selectedItems.length < 6">Add to cart</button>
   </div>
 
   <div class="btn-container">
     <button class="btn btn-primary" (click)="getRandomDraw()">Get Random Draw</button>
+  </div>
+
+  <div class="btn-container">
+    <button class="btn btn-primary" (click)="clearAll()">Clear All</button>
   </div>
 </div>
