@@ -3,6 +3,7 @@ using API.Models;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static API.Repos.Dtos.DrawDto;
 using static API.Repos.Dtos.LottoDto;
 
 namespace API.Controllers
@@ -11,11 +12,12 @@ namespace API.Controllers
     {
         private readonly LotteryContext _lotteryContext;
         private readonly Generators _generators;
-
+        private ResponseDto _response;
         public LottoController(LotteryContext lotteryContext, Generators generators)
         {
             _lotteryContext = lotteryContext;
             _generators = generators;
+            _response = new ResponseDto();
         }
 
         [HttpPost("GetLottoNumbers")]
@@ -83,11 +85,13 @@ namespace API.Controllers
         }
 
         [HttpPost("BuyLotto")]
-        public async Task<IActionResult> BuyLottoNumbers(BuyLottoDto lottoDto)
+        public async Task<ResponseDto> BuyLottoNumbers(BuyLottoDto lottoDto)
         {
             if (lottoDto.AuthDto == null)
             {
-                return BadRequest("Invalid data!");
+                _response.Message = "Invalid data!";
+                _response.IsSuccess = false;
+                return _response;
             }
 
             HelperAuth decodedValues = PasswordHelpers.DecodeValue(lottoDto.AuthDto.Hash);
@@ -96,7 +100,9 @@ namespace API.Controllers
 
             if (_user == null)
             {
-                return Unauthorized("Invalid Authentication Details");
+                _response.Message = "Invalid Authentication Details";
+                _response.IsSuccess = false;
+                return _response;
             }
 
             var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
@@ -106,17 +112,21 @@ namespace API.Controllers
             {
                 try
                 {
-                    var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync(x => x.CompanyCode == lottoDto.CompanyCode);
+                    var existingCompany = await _lotteryContext.Tblcompanies.FirstOrDefaultAsync();
                     var existingLotto = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => x.LottoCompanyId == existingCompany.Id.ToString());
 
                     if (existingCompany == null)
                     {
-                        return BadRequest("Unable to find company with this id");
+                        _response.Message = "Unable to find company";
+                        _response.IsSuccess = false;
+                        return _response;
                     }
 
-                    if (existingLotto.LottoPrice > _user.AccountBalance)
+                    if (_user.AccountBalance < existingLotto.LottoPrice)
                     {
-                        return BadRequest("Low Balance");
+                        _response.Message = "Insufficient Account Balance!";
+                        _response.IsSuccess = false;
+                        return _response;
                     }
 
                     var newLotto = new Tbllottoorderhistory
@@ -129,18 +139,27 @@ namespace API.Controllers
                         Price = existingLotto.LottoPrice.ToString()
                     };
 
+                    _user.AccountBalance -= existingLotto.LottoPrice;
+
                     await _lotteryContext.Tbllottoorderhistories.AddAsync(newLotto);
                     await _lotteryContext.SaveChangesAsync();
-                    return Ok(newLotto);
+
+                    _response.Message = "Lotto bought successfully!";
+                    _response.IsSuccess = true;
+                    return _response;
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Error occurred while buying lottos! " + ex.Message);
+                    _response.Message = "Error occurred while buying lotto! " + ex.Message;
+                    _response.IsSuccess = false;
+                    return _response;
                 }
             }
             else
             {
-                return Unauthorized("Invalid Authentication Details");
+                _response.Message = "Invalid Authentication Details";
+                _response.IsSuccess = false;
+                return _response;
             }
         }
 

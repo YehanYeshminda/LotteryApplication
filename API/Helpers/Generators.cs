@@ -116,5 +116,20 @@ namespace API.Helpers
         {
             return !_context.Tbllottos.Any(l => l.LottoUniqueId == referenceId);
         }
+
+        public string GenerateRandomNumericStringForTblOrderHistories(int length)
+        {
+            StringBuilder sb = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+            {
+                sb.Append(numericChars[random.Next(numericChars.Length)]);
+            }
+            return sb.ToString();
+        }
+
+        public bool IsUniqueOrder(string referenceId)
+        {
+            return !_context.Tblorderhistories.Any(l => l.RaffleUniqueId == referenceId);
+        }
     }
 }

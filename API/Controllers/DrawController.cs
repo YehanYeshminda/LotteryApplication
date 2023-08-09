@@ -3,6 +3,8 @@ using API.Models;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Twilio.Http;
+using static API.Repos.Dtos.DrawDto;
 
 namespace API.Controllers
 {
@@ -10,11 +12,12 @@ namespace API.Controllers
     {
         private readonly LotteryContext _lotteryContext;
         private readonly Generators _generators;
-
+        private ResponseDto _response;
         public DrawController(LotteryContext lotteryContext, Generators generators)
         {
             _lotteryContext = lotteryContext;
             _generators = generators;
+            _response = new ResponseDto();
         }
 
         [HttpPost("Draw")]
@@ -254,5 +257,113 @@ namespace API.Controllers
             }
         }
 
+        public class BuyDrawsDto
+        {
+            public string RaffleId { get; set; }
+            public string TicketNo { get; set; }
+            public AuthDto AuthDto { get; set; }
+        }
+
+        [NonAction]
+        public string GenerateUniqueOrderHistoryNumber()
+        {
+            string orderNo;
+            do
+            {
+                orderNo = _generators.GenerateRandomNumericStringForTblOrderHistories(8);
+            } while (!_generators.IsUniqueOrder(orderNo));
+
+            return orderNo;
+        }
+
+        [HttpPost("BuyDraws")]
+        public async Task<ResponseDto> BuyDraws([FromBody] BuyDrawsDto buyDrawsDto)
+        {
+            if (buyDrawsDto.AuthDto.Hash == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Hash Information!";
+                return _response;
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(buyDrawsDto.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters
+                .FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == buyDrawsDto.AuthDto.Hash);
+
+            if (_user == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Invalid Authentication Details!";
+                return _response;
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var existingRaffle = await _lotteryContext.Tblraffles
+                        .FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(buyDrawsDto.RaffleId));
+
+                    if (existingRaffle == null)
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Invalid Raffle Id!";
+                        return _response;
+                    }
+
+                    var existingTicketNo = await _lotteryContext.Tblorderhistories.AnyAsync(x => x.TicketNo == buyDrawsDto.TicketNo);
+
+                    if (existingTicketNo != false)
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Duplicate Ticket No!";
+                        return _response;
+                    }
+
+                    if (_user.AccountBalance < existingRaffle.RafflePrice)
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = "Insufficient Account Balance!";
+                        return _response;
+                    }
+
+                    var newOrder = new Tblorderhistory
+                    {
+                        AddOn = DateTime.UtcNow,
+                        LotteryReferenceId = GenerateUniqueOrderHistoryNumber(),
+                        RaffleId = Convert.ToInt32(existingRaffle.Id),
+                        RaffleUniqueId = existingRaffle.UniqueRaffleId,
+                        TicketNo = buyDrawsDto.TicketNo,
+                        UserId = _user.Id,
+                    };
+
+                    _user.AccountBalance -= existingRaffle.RafflePrice;
+                    await _lotteryContext.Tblorderhistories.AddAsync(newOrder);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    _response.IsSuccess = true;
+                    _response.Result = newOrder;
+                    _response.Message = "Successfully Purchased!";
+                    return _response;
+                }
+                catch (Exception ex)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = ex.Message;
+
+                    return _response;
+                }
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Invalid Authentication Details";
+                return _response;
+            }
+        }
     }
 }

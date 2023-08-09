@@ -25,7 +25,6 @@
 
         public class BuyLottoDto
         {
-            public string CompanyCode { get; set; }
             public string LottoNumber { get; set; }
             public AuthDto AuthDto { get; set; }
         }

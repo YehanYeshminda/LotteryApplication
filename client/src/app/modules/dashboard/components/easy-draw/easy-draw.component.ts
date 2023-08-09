@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
-import { EasyDrawResponse } from './models/EasyDrawResponse';
+import { BuyEasyDraw, EasyDrawResponse } from './models/EasyDrawResponse';
 import { CookieService } from "ngx-cookie-service";
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
-import { CartEntityService } from '../cart/services/cart-entity.service';
 import { getAuthDetails } from '@shared/methods/methods';
 
 @Component({
@@ -15,10 +14,7 @@ export class EasyDrawComponent {
   latestNumbers: number[] = [];
   drawExecuted = false;
 
-  constructor(
-    private easyDrawHttpService: EasyDrawHttpService,
-    private cartEntityService: CartEntityService,
-    private cookieService: CookieService) { }
+  constructor(private easyDrawHttpService: EasyDrawHttpService, private cookieService: CookieService) { }
 
   drawRandomNumber() {
     const authDetails = getAuthDetails(this.cookieService.get('user'));
@@ -26,36 +22,29 @@ export class EasyDrawComponent {
     if (authDetails) {
       this.easyDrawHttpService.getEasyDrawNumbers(authDetails).subscribe((response: EasyDrawResponse) => {
         this.latestNumbers = response.result;
-        console.log(this.latestNumbers);
         this.drawExecuted = true;
       });
     }
   }
 
-  addToCart() {
+  buyEasyDraw() {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
-      const newCartItem = {
-        cartNumbers: this.latestNumbers,
-        paid: 0,
-        name: "Easy Draw",
-        addOn: new Date().toISOString(),
+      const newEasyDraw: BuyEasyDraw = {
         authDto: getAuthDetails(this.cookieService.get('user')),
-        price: 500,
         raffleId: "2",
-        lotteryStatus: 0,
-        raffleNo: "",
-        userId: 0,
-        type: "Draw"
-      };
+        ticketNo: this.latestNumbers.join(""),
+      }
 
-      this.cartEntityService.add(newCartItem).subscribe({
+      this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
         next: response => {
-          successNotification(response.lotteryNo + " has been successfully added to the cart!");
-          this.drawRandomNumber();
-        }, error: error => {
-          errorNotification("Lottery number already inside of cart!");
-        }
+          if (response.isSuccess) {
+            successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
+          } else {
+            errorNotification(response.message);
+          }
+        },
       });
+
     } else {
       errorNotification('Please login to add to cart');
     }
