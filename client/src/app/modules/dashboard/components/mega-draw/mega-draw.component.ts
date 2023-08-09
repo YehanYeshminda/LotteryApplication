@@ -18,6 +18,7 @@ export class MegaDrawComponent implements OnInit {
   constructor(private route: ActivatedRoute, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
   ngOnInit(): void {
+    this.getRandomDraw();
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
   }
 

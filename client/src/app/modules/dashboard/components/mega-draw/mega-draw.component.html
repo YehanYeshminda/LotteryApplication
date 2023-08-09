@@ -1,18 +1,51 @@
+<div class="flex-center-container mt-5">
+  <div class="mega-draw-container">
+      <div class="row">
+          <div class="col-12">
+              <div class="image-container">
+                  <img src="assets/MEGADRAW.svg" alt="MEGADRAW">
+              </div>
+          </div>
+          
+          <div class="col-9">
+              <div class="text-container">
+                  <p>Leave Hey it all to chance and let fate reveal your winning combination!</p>
+              </div>
+              
+              <ng-container *ngIf="(selectedItems$ | async) as items; else loadingTemplate">
+                <div class="digit-containers-mega-draw">
+                    <div *ngFor="let number of items" class="number">
+                        <p>{{ number }}</p>
+                    </div>
+                </div>
+              </ng-container>
+
+              <div class="row mega-row-container">
+                  <div class="col-6">
+                      <p class="text-color-inside-card">count</p>
+                  </div>
+                  <div class="col-6">
+                      <p class="text-color-inside-card add-margin-left">drawdate</p>
+                  </div>
+              </div>
+          </div>
+  
+          <div class="col-3 right-line">
+              <div class="right-container">
+                  <div class="line-up"></div>
+  
+                  <div class="mega-draw-number-container">
+                      <p>uniqueNo</p>
+                  </div>
+              </div>
+          </div>
+          <div class="col-3"></div>
+      </div>
+  </div>
+</div>
+
 <div class="container-parent-mega-draw">
   <div class="lottery-body-selected-parent">
-
-    <ul class="lottery-body-selected-list" *ngIf="(selectedItems$ | async) as items; else loadingTemplate">
-      <li *ngFor="let item of items">
-        <div class="circle">{{ item }}</div>
-      </li>
-      <li *ngIf="items.length < 6" class="empty-circle"></li>
-      <li *ngIf="items.length < 5" class="empty-circle"></li>
-      <li *ngIf="items.length < 4" class="empty-circle"></li>
-      <li *ngIf="items.length < 3" class="empty-circle"></li>
-      <li *ngIf="items.length < 2" class="empty-circle"></li>
-      <li *ngIf="items.length < 1" class="empty-circle"></li>
-    </ul>
-
     <ng-template #loadingTemplate>
       <li>Loading....</li>
     </ng-template>
