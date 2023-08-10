@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
 import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw } from './models/EasyDrawResponse';
 import { CookieService } from "ngx-cookie-service";
-import { confirmApproveNotification, confirmCancelNotification, errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { confirmApproveNotification, errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { getAuthDetails } from '@shared/methods/methods';
 import { Observable, of } from 'rxjs';
 

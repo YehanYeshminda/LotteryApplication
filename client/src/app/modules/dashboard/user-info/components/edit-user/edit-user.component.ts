@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, of, Subject, takeUntil} from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, of, Subject, takeUntil } from 'rxjs';
 import { SingleUserInfo, UpdateSingleUserInfo } from '../../models/single-user';
 import { AppState } from 'src/app/reducer';
 import { Store } from '@ngrx/store';
@@ -9,8 +9,7 @@ import { SingleUserHttpService } from '../../services/single-user-http.service';
 import { AuthDetails } from 'src/app/shared/models/auth';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import {confirmApproveNotification, errorNotification, successNotification} from 'src/app/shared/alerts/sweetalert';
-import { Router } from '@angular/router';
+import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 
 @Component({
   selector: 'app-edit-user',
@@ -22,14 +21,14 @@ export class EditUserComponent implements OnInit, OnDestroy {
   form: FormGroup = new FormGroup({});
   private destroy$ = new Subject<void>();
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService, private router: Router) { }
+  constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     this.intializeForm();
     this.singleUserInfo$ = this.store.select(selectSingleUserInfo);
 
     this.singleUserInfo$.pipe(
-        takeUntil(this.destroy$)
+      takeUntil(this.destroy$)
     ).subscribe({
       next: response => {
         if (!response) return;
@@ -85,18 +84,6 @@ export class EditUserComponent implements OnInit, OnDestroy {
         }
       },
     })
-  }
-
-  navigateToCancel() {
-    if (this.form.dirty) {
-      confirmApproveNotification("You will lose all you changes if you navigate back!").then(response => {
-        if (response.isConfirmed) {
-          this.router.navigateByUrl("/dashboard/home")
-        }
-      })
-    } else {
-      this.router.navigateByUrl("/dashboard/home")
-    }
   }
 
   ngOnDestroy() {

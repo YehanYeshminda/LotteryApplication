@@ -11,16 +11,16 @@ import { OtpSend } from './models/auth';
 import { errorNotification } from 'src/app/shared/alerts/sweetalert';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { VerifyOtpComponent } from './components/verify-otp/verify-otp.component';
-import {getRandomCaptcha} from "@shared/methods/methods";
+import { getRandomCaptcha } from "@shared/methods/methods";
 
 interface PopulateFields {
   Value: number
-  text:string
+  text: string
 }
 
 interface PopulateFieldsWithStrings {
-    code: string;
-    name: string;
+  code: string;
+  name: string;
 }
 
 @Component({
@@ -78,69 +78,60 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit() {
-      if (!this.registerMode) {
-        const validCaptcha = this.form.controls['enteredCaptcha'].value == this.captcha;
-        if (this.form.valid && validCaptcha) {
-          const data: MakeLogin = {
-            username: this.form.value.custName,
-            password: this.form.value.custPassword
-          }
+    if (!this.registerMode) {
+      const validCaptcha = this.form.controls['enteredCaptcha'].value == this.captcha;
+      if (this.form.valid && validCaptcha) {
+        const data: MakeLogin = {
+          username: this.form.value.custName,
+          password: this.form.value.custPassword
+        }
 
-          this.isDisabled = true;
-          this.authService
-            .login(data)
-            .pipe(
-              tap((user) => {
-                this.store.dispatch(login({ user }));
-
-                if (user.role === "Admin")
-                {
-                  this.router.navigate(['/admin/home']).then(() => {
-                    this.isDisabled = false;
-                  });
-                } else if (user.role === "Customer")
-                {
-                  this.router.navigate(['/dashboard/user-home']).then(() => {
-                    this.isDisabled = false;
-                  });
-                }
-              })
-            )
-            .subscribe({
-              next: noop,
-              error: (error) => {
-                errorNotification(error.error);
+        this.isDisabled = true;
+        this.authService
+          .login(data)
+          .pipe(
+            tap((user) => {
+              this.store.dispatch(login({ user }));
+              this.router.navigate(['/dashboard/user-home']).then(() => {
                 this.isDisabled = false;
-              }
-            });
-        } else {
-          errorNotification("Captcha does not match");
-        }
-      } else if (this.registerMode) {
-        console.log("register")
-        const data: MakeRegisterUser = {
-          ...this.form.value
-        }
-
-        console.log(data)
-
-        // this.isDisabled = true;
-        // this.authService
-        //   .registerUser(data)
-        //   .pipe(
-        //     tap((user) => {
-        //       this.isDisabled = false;
-        //       this.registerMode = false;
-        //     })
-        //   )
-        //   .subscribe({
-        //     next: noop,
-        //     error: (error) => {
-        //       errorNotification(error.error);
-        //       this.isDisabled = false;
-        //     }
-        //   });
+              });
+            })
+          )
+          .subscribe({
+            next: noop,
+            error: (error) => {
+              errorNotification(error.error);
+              this.isDisabled = false;
+            }
+          });
+      } else {
+        errorNotification("Captcha does not match");
       }
+    } else if (this.registerMode) {
+      console.log("register")
+      const data: MakeRegisterUser = {
+        ...this.form.value
+      }
+
+      console.log(data)
+
+      // this.isDisabled = true;
+      // this.authService
+      //   .registerUser(data)
+      //   .pipe(
+      //     tap((user) => {
+      //       this.isDisabled = false;
+      //       this.registerMode = false;
+      //     })
+      //   )
+      //   .subscribe({
+      //     next: noop,
+      //     error: (error) => {
+      //       errorNotification(error.error);
+      //       this.isDisabled = false;
+      //     }
+      //   });
+    }
   }
 
   openModalWithComponent() {

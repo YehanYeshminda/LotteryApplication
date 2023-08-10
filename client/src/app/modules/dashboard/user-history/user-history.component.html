@@ -1,9 +1,4 @@
 <app-navbar></app-navbar>
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a routerLink="/">{{ (routerState$ | async)?.state.url }}</a></li>
-    </ol>
-  </nav>
     <router-outlet></router-outlet>
 </div>

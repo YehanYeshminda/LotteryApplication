@@ -131,5 +131,20 @@ namespace API.Helpers
         {
             return !_context.Tblorderhistories.Any(l => l.RaffleUniqueId == referenceId);
         }
+
+        public string GenerateRandomStringForTblPackageOrderHistory(int length)
+        {
+            StringBuilder sb = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+            {
+                sb.Append(numericChars[random.Next(numericChars.Length)]);
+            }
+            return sb.ToString();
+        }
+
+        public bool IsUniqueOrderForPackage(string referenceId)
+        {
+            return !_context.Tblorderhistories.Any(l => l.RaffleUniqueId == referenceId);
+        }
     }
 }

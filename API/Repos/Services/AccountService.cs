@@ -89,7 +89,7 @@ namespace API.Repos.Services
             existingUser.Hash = EncodeValue(existingUser.Id);
             await _registerRepository.UpdateUser(existingUser);
 
-            return LoginResult.Success(existingUser.CustName, existingUser.Email, existingUser.Hash, existingUser.Role);
+            return LoginResult.Success(existingUser.CustName, existingUser.Email, existingUser.Hash, existingUser.Role, existingUser.ContactNo);
         }
 
         private string EncodeValue(int userId)

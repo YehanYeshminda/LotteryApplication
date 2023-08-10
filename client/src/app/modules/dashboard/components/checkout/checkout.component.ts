@@ -159,7 +159,6 @@ export class CheckoutComponent implements OnInit, AfterViewInit {
               this.isPaymentDone$ = of(true);
               this.cartHttpService.removeAllFromCart().subscribe({
                 next: response => {
-                  this.lotteryReferenceIds = response;
                   this.showTotal = result.paymentIntent.amount;
                   successNotification(`Payment of ${result.paymentIntent.amount} has been done!`)
                   this.cartEntityService.clearCache();

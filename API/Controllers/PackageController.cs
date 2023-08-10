@@ -101,7 +101,8 @@ namespace API.Controllers
                     {
                         PackageName = createNewPackageDto.PackageName,
                         PackagePrice = createNewPackageDto.PackagePrice,
-                        PackgeUniqueId = _generators.GenerateForPackageRandomString(6)
+                        PackgeUniqueId = _generators.GenerateForPackageRandomString(6),
+                        AddOn = IndianTimeHelper.GetIndianLocalTime(),
                     };
 
                     await _lotteryContext.Tblpackages.AddAsync(newPackage);

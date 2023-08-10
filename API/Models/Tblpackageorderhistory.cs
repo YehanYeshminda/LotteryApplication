@@ -14,4 +14,8 @@ public partial class Tblpackageorderhistory
     public string PackagePrice { get; set; } = null!;
 
     public uint UserId { get; set; }
+
+    public string? PackageOrderUniqueId { get; set; }
+
+    public DateTime? AddOn { get; set; }
 }

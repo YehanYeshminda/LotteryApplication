@@ -97,5 +97,67 @@ namespace API.Controllers
             }
         }
         public record PaymentIntentRequest(int Amount);
+
+        public class UPIPerson
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+        }
+
+        [HttpPost("AuthAndGenToken")]
+        public async Task<IActionResult> GenerateUPI(AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            if (_user.Role != "Admin")
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var existingUPIPerson = await _lotteryContext.Tblregisters.Where(x => x.Role == "UPIPerson").FirstOrDefaultAsync();
+
+                    if (existingUPIPerson == null)
+                    {
+                        return BadRequest("UPI Person not found!");
+                    }    
+
+                    var upPerson = new UPIPerson
+                    {
+                        Username = existingUPIPerson.CustName,
+                        Password = existingUPIPerson.CustPassword
+                    };
+
+
+                    return Ok(upPerson);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occurred while getting Draw Histories! " + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
     }
 }

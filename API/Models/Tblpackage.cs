@@ -12,4 +12,6 @@ public partial class Tblpackage
     public decimal PackagePrice { get; set; }
 
     public string PackgeUniqueId { get; set; } = null!;
+
+    public DateTime? AddOn { get; set; }
 }

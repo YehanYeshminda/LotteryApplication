@@ -41,10 +41,6 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=127.0.0.1;port=3306;database=lottery;uid=root;pwd=123;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tblcashgiven>(entity =>
@@ -293,6 +289,9 @@ public partial class LotteryContext : DbContext
             entity.HasIndex(e => new { e.PackageName, e.PackgeUniqueId }, "packageNameUnique").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
             entity.Property(e => e.PackageName).HasMaxLength(45);
             entity.Property(e => e.PackagePrice).HasPrecision(10);
             entity.Property(e => e.PackgeUniqueId).HasMaxLength(45);
@@ -305,7 +304,13 @@ public partial class LotteryContext : DbContext
             entity.ToTable("tblpackageorderhistory");
 
             entity.Property(e => e.Id).HasColumnType("int(10) unsigned");
+            entity.Property(e => e.AddOn)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("datetime");
             entity.Property(e => e.PackageName).HasMaxLength(45);
+            entity.Property(e => e.PackageOrderUniqueId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.PackagePrice).HasMaxLength(45);
             entity.Property(e => e.PackageUniqueId).HasMaxLength(45);
             entity.Property(e => e.UserId).HasColumnType("int(10) unsigned");

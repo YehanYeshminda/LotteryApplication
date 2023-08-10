@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducer";
-import { logout, clearEntityCache } from "../../modules/dashboard/auth/features/auth.actions";
+import { logout } from "../../modules/dashboard/auth/features/auth.actions";
 import { Observable, of } from "rxjs";
 import { CartReponse } from "../../modules/dashboard/components/cart/models/cart";
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { CartEntityService } from 'src/app/modules/dashboard/components/cart/services/cart-entity.service';
-import { clearCartEntities } from 'src/app/modules/dashboard/components/cart/features/cart.action';
 import { HomeEntityService } from 'src/app/modules/dashboard/components/home/services/home-entity.service';
 import { RestoreInitialState } from 'src/app/modules/dashboard/user-history/features/history.actions';
 import { RestoreSingleUserInfoInitialState } from 'src/app/modules/dashboard/user-info/features/user-info.actions';
-import {AuthDetails} from "../../shared/models/auth";
+import { AuthDetails } from "../../shared/models/auth";
 
 @Component({
   selector: 'app-navbar',

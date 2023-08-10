@@ -112,7 +112,7 @@
         <div class="header-bottom">
           <div class="header-wrapper justify-content-lg-end">
             <div class="mobile-logo d-lg-none">
-              <a href="index.html"><img ngSrc="assets/images/logo/logo.png" alt="logo" height="90" width="157"></a>
+              <a><img ngSrc="assets/images/logo/logo.png" alt="logo" height="90" width="157"></a>
             </div>
             <div class="menu-area">
               <ul class="menu">
@@ -121,7 +121,7 @@
                 </li>
 
                 <li>
-                  <a routerLink="">Games</a>
+                  <a class="game-link">Games</a>
                   <ul class="submenu">
                     <li>
                       <a>LOTTERY</a>
@@ -140,7 +140,7 @@
                   </ul>
                 </li>
                 <li>
-                  <a routerLink="">Orders</a>
+                  <a class="game-link">Orders</a>
                   <ul class="submenu">
                     <li>
                       <a>Past Lottery Orders</a>
@@ -162,13 +162,6 @@
                   </ul>
                 </li>
                 <li><a routerLink="/dashboard/tournaments/home">Tournament</a></li>
-                <li>
-                  <a routerLink="">Blog</a>
-                  <ul class="submenu">
-                    <li><a routerLink="">Blog</a></li>
-                  </ul>
-                </li>
-                <li><a routerLink="">Contact</a></li>
               </ul>
               <ng-container *ngIf="!(isUser$ | async); else userTemplate">
                   <a routerLink="/" class="login"><i class="icofont-user"></i> <span>LOG IN</span> </a>

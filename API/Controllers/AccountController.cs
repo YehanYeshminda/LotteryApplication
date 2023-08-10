@@ -118,7 +118,8 @@ namespace API.Controllers
                     Username = loginResult.Username,
                     Email = loginResult.Email,
                     Hash = loginResult.Hash,
-                    Role = loginResult.Role
+                    Role = loginResult.Role,
+                    Phone = loginResult.Phone
                 });
             }
             else

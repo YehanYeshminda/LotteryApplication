@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Cart, CartReponse } from "../models/cart";
 import { Observable, of } from "rxjs";
-import { errorNotification, successNotification } from "../../../../../shared/alerts/sweetalert";
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
 import { AuthDetails } from 'src/app/shared/models/auth';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 
-
-
+export interface DeleteAllFromCartResponse {
+  packageId: string
+}
 
 @Injectable({
   providedIn: 'root'
@@ -54,8 +54,8 @@ export class CartHttpService {
     sessionStorage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
 
-  removeAllFromCart() {
+  removeAllFromCart(): Observable<DeleteAllFromCartResponse> {
     const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
-    return this.http.post<string[]>(this.baseUrl + "Cart/DeleteAllFromCart", auth)
+    return this.http.post<DeleteAllFromCartResponse>(this.baseUrl + "Cart/DeleteAllFromCart", auth)
   }
 }

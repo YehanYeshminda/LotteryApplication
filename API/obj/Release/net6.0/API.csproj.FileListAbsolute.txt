@@ -103,3 +103,4 @@ D:\Programming\Office\LotteryApp\API\obj\Release\net6.0\refint\API.dll
 D:\Programming\Office\LotteryApp\API\obj\Release\net6.0\API.pdb
 D:\Programming\Office\LotteryApp\API\obj\Release\net6.0\API.genruntimeconfig.cache
 D:\Programming\Office\LotteryApp\API\obj\Release\net6.0\ref\API.dll
+D:\Programming\Office\LotteryApp\API\bin\Release\net6.0\BCrypt.Net-Next.dll

@@ -39,6 +39,7 @@ import { UserHomeComponent } from './components/user-home/user-home.component';
 import { LottoComponent } from './components/lotto/lotto.component';
 import { companyReducer } from './components/lotto/features/company.reducer';
 import { PipesModule } from "../../shared/pipes/pipes.module";
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -51,52 +52,53 @@ const entityMetaData: EntityMetadataMap = {
 }
 
 @NgModule({
-    declarations: [
-        DashboardComponent,
-        EasyDrawComponent,
-        MegaDrawComponent,
-        CartComponent,
-        PaymentComponent,
-        SpashScreenComponent,
-        HomeComponent,
-        CheckoutComponent,
-        SearchHistoryComponent,
-        UserHomeComponent,
-        LottoComponent,
-    ],
-    providers: [
-        CartEntityService,
-        CartHttpService,
-        CartResolver,
-        CartDataService,
-        HomeDataService,
-        HomeEntityService,
-        SequenceNoResolver,
-        MegaDrawResolver,
-        DrawHistoryResolver
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [
-        CommonModule,
-        DashboardRoutingModule,
-        CoreModule,
-        SharedModule,
-        NgxSpinnerModule,
-        ModalModule.forRoot(),
-        ProgressbarModule.forRoot(),
-        NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
-        FormsModule,
-        ReactiveFormsModule,
-        CarouselModule.forRoot(),
-        StoreModule.forFeature('drawHistory', drawHistoryReducer),
-        StoreModule.forFeature('company', companyReducer),
-        MatStepperModule,
-        MatButtonModule,
-        MatIconModule,
-        UserHistoryModule,
-        NgOptimizedImage,
-        PipesModule
-    ]
+  declarations: [
+    DashboardComponent,
+    EasyDrawComponent,
+    MegaDrawComponent,
+    CartComponent,
+    PaymentComponent,
+    SpashScreenComponent,
+    HomeComponent,
+    CheckoutComponent,
+    SearchHistoryComponent,
+    UserHomeComponent,
+    LottoComponent,
+  ],
+  providers: [
+    CartEntityService,
+    CartHttpService,
+    CartResolver,
+    CartDataService,
+    HomeDataService,
+    HomeEntityService,
+    SequenceNoResolver,
+    MegaDrawResolver,
+    DrawHistoryResolver
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [
+    CommonModule,
+    DashboardRoutingModule,
+    NgxQRCodeModule,
+    CoreModule,
+    SharedModule,
+    NgxSpinnerModule,
+    ModalModule.forRoot(),
+    ProgressbarModule.forRoot(),
+    NgxStripeModule.forRoot('pk_test_51NSgQVCGctxV4GttmBY8TDMVypTxkWkWqc8w8AfeEFXDRYv93CoqNnSLOuClW6rCevuODvzwLXGEoNj2PYRBTVIU00qutXHWvA'),
+    FormsModule,
+    ReactiveFormsModule,
+    CarouselModule.forRoot(),
+    StoreModule.forFeature('drawHistory', drawHistoryReducer),
+    StoreModule.forFeature('company', companyReducer),
+    MatStepperModule,
+    MatButtonModule,
+    MatIconModule,
+    UserHistoryModule,
+    NgOptimizedImage,
+    PipesModule,
+  ]
 })
 
 export class DashboardModule {

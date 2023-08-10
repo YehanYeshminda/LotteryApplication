@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<div class="container-for-margin-top-dashbaord">
+<div class="">
   <!-- <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a routerLink="/">{{ (routerState$ | async)?.state.url }}</a></li>
@@ -10,7 +10,7 @@
      <app-spash-screen [loading]="loadingValue"></app-spash-screen>
    </ng-container>
 
-   <div class="container" *ngIf="(routerState$ | async)?.state.url !== '/dashboard/checkout' && (routerState$ | async)?.state.url !== '/dashboard/cart' && (routerState$ | async)?.state.url !== '/dashboard/easy-draw' && (routerState$ | async)?.state.url !== '/dashboard/mega-draw' && (routerState$ | async)?.state.url !== '/dashboard/user-home' && (routerState$ | async)?.state.url !== '/dashboard/lotto'" >
+   <div class="container" *ngIf="(routerState$ | async)?.state.url !== '/dashboard/checkout' && (routerState$ | async)?.state.url !== '/dashboard/cart' && (routerState$ | async)?.state.url !== '/dashboard/easy-draw' && (routerState$ | async)?.state.url !== '/dashboard/mega-draw' && (routerState$ | async)?.state.url !== '/dashboard/user-home' && (routerState$ | async)?.state.url !== '/dashboard/lotto'  && (routerState$ | async)?.state.url !== '/dashboard/history/user-history'" >
       <div class="search-container form-group">
         <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Enter a unique raffle Id...">
         <button class="btn btn-primary" [routerLink]="['/dashboard/search-history/' + searchTerm]">Search</button>

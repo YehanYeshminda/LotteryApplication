@@ -6,6 +6,7 @@ D:\Programming\Office\LotteryApp\API\publish\API.runtimeconfig.json
 D:\Programming\Office\LotteryApp\API\publish\API.pdb
 D:\Programming\Office\LotteryApp\API\publish\AutoMapper.dll
 D:\Programming\Office\LotteryApp\API\publish\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\Programming\Office\LotteryApp\API\publish\BCrypt.Net-Next.dll
 D:\Programming\Office\LotteryApp\API\publish\Google.Protobuf.dll
 D:\Programming\Office\LotteryApp\API\publish\K4os.Compression.LZ4.dll
 D:\Programming\Office\LotteryApp\API\publish\K4os.Compression.LZ4.Streams.dll

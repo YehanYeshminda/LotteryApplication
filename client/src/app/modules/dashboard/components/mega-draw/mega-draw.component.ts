@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { confirmApproveNotification, errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
-import { CartEntityService } from '../cart/services/cart-entity.service';
 import { FullMegaDraw } from './models/megaDraw';
 import { MegaDrawHttpService } from './services/mega-draw-http.service';
 import { BuyEasyDraw } from '../easy-draw/models/EasyDrawResponse';
@@ -22,7 +21,7 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   megaDrawInfo$: Observable<FullMegaDraw> = of();
   private selectedItemsSubscription!: Subscription;
 
-  constructor(private route: ActivatedRoute, private cookieService: CookieService, private cartEntityService: CartEntityService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService) { }
+  constructor(private route: ActivatedRoute, private cookieService: CookieService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService) { }
 
   ngOnInit(): void {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();

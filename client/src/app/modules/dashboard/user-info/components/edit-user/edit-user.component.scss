@@ -8,7 +8,7 @@ body {
 }
 
 .account-settings .user-profile {
-    margin: 0 0 1rem 0;
+    margin: 50px 0 1rem 0;
     padding-bottom: 1rem;
     text-align: center;
 }
@@ -36,6 +36,13 @@ body {
     font-size: 0.8rem;
     font-weight: 400;
     color: #9fa8b9;
+}
+
+.account-settings .user-profile h6.user-balance {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
 }
 
 .account-settings .about {
@@ -81,4 +88,43 @@ label {
 
 .add-margin-body {
     margin-top: 150px;
+}
+
+.add-margin-to-header {
+    margin-top: 200px;
+}
+
+.card {
+    height: 350px;
+}
+
+.bottom-body-card {
+    height: 800px;
+    padding: 20px;
+}
+
+
+.card-body-user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 340px;
+    border: 1px solid transparent;
+    border-radius: 50px;
+    background-color: white;
+}
+
+
+@media screen and (max-width: 768px) {
+    .card-body-user {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 800px;
+        border: 1px solid transparent;
+        border-radius: 50px;
+        background-color: white;
+    }
 }

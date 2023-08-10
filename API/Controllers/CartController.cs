@@ -282,8 +282,26 @@ namespace API.Controllers
             }
         }
 
+
+        [NonAction]
+        public string GenerateUniqueTblPackageOrderHistoryNumber()
+        {
+            string orderNo;
+            do
+            {
+                orderNo = _generators.GenerateRandomStringForTblPackageOrderHistory(13);
+            } while (!_generators.IsUniqueOrderForPackage(orderNo));
+
+            return orderNo;
+        }
+
+        public class ReturnFromDeleteInCart
+        {
+            public string PackageId { get; set; }
+        }
+
         [HttpPost("DeleteAllFromCart")]
-        public async Task<ActionResult<IEnumerable<string>>> RemoveAllCartItemsById(AuthDto AuthDto)
+        public async Task<ActionResult<ReturnFromDeleteInCart>> RemoveAllCartItemsById(AuthDto AuthDto)
         {
             if (AuthDto.Hash == null)
             {
@@ -322,62 +340,35 @@ namespace API.Controllers
                     var orderList = new List<Tblorderhistory>();
                     var purchaseList = new List<Tblpackageorderhistory>();
                     var raffleId = new List<string>();
+                    var packageId = GenerateUniqueTblPackageOrderHistoryNumber();
 
                     foreach (var item in items)
                     {
                         if (item.LotteryStatus == 1)
                         {
-                            var newPurchaseOrder = new Tblpackageorderhistory 
+                            var newPurchaseOrder = new Tblpackageorderhistory
                             {
                                 PackageName = item.LotteryName,
                                 PackagePrice = item.Paid.ToString() ?? "0",
                                 PackageUniqueId = item.RaffleNo,
-                                UserId = (uint)_user.Id
+                                UserId = (uint)_user.Id,
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                                PackageOrderUniqueId = packageId,
                             };
 
                             _lotteryContext.Tblpackageorderhistories.AddRange(newPurchaseOrder);
                             _user.AccountBalance += item.Paid;
-                        } else if (item.LotteryStatus == 0)
-                        {
-                            var newOrder = new Tblorderhistory
-                            {
-                                AddOn = DateTime.UtcNow,
-                                LotteryReferenceId = item.LotteryReferenceId,
-                                RaffleId = Convert.ToInt32(item.RaffleNo),
-                                RaffleUniqueId = _lotteryContext.Tblraffles.FirstOrDefault(x => x.Id == Convert.ToInt32(item.RaffleNo)).UniqueRaffleId,
-                                TicketNo = item.LotteryNo,
-                                UserId = _user.Id,
-                            };
-
-                            _lotteryContext.Tblorderhistories.AddRange(newOrder);
-                            raffleId = orderList.Select(x => x.RaffleUniqueId).Distinct().ToList();
-                        } else if (item.LotteryStatus == 2)
-                        {
-                            var existingLottery = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => x.LottoUniqueId == item.RaffleNo);
-
-                            if (existingLottery == null)
-                            {
-                                return BadRequest("Unable to find lottery with this id");
-                            }
-
-                            var newOrder = new Tbllottoorderhistory
-                            {
-                                AddOn = DateTime.UtcNow,
-                                LottoUnqueReferenceId = item.LotteryReferenceId,
-                                ReferenceId = existingLottery.LottoUniqueId,
-                                LottoNumbers = item.RaffleNo,
-                                UserId = _user.Id,
-                                Price = existingLottery.LottoPrice.ToString()
-                            };
-
-                            _lotteryContext.Tbllottoorderhistories.AddRange(newOrder);
-                            _user.AccountBalance -= existingLottery.LottoPrice;
-                            raffleId = orderList.Select(x => x.RaffleUniqueId).Distinct().ToList();
                         }
                     }
 
                     await _lotteryContext.SaveChangesAsync();
-                    return Ok(raffleId);
+
+                    var newDataToReturn = new ReturnFromDeleteInCart
+                    {
+                        PackageId = packageId
+                    };
+
+                    return Ok(newDataToReturn);
                 }
                 catch (Exception ex)
                 {
