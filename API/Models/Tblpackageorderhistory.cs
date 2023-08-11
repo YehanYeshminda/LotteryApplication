@@ -18,4 +18,6 @@ public partial class Tblpackageorderhistory
     public string? PackageOrderUniqueId { get; set; }
 
     public DateTime? AddOn { get; set; }
+
+    public uint OrderStatus { get; set; }
 }

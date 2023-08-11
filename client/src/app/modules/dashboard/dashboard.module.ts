@@ -40,6 +40,8 @@ import { LottoComponent } from './components/lotto/lotto.component';
 import { companyReducer } from './components/lotto/features/company.reducer';
 import { PipesModule } from "../../shared/pipes/pipes.module";
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { UpiGenerateModalComponent } from './components/cart/components/upi-generate-modal/upi-generate-modal.component';
+import { StatusCheckComponent } from './components/status-check/status-check.component';
 
 const entityMetaData: EntityMetadataMap = {
   Cart: {
@@ -64,6 +66,8 @@ const entityMetaData: EntityMetadataMap = {
     SearchHistoryComponent,
     UserHomeComponent,
     LottoComponent,
+    UpiGenerateModalComponent,
+    StatusCheckComponent,
   ],
   providers: [
     CartEntityService,

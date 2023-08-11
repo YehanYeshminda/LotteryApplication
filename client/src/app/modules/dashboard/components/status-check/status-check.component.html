@@ -1,0 +1,35 @@
+<div class="container mt-5">
+    <ng-container *ngIf="(statusCheckResult$ | async) as data">
+        <ng-container *ngIf="data.length > 0; else loadingTemplate">
+            <div class="card" *ngFor="let order of data">
+                <div class="card-header text-black">
+                  {{ order.packageName }}
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title text-black">{{ order.packageUniqueId }} bought for {{ order.packagePrice }}</h5>
+                  <h5 class="card-title text-black">Package Order Id: {{ order.packageOrderUniqueId }}</h5>
+                  <p class="card-text text-black">Bought On: {{ order.addOn }}</p>
+                  <ng-container *ngIf="order.orderStatus === 0; else PaidTemplate">
+                      <a class="btn btn-danger">PAYMENT PENDING</a>
+                  </ng-container>
+                  <ng-template #PaidTemplate>
+                    <a class="btn btn-success">PAID</a>
+                </ng-template>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #loadingTemplate>
+            <div class="card" *ngFor="let order of data">
+                <div class="card-header text-black">
+                  Loading...
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title text-black">Loading...</h5>
+                  <p class="card-texttext-black">Loading...</p>
+                  <a href="#" class="btn btn-primary text-black">Loading...</a>
+                </div>
+            </div>
+        </ng-template>
+    </ng-container>
+</div>

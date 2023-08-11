@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<LotteryContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // services
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IRegisterRepository, RegisterService>();
 builder.Services.AddScoped<IAccountRepository, AccountService>();
 builder.Services.AddScoped<IHistoryService, HistoryService>();

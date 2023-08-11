@@ -3,12 +3,15 @@ import { CartReponse } from "./models/cart";
 import { Observable, map, of, tap } from "rxjs";
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { confirmDeleteNotification, errorNotification } from 'src/app/shared/alerts/sweetalert';
+import { confirmApproveNotification, confirmDeleteNotification, errorNotification } from 'src/app/shared/alerts/sweetalert';
 import { CartEntityService } from './services/cart-entity.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DataToSendUpi, GetUpiPerson, UpiGenerateHttpService } from './services/upi-generate-http.service';
+import { UpiGenerateHttpService } from './services/upi-generate-http.service';
 import { CartHttpService } from './services/cart-http.service';
 import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
+import { GenerateUpi } from './models/upi';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { UpiGenerateModalComponent } from './components/upi-generate-modal/upi-generate-modal.component';
 
 @Component({
   selector: 'app-cart',
@@ -22,12 +25,10 @@ export class CartComponent implements OnInit {
   paymentForm: FormGroup = new FormGroup({});
   confirmationForm: FormGroup = new FormGroup({});
   index: any;
-  upiUser$: Observable<GetUpiPerson> = of();
-  public elementType: NgxQrcodeElementTypes = NgxQrcodeElementTypes.CANVAS;
-  qrValue = ''
-  public errorCorrectionLevel: NgxQrcodeErrorCorrectionLevels = NgxQrcodeErrorCorrectionLevels.LOW;
+  bsModalRef?: BsModalRef;
+  loading: boolean = false;
 
-  constructor(private cookieService: CookieService, private cartEntityService: CartEntityService, private fb: FormBuilder, private upiHttpService: UpiGenerateHttpService, private cartHttpService: CartHttpService) { }
+  constructor(private cookieService: CookieService, private cartEntityService: CartEntityService, private fb: FormBuilder, private upiHttpService: UpiGenerateHttpService, private cartHttpService: CartHttpService, private modalService: BsModalService) { }
 
   removeCartItem(item: CartReponse): void {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
@@ -49,57 +50,46 @@ export class CartComponent implements OnInit {
   }
 
   purchaseItems() {
-    this.cartHttpService.removeAllFromCart().subscribe({
-      next: response => {
-        if (response.packageId) {
-          this.generateUPI(response.packageId);
-        }
+    confirmApproveNotification('Are you sure you want to purchase these items?').then((result) => {
+      if (result.isConfirmed) {
+        this.loading = true;
+        this.cartHttpService.removeAllFromCart().subscribe({
+          next: response => {
+            if (response.packageId) {
+              this.generateUPI(response.packageId);
+            }
+          }
+        })
       }
-    })
+    });
   }
 
-  // do this after the order is placed and make sure to call this inside of a sub place
+  openModalWithComponent(qr: string) {
+    const initialState: ModalOptions = {
+      initialState: {
+        qrValue: qr
+      }
+    };
+    this.bsModalRef = this.modalService.show(UpiGenerateModalComponent, initialState);
+  }
+
   generateUPI(orderNo: string) {
     if (getAuthDetails(this.cookieService.get('user')) != null) {
-      this.upiHttpService.getUPIUser().subscribe({
-        next: userResponse => {
-          if (userResponse.username !== "") {
-            this.upiHttpService.getAuthDetails(userResponse).subscribe({
-              next: authResponse => {
-                if (authResponse.success) {
-                  const user = getAuthDetails(this.cookieService.get('user'))
+      const data: GenerateUpi = {
+        authDto: getAuthDetails(this.cookieService.get('user')),
+        orderNo: orderNo,
+        total: this.total.toString()
+      }
 
-                  if (user != null) {
-                    const sendData: DataToSendUpi = {
-                      amount: this.total.toString(),
-                      Email: user.email,
-                      Name: user.username,
-                      Phone: user.phone,
-                      ReferenceId: orderNo,
-                    }
-
-                    this.upiHttpService.generateUpi(sendData, authResponse.data.token, userResponse.password).subscribe({
-                      next: upiResponse => {
-                        if (upiResponse.success) {
-                          this.qrValue = upiResponse.data.qr;
-                        } else {
-                          console.error("error while getting upi " + upiResponse.message);
-                        }
-                      }
-                    })
-                  }
-                } else {
-                  console.error("error while getting auth " + authResponse.message);
-                }
-              },
-              error: error => {
-                console.error("Inside of get auth " + error);
-              }
-            })
-          }
+      this.upiHttpService.getUpiQrCode(data).subscribe({
+        next: response => {
+          this.loading = false;
+          this.openModalWithComponent(response.qr);
+          this.cartEntityService.clearCache();
         },
         error: error => {
-          console.error("Inside of database auth get ", error);
+          this.loading = true;
+          console.error(error);
         }
       });
     } else {

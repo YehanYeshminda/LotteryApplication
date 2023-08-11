@@ -288,7 +288,12 @@
                                       <div class="game__item item-layer">
                                         <div class="game__inner text-center p-0">
                                           <div class="game__thumb mb-0">
-                                            <img src="assets/images/jaqport/01.jpg" alt="game-img" class="rounded-3 w-100">
+                                            <ng-container *ngIf="item.raffleName == 'MegaDraw'; else easyDrawImage">
+                                                <img src="assets/MegaDrawCard.png" alt="game-img" class="rounded-3 w-100">
+                                            </ng-container>
+                                            <ng-template #easyDrawImage>
+                                                <img src="assets/EasyDrawCard.png" alt="game-img" class="rounded-3 w-100">
+                                            </ng-template>
                                           </div>
                                           <div class="game__overlay">
                                             <h4>{{ item.raffleName }}</h4>
@@ -318,48 +323,33 @@
                             </div>
                             <div class="jaqport__body">
                                 <div class="row g-4 justify-content-center">
-                                    <div class="col-lg-4 col-sm-6 col-12">
-                                        <div class="game__item item-layer">
-                                            <div class="game__inner text-center p-0">
-                                                <div class="game__thumb mb-0">
-                                                    <img src="assets/images/jaqport/04.jpg" alt="game-img" class="rounded-3 w-100">
-                                                </div>
-                                                <div class="game__overlay">
-                                                    <h4>poker games</h4>
-                                                    <p>$1,23,002</p>
-                                                    <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                                                </div>
-                                            </div>
+                                    <!--USED TO SHOW THE UPCOMING DRAWS-->
+                                  <ng-container *ngIf="(tournamentDraws$ | async) as data">
+                                    <div class="col-lg-4 col-sm-6 col-12" *ngFor="let item of data">
+                                      <div class="game__item item-layer">
+                                        <div class="game__inner text-center p-0">
+                                          <div class="game__thumb mb-0">
+                                            <ng-container *ngIf="item.raffleName == 'MegaDraw'; else easyDrawImage">
+                                                <img src="assets/MegaDrawCard.png" alt="game-img" class="rounded-3 w-100">
+                                            </ng-container>
+                                            <ng-template #easyDrawImage>
+                                                <img src="assets/EasyDrawCard.png" alt="game-img" class="rounded-3 w-100">
+                                            </ng-template>
+                                          </div>
+                                          <div class="game__overlay">
+                                            <h4>{{ item.raffleName }}</h4>
+                                            <p>{{ item.winAmount | currency:"₹" }}</p>
+                                            <ng-container *ngIf="item.raffleName === 'MegaDraw'">
+                                              <a routerLink="/dashboard/mega-draw" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
+                                            </ng-container>
+                                            <ng-container *ngIf="item.raffleName === 'EasyDraw'">
+                                              <a routerLink="/dashboard/easy-draw" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
+                                            </ng-container>
+                                          </div>
                                         </div>
+                                      </div>
                                     </div>
-                                    <div class="col-lg-4 col-sm-6 col-12">
-                                        <div class="game__item item-layer">
-                                            <div class="game__inner text-center p-0">
-                                                <div class="game__thumb mb-0">
-                                                    <img src="assets/images/jaqport/05.jpg" alt="game-img" class="rounded-3 w-100">
-                                                </div>
-                                                <div class="game__overlay">
-                                                    <h4>poker games</h4>
-                                                    <p>$1,23,002</p>
-                                                    <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-sm-6 col-12">
-                                        <div class="game__item item-layer">
-                                            <div class="game__inner text-center p-0">
-                                                <div class="game__thumb mb-0">
-                                                    <img src="assets/images/jaqport/06.jpg" alt="game-img" class="rounded-3 w-100">
-                                                </div>
-                                                <div class="game__overlay">
-                                                    <h4>poker games</h4>
-                                                    <p>$1,23,002</p>
-                                                    <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  </ng-container>
                                 </div>
                             </div>
                         </div>

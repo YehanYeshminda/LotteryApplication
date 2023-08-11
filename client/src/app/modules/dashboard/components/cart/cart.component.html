@@ -27,7 +27,6 @@
                                     </td>
                                     <td class="cat-price">{{ item.paid | currency: "₹"}}</td>
                                     <ng-container *ngIf="item.lotteryNo && item.lotteryNo.length > 1; else template">
-<!--                                      TODO: Keep a Space between the lottery numbers and fix the backend to only send 2 digit numbers -->
                                         <td class="cat-toprice">{{ item.lotteryReferenceId }} with Lottery No : {{ item.lotteryNo }}</td>
                                     </ng-container>
                                     <ng-template #template>
@@ -121,9 +120,17 @@
                         <button routerLink="/dashboard/user-home" class="default-button m-2">
                             <span>Shop More</span>
                         </button>
-                        <button [disabled]="total === 0" (click)="purchaseItems()" class="default-button reverse-effect m-2">
-                            <span>Proceed to Checkout</span>
-                        </button>
+                        <ng-container *ngIf="!loading; else loadingTemplateForCart">
+                            <button [disabled]="total === 0" (click)="purchaseItems()" class="default-button reverse-effect m-2">
+                                <span>Proceed to Checkout</span>
+                            </button>
+                        </ng-container>
+
+                        <ng-template #loadingTemplateForCart>
+                            <button class="default-button reverse-effect m-2">
+                                <span>Please Wait till the UPI is Generated</span>
+                            </button>
+                        </ng-template>
                     </div>
                 </div>
                 <div class="shiping-box">
@@ -147,14 +154,6 @@
                         </div>
                     </div>
                 </div>
-
-                <ng-container *ngIf="qrValue != ''">
-                    <ngx-qrcode 
-                        [elementType]="elementType" 
-                        [value]="qrValue"
-                        [errorCorrectionLevel]="errorCorrectionLevel">
-                    </ngx-qrcode>
-                </ng-container>
             </div>
         </div>
     </div>

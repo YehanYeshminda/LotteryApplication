@@ -307,6 +307,7 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AddOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
+            entity.Property(e => e.OrderStatus).HasColumnType("int(10) unsigned");
             entity.Property(e => e.PackageName).HasMaxLength(45);
             entity.Property(e => e.PackageOrderUniqueId)
                 .HasMaxLength(45)
