@@ -36,6 +36,7 @@ export class AuthComponent implements OnInit {
   remainingTime: number = 30;
   bsModalRef?: BsModalRef;
   captcha: string = '';
+  numberCode = '+91'
   @ViewChild('timerSpan', { static: false }) timerSpan!: ElementRef;
 
   constructor(private fb: FormBuilder, private router: Router, private store: Store<AppState>, private authService: AuthHttpService, private modalService: BsModalService) { }
@@ -108,29 +109,38 @@ export class AuthComponent implements OnInit {
         errorNotification("Captcha does not match");
       }
     } else if (this.registerMode) {
-      console.log("register")
       const data: MakeRegisterUser = {
-        ...this.form.value
+        ...this.form.value,
+        contactNo: this.numberCode + this.form.value.contactNo.toString(),
+        alternatePhone: this.numberCode + this.form.value.alternatePhone.toString(),
       }
 
       console.log(data)
 
-      // this.isDisabled = true;
-      // this.authService
-      //   .registerUser(data)
-      //   .pipe(
-      //     tap((user) => {
-      //       this.isDisabled = false;
-      //       this.registerMode = false;
-      //     })
-      //   )
-      //   .subscribe({
-      //     next: noop,
-      //     error: (error) => {
-      //       errorNotification(error.error);
-      //       this.isDisabled = false;
-      //     }
-      //   });
+      this.isDisabled = true;
+      this.authService
+        .registerUser(data)
+        .pipe(
+          tap((user) => {
+            this.isDisabled = false;
+            this.registerMode = false;
+          })
+        )
+        .subscribe({
+          next: (respones) => {
+            console.log(respones)
+            this.registerMode = false;
+
+            if (this.registerMode == false) {
+              this.initializeForm();
+              this.generateCaptcha();
+            }
+          },
+          error: (error) => {
+            errorNotification(error.error);
+            this.isDisabled = false;
+          }
+        });
     }
   }
 

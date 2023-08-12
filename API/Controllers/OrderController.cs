@@ -53,7 +53,7 @@ namespace API.Controllers
                 try
                 {
                     DateTime threeDaysAgo = DateTime.Now.AddDays(-3);
-                    var existingUserPackageOrders = await _lotteryContext.Tblpackageorderhistories.Where(x => x.UserId == _user.Id && x.AddOn >= threeDaysAgo).ToListAsync();
+                    var existingUserPackageOrders = await _lotteryContext.Tblpackageorderhistories.Where(x => x.UserId == _user.Id && x.AddOn >= threeDaysAgo).OrderByDescending(x => x.OrderStatus).ToListAsync();
 
                     var newItems = new List<ItemsToReturnForOrders>();
                     if (existingUserPackageOrders == null)

@@ -91,7 +91,7 @@
     </li>
 </ul>
 
-<div class="lottery-btn-container row">
+<div class="lottery-btn-container row" *ngIf="(megaDrawInfo$ | async) as data">
     <div class="btn-container col-12 col-md-4">
       <button class="btn btn-trash" (click)="clearAll()"><i class="fa fa-trash-o" aria-hidden="true"></i> CLEAR SELECTION</button>
     </div>
@@ -101,7 +101,7 @@
     </div>
 
     <div class="btn-container col-12 col-md-4" *ngIf="(selectedItems$ | async) as selectedItems">
-      <button class="btn btn-buynow" (click)="buyMegaDraw()" [disabled]="selectedItems.length < 6"><i class="fas fa-money-bill    "></i> Buy Now</button>
+      <button class="btn btn-buynow" (click)="buyMegaDraw()" [disabled]="selectedItems.length < 6"><i class="fas fa-money-bill"></i> Buy  {{ data.rafflePrice| currency: "₹" }}</button>
     </div>
   </div>
 </div>

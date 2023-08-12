@@ -318,13 +318,15 @@
 
     <ng-container *ngIf="(isUser$ | async); else userTemplate">
       <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2">View Profile</button>
-        <button type="button" class="btn btn-primary">Logout</button>
+        <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/user-package/packages"><i class="fas fa-money-bill-wave"></i></button>
+        <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/cart"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> <span class="text-white ms-1">{{ (cartItems$ | async)?.length }}</span></button>
+        <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/info/edit-user">View Profile</button>
+        <button type="button" class="btn btn-primary" (click)="logOut()">Logout</button>
       </div>
     </ng-container>
     <ng-template #userTemplate>
-      <button type="button" class="btn btn-outline-primary me-2">Login</button>
-        <button type="button" class="btn btn-primary">Sign-up</button>
+      <button type="button" class="btn btn-outline-primary me-2" routerLink="/">Login</button>
+        <button type="button" class="btn btn-primary" routerLink="/">Sign-up</button>
     </ng-template>
   </header>
 </div>

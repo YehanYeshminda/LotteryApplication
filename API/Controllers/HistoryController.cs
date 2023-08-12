@@ -44,6 +44,7 @@ namespace API.Controllers
                 {
                     var query = _lotteryContext.Tblorderhistories
                         .Where(x => x.UserId == decodedValues.UserId)
+                        .OrderByDescending(x => x.AddOn)
                         .Select(item => new GetHistoryDto
                         {
                             OrderedOn = item.AddOn,
@@ -94,7 +95,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var data = await _lotteryContext.Tblorderhistories.Where(x => x.UserId == _user.Id).ToListAsync();
+                    var data = await _lotteryContext.Tblorderhistories.Where(x => x.UserId == _user.Id).OrderByDescending(x => x.AddOn).ToListAsync();
 
                     var dataToReturn = data.Select(item => new GetHistoryDto
                     {

@@ -109,11 +109,25 @@
           </div>
           <div class="form-group">
             <label>Mobile Number:</label>
-            <input type="text" formControlName="contactNo">
+            <div class="row">
+              <div class="col-3">
+                <input type="text" disabled [value]="numberCode">
+              </div>
+              <div class="col-9">
+                <input type="text" formControlName="contactNo">
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label>Alternate Phone Number:</label>
-            <input type="text" formControlName="alternatePhone">
+            <div class="row">
+              <div class="col-3">
+                <input type="text" disabled [value]="numberCode">
+              </div>
+              <div class="col-9">
+                <input type="text" formControlName="alternatePhone">
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label>Password:</label>

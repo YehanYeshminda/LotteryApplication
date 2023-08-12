@@ -47,7 +47,7 @@
                         <tr>
                             <th class="cat-product">Product</th>
                             <th class="cat-price">Price</th>
-                            <th class="cat-quantity">Quantity</th>
+                            <th class="cat-quantity">ReferenceId</th>
                             <th class="cat-toprice">Total</th>
                             <th class="cat-edit">Edit</th>
                         </tr>
@@ -57,7 +57,18 @@
                         <tr *ngFor="let item of items">
                             <td class="product-item cat-product">
                                 <div class="p-thumb">
-                                    <img ngSrc="assets/images/shop/01.jpg" alt="product" height="300" width="250">
+                                    <ng-container *ngIf="item.paid == 100">
+                                        <img ngSrc="assets/PackageCards-01.png" alt="product" height="300" width="250">
+                                    </ng-container>
+                                    <ng-container *ngIf="item.paid == 200">
+                                        <img ngSrc="assets/PackageCards-02.png" alt="product" height="300" width="250">
+                                    </ng-container>
+                                    <ng-container *ngIf="item.paid == 500">
+                                        <img ngSrc="assets/PackageCards-03.png" alt="product" height="300" width="250">
+                                    </ng-container>
+                                    <ng-container *ngIf="item.paid == 1000">
+                                        <img ngSrc="assets/PackageCards-04.png" alt="product" height="300" width="250">
+                                    </ng-container>
                                 </div>
                                 <div class="p-content">
                                     <a>{{ item.lotteryName }}</a>

@@ -189,7 +189,7 @@ namespace API.Controllers
 
                 var newDraw = new Tbldrawhistory
                 {
-                    DrawDate = DateTime.UtcNow,
+                    DrawDate = IndianTimeHelper.GetIndianLocalTime(),
                     LotteryId = (int)existingTicketNo.Id,
                     Sequence = existingTicketNo.TicketNo,
                     UniqueLotteryId = existingTicketNo.UniqueRaffleId
@@ -211,7 +211,7 @@ namespace API.Controllers
                     {
                         var newWin = new Tbllotterywinner
                         {
-                            AddOn = DateTime.UtcNow,
+                            AddOn = IndianTimeHelper.GetIndianLocalTime(),
                             DrawDate = newDraw.DrawDate,
                             RaffleUniqueId = existingTicketNo.UniqueRaffleId,
                             TicketNo = orderHistories[i].TicketNo,
@@ -304,7 +304,7 @@ namespace API.Controllers
 
                     var newDraw = new Tbldrawhistory
                     {
-                        DrawDate = DateTime.UtcNow,
+                        DrawDate = IndianTimeHelper.GetIndianLocalTime(),
                         LotteryId = verifyEasyDrawGenDto.RaffleId,
                         Sequence = String.Join("",verifyEasyDrawGenDto.TicketNos.ToArray()),
                     };
@@ -316,7 +316,7 @@ namespace API.Controllers
 
                     var newWin = new Tbllotterywinner
                     {
-                        AddOn = DateTime.UtcNow,
+                        AddOn = IndianTimeHelper.GetIndianLocalTime(),
                         DrawDate = newDraw.DrawDate,
                         RaffleUniqueId = existingTicketNo.UniqueRaffleId,
                         TicketNo = oldTicketNo,
@@ -437,7 +437,7 @@ namespace API.Controllers
 
                     var newDraw = new Tbldrawhistory
                     {
-                        DrawDate = DateTime.UtcNow,
+                        DrawDate = IndianTimeHelper.GetIndianLocalTime(),
                         LotteryId = megaDrawGenDto.RaffleId,
                         Sequence = String.Join("", megaDrawGenDto.TicketNos.ToArray()),
                     };

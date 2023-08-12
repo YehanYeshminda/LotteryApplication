@@ -27,16 +27,7 @@
         <!-- used for the infinate scroll -->
         <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()" (scrolledUp)="onUp()">
       </div>
-      </mat-tab>
-    </ng-container>
-    <ng-container *ngIf="(userHistoryBasedOnLast3Days$ | async) as userWinForLast3DaysHistoryData">
-      <mat-tab label="Latest Orders"> 
-          <div class="row" *ngIf="userWinForLast3DaysHistoryData.length > 0; else noLatestOrdersTemplate">
-          <div class="col-12 col-sm-6 col-md-4 my-3" *ngFor="let item of userWinForLast3DaysHistoryData">
-              <app-historycard [userHistoryData]="item"></app-historycard>
-            </div>
-          </div>
-      </mat-tab>
+      </mat-tab>w
     </ng-container>
   </mat-tab-group>
 

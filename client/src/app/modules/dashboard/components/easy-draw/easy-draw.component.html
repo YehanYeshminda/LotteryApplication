@@ -89,8 +89,8 @@
 </div>
 
 <div class="container">
-  <div class="button-container">
+  <div class="button-container" *ngIf="(easyDraw$ | async) as drawData">
     <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-random" aria-hidden="true"></i> RESHUFFLE</button>
-    <button (click)="buyEasyDraw()" type="button" class="btnmain"><i class="fas fa-money-bill"></i> Buy Now</button>
+    <button (click)="buyEasyDraw()" type="button" class="btnmain"><i class="fas fa-money-bill"></i> Buy {{ drawData.rafflePrice| currency: "₹" }}</button>
   </div>
 </div>

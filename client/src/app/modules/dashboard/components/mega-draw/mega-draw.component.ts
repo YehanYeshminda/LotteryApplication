@@ -26,7 +26,7 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
-    this.getRandomDraw();
+    // this.getRandomDraw();
   }
 
   selectDrawNumber(item: number) {

@@ -27,11 +27,39 @@ namespace API.Repos.Services
                 return RegistrationResult.Error("User data is empty!");
             }
 
-            var existingUser = await _registerRepository.GetUserByEmailOrNicOrContactNo(createUserDto.Email, createUserDto.Nic, createUserDto.ContactNo, createUserDto.CustName);
+            var existingUserWithEmail = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == createUserDto.Email);
 
-            if (existingUser != null)
+            if (existingUserWithEmail != null)
             {
-                return RegistrationResult.Error("User already exists with this information!");
+                return RegistrationResult.Error("User already exists with Email!");
+            }
+
+            var existingUserName = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.CustName == createUserDto.CustName);
+
+            if (existingUserName != null)
+            {
+                return RegistrationResult.Error("User already exists with this username!");
+            }
+
+            var existingUserNic = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Nic == createUserDto.Nic);
+
+            if (existingUserNic != null)
+            {
+                return RegistrationResult.Error("User already exists with this NIC!");
+            }
+
+            var existingUserContactNo = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.ContactNo == createUserDto.ContactNo);
+
+            if (existingUserContactNo != null)
+            {
+                return RegistrationResult.Error("User already exists with this contact No!");
+            }
+
+            var existingUserContactMobile = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Mobile == createUserDto.ContactNo);
+
+            if (existingUserContactMobile != null)
+            {
+                return RegistrationResult.Error("User already exists with this contact No!");
             }
 
             createUserDto.CustPassword = GetHashedPassword(createUserDto.CustPassword);
@@ -50,11 +78,12 @@ namespace API.Repos.Services
                 CustPassword = createUserDto.CustPassword,
                 CustStatus = 1,
                 Email = createUserDto.Email,
-                Mobile = createUserDto.Mobile,
+                Mobile = createUserDto.ContactNo,
                 Otp = "This will be OTP",
                 Photo = "",
                 Hash = refreshToken,
-                Role = createUserDto.Role
+                Role = createUserDto.Role,
+                Dob = createUserDto.Dob
             };
 
             await _registerRepository.AddUser(newUser);
