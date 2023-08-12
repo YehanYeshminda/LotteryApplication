@@ -5,3 +5,23 @@
 .card-text {
     color: black;
 }
+
+.margin-header-add {
+    margin-top: 120px;
+}
+
+@media screen and (max-width: 768px) {
+    .margin-header-add {
+        margin-top: 50px;
+    }
+}
+
+.card-header {
+    color: black;
+}
+
+.text-fields-for-card {
+    color: black;
+    font-size: 14px;
+    font-weight: 400;
+}

@@ -75,7 +75,7 @@
 
 
 <!-- ==========Header Section Starts Here========== -->
-<header class="header-section" style="background-image: url(assets/images/banner/bg.jpg)">
+<!-- <header class="header-section" style="background-image: url(assets/images/banner/bg.jpg)">
   <div class="container">
     <div class="header-holder d-flex flex-wrap justify-content-between align-items-center">
       <div class="brand-logo d-none d-lg-inline-block">
@@ -187,4 +187,144 @@
     </div>
   </div>
 
-</header>
+</header> -->
+
+<!-- <header class="p-3 mb-3">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-start">
+      <a routerLink="/dashboard/user-home" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+        <img ngSrc="assets/images/logo/logo.png" alt="logo" height="90" width="157">
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto add-margin-start mb-2 mb-md-0 text-center">
+        <li><a class="nav-link custom-text text-white px-2 link-secondary" routerLink="/dashboard/user-home">Home</a></li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Draws
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" routerLink="/dashboard/easy-draw">Easy Draw</a></li>
+                <li><a class="dropdown-item" routerLink="/dashboard/mega-draw">Mega Draw</a></li>
+            </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Lottos
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" routerLink="/dashboard/lotto">Lotto</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Past Orders
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" routerLink="/dashboard/history/user-history">Past Lottery Draws</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Status
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" routerLink="/dashboard/payment-status">Past Payment Status</a></li>
+          </ul>
+        </li>
+        <li><a class="nav-link custom-text text-white px-2 link-dark" routerLink="/dashboard/tournaments/home">Tournaments</a></li>
+    </ul>
+
+      <ng-container *ngIf="(isUser$ | async); else userTemplate">
+        <div class="text-end">
+          <a routerLink="/dashboard/user-package/packages" class="me-4 text-white">
+            <i class="icofont-money-bag"></i>
+          </a>
+        </div>
+        <div class="text-end">
+          <a routerLink="/dashboard/cart" class="me-3 text-white">
+            <i class="icofont-cart"></i>
+            <span class="bg-dark text-white ms-1 rounded-pill">{{ (cartItems$ | async)?.length }}</span>
+          </a>
+        </div>
+        <div class="dropdown text-end">
+          <a class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" routerLink="/dashboard/info/edit-user">View Profile</a></li>
+            <li><a class="dropdown-item" routerLink="/" (click)="logOut()">Logout</a></li>
+          </ul>
+        </div>
+      </ng-container>
+      <ng-template #userTemplate>
+        <div class="dropdown text-end">
+          <a class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" routerLink="/">Login</a></li>
+            <li><a class="dropdown-item" routerLink="/">Sign In</a></li>
+          </ul>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</header> -->
+
+
+<div class="container">
+  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+      <img ngSrc="assets/images/logo/logo.png" alt="logo" height="90" width="157">
+    </a>
+
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li><a class="nav-link custom-text text-white px-2 link-secondary" routerLink="/dashboard/user-home">Home</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Draws
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" routerLink="/dashboard/easy-draw">Easy Draw</a></li>
+            <li><a class="dropdown-item" routerLink="/dashboard/mega-draw">Mega Draw</a></li>
+        </ul>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Lottos
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" routerLink="/dashboard/lotto">Lotto</a></li>
+      </ul>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Past Orders
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" routerLink="/dashboard/history/user-history">Past Lottery Draws</a></li>
+      </ul>
+    </li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Status
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" routerLink="/dashboard/payment-status">Past Payment Status</a></li>
+      </ul>
+    </li>
+    <li><a class="nav-link custom-text text-white px-2 link-dark" routerLink="/dashboard/tournaments/home">Tournaments</a></li>
+    </ul>
+
+    <ng-container *ngIf="(isUser$ | async); else userTemplate">
+      <div class="col-md-3 text-end">
+        <button type="button" class="btn btn-outline-primary me-2">View Profile</button>
+        <button type="button" class="btn btn-primary">Logout</button>
+      </div>
+    </ng-container>
+    <ng-template #userTemplate>
+      <button type="button" class="btn btn-outline-primary me-2">Login</button>
+        <button type="button" class="btn btn-primary">Sign-up</button>
+    </ng-template>
+  </header>
+</div>

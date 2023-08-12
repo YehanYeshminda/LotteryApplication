@@ -1,9 +1,9 @@
-<div class="shop-cart padding-top padding-bottom">
+<div class="shop-cart add-header-margin padding-bottom">
     <div class="container">
         <div class="section-wrapper">
             <div class="cart-top">
                 <table>
-                    <ng-container *ngIf="(cartItems$ | async) as items">
+                    <!-- <ng-container *ngIf="(cartItems$ | async) as items">
                             <thead>
                                 <tr>
                                     <th class="cat-product">Product</th>
@@ -40,7 +40,45 @@
                                 </tr>
                             </tbody>
                         </ng-container>
+                    </ng-container> -->
+                    
+                    <ng-container *ngIf="(cartItems$ | async) as items">
+                    <thead>
+                        <tr>
+                            <th class="cat-product">Product</th>
+                            <th class="cat-price">Price</th>
+                            <th class="cat-quantity">Quantity</th>
+                            <th class="cat-toprice">Total</th>
+                            <th class="cat-edit">Edit</th>
+                        </tr>
+                    </thead>
+                    <ng-container *ngIf="items.length > 0; else noCartItemsTemplate">
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td class="product-item cat-product">
+                                <div class="p-thumb">
+                                    <img ngSrc="assets/images/shop/01.jpg" alt="product" height="300" width="250">
+                                </div>
+                                <div class="p-content">
+                                    <a>{{ item.lotteryName }}</a>
+                                </div>
+                            </td>
+                            <td class="cat-price">{{ item.paid | currency: "₹"}}</td>
+                            <td class="cat-quantity">
+                                <div class="cart-plus-minus">
+                                    <input class="cart-plus-minus-box" disabled [value]="item.lotteryReferenceId" type="text" name="qtybutton">
+                                </div>
+                            </td>
+                            <td class="cat-toprice">{{ item.paid | currency: "₹"}}</td>
+                            <td class="cat-edit">
+                                <button (click)="removeCartItem(item)" class="btn btn-light">
+                                    <i class="icofont-delete-alt text-danger"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
                     </ng-container>
+                </ng-container>
 
                     <!-- NO ITEMS IN THE CART TEMPLATE -->
                     <ng-template #noCartItemsTemplate>

@@ -12,6 +12,10 @@
         [errorCorrectionLevel]="errorCorrectionLevel">
     </ngx-qrcode>
   </div>
+
+  <div class="button-container" (click)="updateStatusCheckForPayments()">
+    <button class="btn btn-success" [disabled]="paymentProcessing">Confirm Payment</button>
+  </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
   </div>

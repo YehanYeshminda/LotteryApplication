@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { RouterReducerState } from '@ngrx/router-store';
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Router } from '@angular/router';
+import { StatusCheckHttpService } from './components/status-check/services/status-check-http.service';
+import { StatusCheckData } from './components/status-check/models/statuscheck';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,21 +15,20 @@ export class DashboardComponent implements OnInit {
   routerState$: Observable<RouterReducerState<any>> | undefined;
   loading!: boolean;
   loadingValue: number = 0;
-  // count = 1;
   searchTerm: string = '';
 
   constructor(private store: Store<{ router: RouterReducerState<any> }>, private router: Router) { }
 
   ngOnInit(): void {
     this.routerState$ = this.store.pipe(select('router'));
-    this.routerState$.subscribe({
-      next: response => {
-        if (response.navigationId === 2) {
-          this.loading = false;
-          // this.startLoading();
-        }
-      }
-    })
+    // this.routerState$.subscribe({
+    //   next: response => {
+    //     if (response.navigationId === 2) {
+    //       this.loading = false;
+    //       // this.startLoading();
+    //     }
+    //   }
+    // })
   }
 
   setDelayedLoadingValue(value: number, delay: number): void {

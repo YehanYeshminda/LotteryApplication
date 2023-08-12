@@ -305,8 +305,8 @@ namespace API.Controllers
 
                                 GetStatusCheckResponse upiResponse = await DoStatusCheck(makeUpiStatusCheckDto.TransactionId, authResponse.data.token, upiPerson.CustPassword);
 
-                                if (upiResponse.success)
-                                {
+                                //if (upiResponse.success)
+                                //{
                                     var existingTrancation = await _lotteryContext.Tblpackageorderhistories.FirstOrDefaultAsync(x => x.PackageOrderUniqueId == makeUpiStatusCheckDto.TransactionId);
 
                                     if (existingTrancation == null)
@@ -324,11 +324,11 @@ namespace API.Controllers
                                     };
 
                                     return Ok(newCheck);
-                                }
-                                else
-                                {
-                                    return BadRequest($"Error while checking status: {upiResponse.message}");
-                                }
+                                //}
+                                //else
+                                //{
+                                //    return Ok(upiResponse.message);
+                                //}
                             }
                         }
                         else

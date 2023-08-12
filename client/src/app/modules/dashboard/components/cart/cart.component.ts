@@ -64,10 +64,11 @@ export class CartComponent implements OnInit {
     });
   }
 
-  openModalWithComponent(qr: string) {
+  openModalWithComponent(qr: string, orderNo: string) {
     const initialState: ModalOptions = {
       initialState: {
-        qrValue: qr
+        qrValue: qr,
+        packageId: orderNo
       }
     };
     this.bsModalRef = this.modalService.show(UpiGenerateModalComponent, initialState);
@@ -84,7 +85,7 @@ export class CartComponent implements OnInit {
       this.upiHttpService.getUpiQrCode(data).subscribe({
         next: response => {
           this.loading = false;
-          this.openModalWithComponent(response.qr);
+          this.openModalWithComponent(response.qr, orderNo);
           this.cartEntityService.clearCache();
         },
         error: error => {

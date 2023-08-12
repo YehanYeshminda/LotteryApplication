@@ -18,12 +18,18 @@ import { AuthDetails } from "../../shared/models/auth";
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  isMenuActive = false;
   navbarCollapsed = true;
   cartNo: number = 0;
   cartItems$: Observable<CartReponse[]> = of([]);
   isUser$: Observable<boolean> = of(false);
   userDetails: AuthDetails | null = null
+  isMenuActive: boolean = false;
+
+  toggleMenu() {
+    console.log('Toggle menu clicked');
+    this.isMenuActive = !this.isMenuActive;
+    console.log('isMenuActive:', this.isMenuActive);
+  }
 
   constructor(private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService, private homeEntityService: HomeEntityService) { }
 
