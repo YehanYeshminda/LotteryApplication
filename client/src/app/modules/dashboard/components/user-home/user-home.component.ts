@@ -1,7 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Observable, of} from "rxjs";
-import {TournamentDrawsInterface} from "../../tournaments/models/tournament";
-import {TournamentHttpService} from "../../tournaments/services/tournament-http.service";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Observable, of } from "rxjs";
+import { TournamentDrawsInterface } from "../../tournaments/models/tournament";
+import { TournamentHttpService } from "../../tournaments/services/tournament-http.service";
+import { UserWinnerHistoryInfo } from './models/user-home';
 
 @Component({
   selector: 'app-user-home',
@@ -15,15 +16,17 @@ export class UserHomeComponent implements OnInit {
   endValue: number = 100000;
   duration: number = 5000;
   startTimestamp: number | null = null;
+  userWinnerHistory$: Observable<UserWinnerHistoryInfo[]> = of([]);
 
 
   tournamentDraws$: Observable<TournamentDrawsInterface[]> = of([]);
-  constructor(private tournamentHttpService: TournamentHttpService) {}
+  constructor(private tournamentHttpService: TournamentHttpService) { }
 
 
   ngOnInit(): void {
     this.animateValue();
     this.tournamentDraws$ = this.tournamentHttpService.getAllDraws();
+    this.userWinnerHistory$ = this.tournamentHttpService.getAllUserWinnerHistory();
   }
 
   animateValue() {

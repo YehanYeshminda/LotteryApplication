@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { DefaultDataService, HttpUrlGenerator } from "@ngrx/data";
 import { CartReponse } from "../models/cart";
 import { HttpClient } from "@angular/common/http";
-import { Observable, catchError, of, throwError } from "rxjs";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment.development"; // Make sure to import HttpOptions
 import { AuthDetails } from "src/app/shared/models/auth";
 import { getAuthDetails } from "src/app/shared/methods/methods";

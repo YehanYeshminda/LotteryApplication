@@ -26,7 +26,7 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
-    // this.getRandomDraw();
+    this.getRandomDraw();
   }
 
   selectDrawNumber(item: number) {
@@ -50,21 +50,16 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
             raffleId: "1",
             ticketNo: response.join(""),
           }
-
-          confirmApproveNotification('Are you sure you want to buy this ticket?').then((result) => {
-            if (result.isConfirmed) {
-              this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
-                next: response => {
-                  if (response.isSuccess) {
-                    successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
-                    this.getRandomDraw();
-                  } else {
-                    errorNotification(response.message);
-                  }
-                },
-              });
-            }
-          })
+          this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
+            next: response => {
+              if (response.isSuccess) {
+                successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
+                this.getRandomDraw();
+              } else {
+                errorNotification(response.message);
+              }
+            },
+          });
         }
       })
 

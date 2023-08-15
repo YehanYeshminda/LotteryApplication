@@ -14,3 +14,11 @@
     align-items: center;
     width: 100%;
 }
+
+.modal-header {
+    border-bottom: none !important;
+}
+
+.modal-footer {
+    border-top: none !important;
+}

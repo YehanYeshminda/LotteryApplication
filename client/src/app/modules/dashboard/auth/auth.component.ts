@@ -6,22 +6,13 @@ import { AppState } from 'src/app/reducer';
 import { AuthHttpService } from './services/auth-http.service';
 import { noop, tap } from 'rxjs';
 import { login } from './features/auth.actions';
-import { MakeLogin, MakeRegisterUser, User } from './models/user';
+import { MakeLogin, MakeRegisterUser } from './models/user';
 import { OtpSend } from './models/auth';
 import { errorNotification } from 'src/app/shared/alerts/sweetalert';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { VerifyOtpComponent } from './components/verify-otp/verify-otp.component';
 import { getRandomCaptcha } from "@shared/methods/methods";
-
-interface PopulateFields {
-  Value: number
-  text: string
-}
-
-interface PopulateFieldsWithStrings {
-  code: string;
-  name: string;
-}
+import { REGEXFORNUMBER } from '@shared/regex/regex';
 
 @Component({
   selector: 'app-auth',
@@ -56,14 +47,14 @@ export class AuthComponent implements OnInit {
     } else {
       this.form = this.fb.group({
         custName: ['', [Validators.required]],
-        nic: ['', []],
+        nic: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
         custAddress: ['', [Validators.required]],
-        mobile: ['', [Validators.required]],
-        alternatePhone: ['', [Validators.required]],
-        contactNo: ['', [Validators.required]],
+        mobile: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(REGEXFORNUMBER)]],
+        alternatePhone: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(REGEXFORNUMBER)]],
+        contactNo: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(REGEXFORNUMBER)]],
         dob: [new Date(), []],
-        custPassword: ['', [Validators.required]],
+        custPassword: ['', [Validators.required, Validators.minLength(8)]],
       });
     }
 
@@ -71,6 +62,16 @@ export class AuthComponent implements OnInit {
       this.captcha = getRandomCaptcha();
       this.form.controls['captcha'].setValue(this.captcha);
     }
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+
+    if (control) {
+      return control.invalid && control.touched;
+    }
+
+    return false;
   }
 
   generateCaptcha(): void {

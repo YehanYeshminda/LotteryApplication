@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducer";
 import { logout } from "../../modules/dashboard/auth/features/auth.actions";
@@ -11,6 +11,7 @@ import { HomeEntityService } from 'src/app/modules/dashboard/components/home/ser
 import { RestoreInitialState } from 'src/app/modules/dashboard/user-history/features/history.actions';
 import { RestoreSingleUserInfoInitialState } from 'src/app/modules/dashboard/user-info/features/user-info.actions';
 import { AuthDetails } from "../../shared/models/auth";
+import { ViewportService } from './services/viewport-service.service';
 
 @Component({
   selector: 'app-navbar',
@@ -24,6 +25,7 @@ export class NavbarComponent implements OnInit {
   isUser$: Observable<boolean> = of(false);
   userDetails: AuthDetails | null = null
   isMenuActive: boolean = false;
+  isLessThan768!: boolean;
 
   toggleMenu() {
     console.log('Toggle menu clicked');
@@ -31,7 +33,7 @@ export class NavbarComponent implements OnInit {
     console.log('isMenuActive:', this.isMenuActive);
   }
 
-  constructor(private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService, private homeEntityService: HomeEntityService) { }
+  constructor(private store: Store<AppState>, private cartEntityService: CartEntityService, private cookieService: CookieService, private homeEntityService: HomeEntityService, private viewportService: ViewportService) { }
 
   logOut() {
     this.store.dispatch(logout());
@@ -41,7 +43,13 @@ export class NavbarComponent implements OnInit {
     this.store.dispatch(RestoreSingleUserInfoInitialState());
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isLessThan768 = event.target.innerWidth < 768 ? true : false;
+  }
+
   ngOnInit(): void {
+    this.isLessThan768 = window.innerWidth < 768 ? true : false;
     if (getAuthDetails(this.cookieService.get('user')) != null) {
       this.cartItems$ = this.cartEntityService.entities$;
       this.isUser$ = of(true);

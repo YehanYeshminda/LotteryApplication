@@ -32,7 +32,7 @@
       <div class="pricing-plan-wrapper">
         <div class="row g-4 justify-content-center">
             <ng-container *ngIf="(userPackages$ | async) as data; else loadingUserPackageTemplate">
-          <div class="col-lg-4 col-sm-6" *ngFor="let item of data" >
+          <div (click)="buyNewPackage(item.id.toString(), item.packgeUniqueId, item.packageName)" class="col-lg-4 col-sm-6" *ngFor="let item of data" >
               <div class="price-item">
                 <div class="price-item-inner">
                   <div class="price-top">
@@ -41,7 +41,7 @@
                     <p class="text-white">{{ item.packgeUniqueId }}</p>
                   </div>
                   <div class="price-bottom">
-                    <a  (click)="buyNewPackage(item.id.toString(), item.packgeUniqueId, item.packageName)" class="default-button"><span>Purchase Now</span></a>
+                    <a class="default-button"><span>Purchase Now</span></a>
                   </div>
                 </div>
               </div>

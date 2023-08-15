@@ -50,18 +50,14 @@ export class CartComponent implements OnInit {
   }
 
   purchaseItems() {
-    confirmApproveNotification('Are you sure you want to purchase these items?').then((result) => {
-      if (result.isConfirmed) {
-        this.loading = true;
-        this.cartHttpService.removeAllFromCart().subscribe({
-          next: response => {
-            if (response.packageId) {
-              this.generateUPI(response.packageId);
-            }
-          }
-        })
+    this.loading = true;
+    this.cartHttpService.removeAllFromCart().subscribe({
+      next: response => {
+        if (response.packageId) {
+          this.generateUPI(response.packageId);
+        }
       }
-    });
+    })
   }
 
   openModalWithComponent(qr: string, orderNo: string) {

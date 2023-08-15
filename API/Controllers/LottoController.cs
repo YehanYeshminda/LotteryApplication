@@ -207,6 +207,20 @@ namespace API.Controllers
 
                 var response = numberCounts.Select(kv => new LottoNumberCount { No = kv.Key, Count = kv.Value }).ToList();
 
+                int keyWithLowestValue = numberCounts.OrderBy(kv => kv.Value).FirstOrDefault().Key;
+                int lowestValue = numberCounts[keyWithLowestValue];
+
+
+                var existingLotto = await _lotteryContext.Tbllottos.FirstOrDefaultAsync(x => x.Id == 1);
+
+                if (existingLotto == null)
+                {
+                    return BadRequest("Unable to find lotto!");
+                }
+
+                existingLotto.WinnerNo = keyWithLowestValue.ToString();
+                await _lotteryContext.SaveChangesAsync();
+
                 return Ok(response);
             }
             catch (Exception ex)
@@ -214,6 +228,48 @@ namespace API.Controllers
                 return BadRequest("Error occurred while buying lottos! " + ex.Message);
             }
         }
+
+        public class LottoHistoryToReturn
+        {
+            public DateTime? AddOn { get; set; }
+            public string LottoNumbers { get; set; }
+            public string LottoUnqueReferenceId { get; set; }
+            public string Price { get; set; }
+        }
+
+
+        [HttpGet("GetAllLottoHistory")]
+        public async Task<IActionResult> GetAllLottoHistory()
+        {
+            try
+            {
+                DateTime fifteenMinutesAgo = IndianTimeHelper.GetIndianLocalTime().AddMinutes(-15);
+
+                var existingLottoHistory = await _lotteryContext.Tbllottoorderhistories
+                    .Where(x => x.AddOn >= fifteenMinutesAgo)
+                    .ToListAsync();
+
+                if (existingLottoHistory == null)
+                {
+                    return BadRequest("No lotto history found!");
+                }
+
+                var response = existingLottoHistory.Select(x => new LottoHistoryToReturn
+                {
+                    AddOn = x.AddOn,
+                    LottoNumbers = x.LottoNumbers,
+                    LottoUnqueReferenceId = x.LottoUnqueReferenceId,
+                    Price = x.Price,
+                }).OrderByDescending(x => x.AddOn).ToList();
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred while fetching lotto history! " + ex.Message);
+            }
+        }
+
 
         [HttpPost("AddNewLotto")]
         public async Task<IActionResult> AddNewLotto(AddNewLottoDto addNewLottoDto)

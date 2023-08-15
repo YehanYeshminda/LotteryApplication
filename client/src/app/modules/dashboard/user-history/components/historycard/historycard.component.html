@@ -1,21 +1,18 @@
 <div class="card bg-light d-flex flex-fill">
         <div class="card-header fw-bolder text-decoration-underline border-bottom-0">
-          {{ userHistoryData.raffleId === 1 ? 'Mega Draw' : 'Easy Draw' }}
+          <h2 class="lead mt-2" [ngClass]="userHistoryData.isWin ? 'text-dark' : ''"><b>Ticket No: {{ userHistoryData.ticketNumber }}</b></h2>
         </div>
-        <div class="card-body pt-0" [ngClass]="userHistoryData.isWin ? 'bg-success' : ''">
+        <div class="card-body pt-2" [ngClass]="userHistoryData.isWin ? 'bg-success' : ''">
           <div class="row">
             <div class="col-9">
-              <h2 class="lead mt-2" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><b>Ticket No: {{ userHistoryData.ticketNumber }}</b></h2>
               <ul class="ml-0 mb-0 fa-ul text-muted">
                 <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-id-card" aria-hidden="true"></i></span> Unique Raffle Id: {{ userHistoryData.uniqueRaffleId }}</li>
                 <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-calendar" aria-hidden="true"></i></span> Ordered On: {{ userHistoryData.orderedOn | date: 'short' }}</li>
-
-                <li class="small" [ngClass]="userHistoryData.isWin ? 'text-light' : ''"><span class="fa-li"><i class="fa fa-location-arrow" aria-hidden="true"></i></span> {{ getUserTimeZone() }}</li>
               </ul>
             </div>
             <div class="col-3 text-center d-flex justify-content-center align-items-center">
-              <img src="assets/MEGADRAW.svg" *ngIf="userHistoryData.raffleId == 1" alt="MEGA DRAW" class="img-circle img-fluid bg-danger h-75 w-100 p-2">
-              <img src="assets/EASYDRAW.svg" *ngIf="userHistoryData.raffleId == 2" alt="EASY DRAW" class="img-circle img-fluid bg-success h-75 w-100 p-2">
+              <img src="assets/MEGADRAW.svg" *ngIf="userHistoryData.raffleId == 1" alt="MEGA DRAW" class="img-circle img-fluid bg-danger border border-1 border-black h-75 w-100 p-2">
+              <img src="assets/EASYDRAW.svg" *ngIf="userHistoryData.raffleId == 2" alt="EASY DRAW" class="img-circle img-fluid bg-success h-75 border border-1 border-black w-100 p-2">
             </div>
           </div>
         </div>

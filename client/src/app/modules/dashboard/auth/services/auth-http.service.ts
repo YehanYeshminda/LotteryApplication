@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { MakeLogin, MakeRegisterUser, User } from '../models/user';
 import { Observable } from 'rxjs';
 import { OtpSend } from '../models/auth';
-import { environment } from 'src/environments/environment.development';
 import { GetVerifyOtpRequestResponse, VerifyOtpRequest } from '../models/otp';
+import { environment } from '@env/environment.development';
 
 interface GetOtpResponse {
   number: string;

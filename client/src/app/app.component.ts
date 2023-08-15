@@ -3,14 +3,13 @@ import { login } from './modules/dashboard/auth/features/auth.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducer';
 import { isLoggedIn } from './modules/dashboard/auth/features/auth.selectors';
-import { delay, interval, Observable, of, Subscription } from 'rxjs';
+import { interval, Observable, of, Subscription } from 'rxjs';
 import { GetNotificationResponse, SendNotificationHttpService } from "./shared/alerts/send-notification-http.service";
 import { confirmApproveNotification } from "./shared/alerts/sweetalert";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { NotificationDialogComponent } from "./components/notification-dialog/notification-dialog.component";
 import { CookieService } from 'ngx-cookie-service';
 import { getAuthDetails } from '@shared/methods/methods';
-import { StatusCheckHttpService } from './modules/dashboard/components/status-check/services/status-check-http.service';
 import { StatusCheckData } from './modules/dashboard/components/status-check/models/statuscheck';
 
 @Component({
@@ -19,15 +18,12 @@ import { StatusCheckData } from './modules/dashboard/components/status-check/mod
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private store: Store<AppState>, private notificationHttpService: SendNotificationHttpService, private modalService: BsModalService, private cookieService: CookieService, private statusCheckHttpService: StatusCheckHttpService) { }
+  constructor(private store: Store<AppState>, private notificationHttpService: SendNotificationHttpService, private modalService: BsModalService, private cookieService: CookieService) { }
 
   isLoggedIn$: Observable<boolean> = of(false);
   private intervalDurationInMilliseconds = 1 * 10 * 60000;
-  private intervalForStatusCheckDurationInMilliseconds = 15 * 60 * 1000;
   private intervalSubscription!: Subscription;
   private intervalStartTime!: number;
-  private intervalStartTimeForStatusCheck!: number;
-  private intervalStartTimeForStatus!: number;
   bsModalRef?: BsModalRef;
   statusCheckResult$: Observable<StatusCheckData[]> = of([]);
 

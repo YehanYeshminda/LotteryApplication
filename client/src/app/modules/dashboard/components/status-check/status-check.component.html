@@ -1,37 +1,44 @@
 <div class="container">
-    <ng-container *ngIf="(statusCheckResult$ | async) as data">
-        <ng-container *ngIf="data.length > 0; else loadingTemplate">
+    <ng-container *ngIf="(statusCheckResult$ | async) as data; else NoPaymentTemplate">
+        <ng-container *ngIf="showStatus">
           <div class="row">
             <div class="col-12 col-md-6" *ngFor="let order of data">
               <div class="card m-2">
                 <div class="card-body">
                     <h4 class="card-title">Package Name: {{ order.packageName }}</h4>
-                    <p class="text-fields-for-card">{{ order.packageUniqueId }} bought for {{ order.packagePrice }}</p>
+                    <p class="text-fields-for-card"> <b>Package Price:</b> {{ order.packagePrice }}</p>
                     <p class="text-fields-for-card">Package Order Id: {{ order.packageOrderUniqueId }}</p>
                     <p class="text-fields-for-card">Bought On: {{ order.addOn | date: 'short' }}</p>
-                    <ng-container *ngIf="order.orderStatus === 0; else PaidTemplate">
-                        <a class="btn btn-danger">PAYMENT PENDING</a>
-                    </ng-container>
-                    <ng-template #PaidTemplate>
-                      <a class="btn btn-success">PAID</a>
-                  </ng-template>
+                    
+                    <div class="btn-container">
+                      <ng-container *ngIf="order.orderStatus === 0; else PaidTemplate">
+                          <a class="btn btn-danger">PAYMENT PENDING</a>
+                      </ng-container>
+                      <ng-template #PaidTemplate>
+                        <a class="btn btn-success">PAID</a>
+                    </ng-template>
+                    <button [disabled]="paymentProcessing" type="button" class="btn btn-primary" (click)="updateStatusCheckForPayments(order.packageOrderUniqueId)">Update Payment</button>
+                    </div>
                 </div>
               </div>
             </div>
           </div>
         </ng-container>
 
-        <ng-template #loadingTemplate>
-            <div class="card" *ngFor="let order of data">
-                <div class="card-header text-black">
-                  Loading...
-                </div>
+        <div *ngIf="!showStatus">
+            <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title text-black">Loading...</h5>
-                  <p class="card-texttext-black">Loading...</p>
-                  <a href="#" class="btn btn-primary text-black">Loading...</a>
+                  <h5 class="card-title text-black">No Payments has been made</h5>
                 </div>
             </div>
-        </ng-template>
+        </div>
     </ng-container>
+
+    <ng-template #NoPaymentTemplate>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-black">Loading...</h5>
+        </div>
+    </div>
+    </ng-template>
 </div>

@@ -86,26 +86,42 @@
         <form class="account-form text-start" [formGroup]="form">
           <div class="form-group">
             <label>Customer Name:</label>
-            <input type="text" placeholder="First Name" formControlName="custName">
+            <input type="text" placeholder="First Name" formControlName="custName" [class.is-invalid]="isInvalid('custName')">
+            <div *ngIf="form.get('custName')?.invalid && (form.get('custName')?.dirty || form.get('custName')?.touched)" class="invalid-feedback">
+							<div *ngIf="form.get('custName')?.errors?.['required']">custName is required.</div>
+						</div>
           </div>
 
           <div class="form-group">
-            <label>NIC:</label>
-            <input type="text" placeholder="NIC" formControlName="nic">
+            <label>Goverment Issued ID:</label>
+            <input type="text" placeholder="NIC" formControlName="nic" [class.is-invalid]="isInvalid('nic')">
+            <div *ngIf="form.get('nic')?.invalid && (form.get('nic')?.dirty || form.get('nic')?.touched)" class="invalid-feedback">
+							<div *ngIf="form.get('nic')?.errors?.['required']">nic is required.</div>
+						</div>
           </div>
 
           <div class="form-group">
             <label>Date Of Birth:</label>
-            <input formControlName="dob" type="date">
+            <input formControlName="dob" type="date" [class.is-invalid]="isInvalid('dob')">
+            <div *ngIf="form.get('dob')?.invalid && (form.get('dob')?.dirty || form.get('dob')?.touched)" class="invalid-feedback">
+							<div *ngIf="form.get('dob')?.errors?.['required']">DOB is required.</div>
+						</div>
           </div>
 
           <div class="form-group">
             <label>Address:</label>
-            <input formControlName="custAddress" type="text" name="Address">
+            <input formControlName="custAddress" type="text" name="Address" [class.is-invalid]="isInvalid('custAddress')">
+            <div *ngIf="form.get('custAddress')?.invalid && (form.get('custAddress')?.dirty || form.get('custAddress')?.touched)" class="invalid-feedback">
+							<div *ngIf="form.get('custAddress')?.errors?.['required']">Address is required.</div>
+						</div>
           </div>
           <div class="form-group">
             <label>Email:</label>
-            <input type="email" formControlName="email">
+            <input type="email" formControlName="email" [class.is-invalid]="isInvalid('email')">
+            <div *ngIf="form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)" class="invalid-feedback">
+							<div *ngIf="form.get('email')?.errors?.['required']">Email is required.</div>
+							<div *ngIf="form.get('email')?.errors?.['email']">Email format is invalid.</div>
+						</div>
           </div>
           <div class="form-group">
             <label>Mobile Number:</label>
@@ -114,7 +130,12 @@
                 <input type="text" disabled [value]="numberCode">
               </div>
               <div class="col-9">
-                <input type="text" formControlName="contactNo">
+                <input type="text" formControlName="contactNo" [class.is-invalid]="isInvalid('contactNo')">
+                <div *ngIf="form.get('contactNo')?.invalid && (form.get('contactNo')?.dirty || form.get('contactNo')?.touched)" class="invalid-feedback">
+                  <div *ngIf="form.get('contactNo')?.errors?.['required']">contactNo is required.</div>
+                  <div *ngIf="form.get('contactNo')?.errors?.['maxLength']">Max character limit exceeded.</div>
+                  <div *ngIf="form.get('contactNo')?.errors?.['pattern']">Enter a valid number.</div>
+                </div>
               </div>
             </div>
           </div>
@@ -125,13 +146,23 @@
                 <input type="text" disabled [value]="numberCode">
               </div>
               <div class="col-9">
-                <input type="text" formControlName="alternatePhone">
+                <input type="text" formControlName="alternatePhone" [class.is-invalid]="isInvalid('alternatePhone')">
+                <div *ngIf="form.get('alternatePhone')?.invalid && (form.get('alternatePhone')?.dirty || form.get('alternatePhone')?.touched)" class="invalid-feedback">
+                  <div *ngIf="form.get('alternatePhone')?.errors?.['required']">AlternatePhone is required.</div>
+                  <div *ngIf="form.get('alternatePhone')?.errors?.['maxLength']">Max character limit exceeded.</div>
+                  <div *ngIf="form.get('alternatePhone')?.errors?.['pattern']">Enter a valid number.</div>
+                </div>
               </div>
             </div>
           </div>
           <div class="form-group">
             <label>Password:</label>
-            <input type="password" formControlName="custPassword">
+            <input type="password" formControlName="custPassword" [class.is-invalid]="isInvalid('custPassword')">
+            <div *ngIf="form.get('custPassword')?.invalid && (form.get('custPassword')?.dirty || form.get('custPassword')?.touched)" class="invalid-feedback">
+              <div *ngIf="form.get('custPassword')?.errors?.['required']">Password is required.</div>
+              <div *ngIf="form.get('custPassword')?.errors?.['maxLength']">Max character limit exceeded.</div>
+              <div *ngIf="form.get('custPassword')?.errors?.['pattern']">Enter a valid number.</div>
+            </div>
           </div>
           <div class="form-group">
             <button class="d-block default-button" type="button" (click)="onSubmit()"><span>Get Started Now</span></button>
@@ -153,7 +184,12 @@
         <form class="account-form text-start" [formGroup]="form">
           <div class="form-group-sm">
             <label>User Name:</label>
-            <input formControlName="custName" type="text" name="username">
+            <input formControlName="custName" type="text" name="username" [class.is-invalid]="isInvalid('custName')">
+            <div *ngIf="form.get('custName')?.invalid && (form.get('custName')?.dirty || form.get('custName')?.touched)" class="invalid-feedback">
+              <div *ngIf="form.get('custName')?.errors?.['required']">Customer name is required.</div>
+              <div *ngIf="form.get('custName')?.errors?.['maxLength']">Max character limit exceeded.</div>
+              <div *ngIf="form.get('custName')?.errors?.['pattern']">Enter a valid number.</div>
+            </div>
           </div>
           <div class="form-group-sm">
             <div class="row">
@@ -168,19 +204,20 @@
           </div>
           <div class="form-group-sm">
             <label>Enter the Above Captcha:</label>
-            <input formControlName="enteredCaptcha" type="text" name="enteredCaptcha">
+            <input formControlName="enteredCaptcha" type="text" name="enteredCaptcha" [class.is-invalid]="isInvalid('enteredCaptcha')">
+            <div *ngIf="form.get('enteredCaptcha')?.invalid && (form.get('enteredCaptcha')?.dirty || form.get('enteredCaptcha')?.touched)" class="invalid-feedback">
+              <div *ngIf="form.get('enteredCaptcha')?.errors?.['required']">Captcha is required.</div>
+              <div *ngIf="form.get('enteredCaptcha')?.errors?.['maxLength']">Max character limit exceeded.</div>
+              <div *ngIf="form.get('enteredCaptcha')?.errors?.['pattern']">Enter a valid number.</div>
+            </div>
           </div>
           <div class="form-group-sm">
             <label>Password:</label>
-            <input formControlName="custPassword" type="password" name="password">
-          </div>
-          <div class="form-group">
-            <div class="d-flex justify-content-between flex-wrap pt-sm-2">
-              <div class="checkgroup">
-                <input type="checkbox" name="remember" id="remember">
-                <label for="remember">Remember Me</label>
-              </div>
-              <a routerLink="">Forget Password?</a>
+            <input formControlName="custPassword" type="password" name="password" [class.is-invalid]="isInvalid('custPassword')">
+            <div *ngIf="form.get('custPassword')?.invalid && (form.get('custPassword')?.dirty || form.get('custPassword')?.touched)" class="invalid-feedback">
+              <div *ngIf="form.get('custPassword')?.errors?.['required']">Password is required.</div>
+              <div *ngIf="form.get('custPassword')?.errors?.['maxLength']">Max character limit exceeded.</div>
+              <div *ngIf="form.get('custPassword')?.errors?.['pattern']">Enter a valid number.</div>
             </div>
           </div>
           <div class="form-group">

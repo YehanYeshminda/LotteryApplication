@@ -171,6 +171,14 @@ $east-draw-color: #CC49D3;
       color: white;
       font-size: 20px;
     }
+
+    .btn-main-disabled {
+      width: 200px;
+      height: 50px;
+      background-color:  gray;
+      color: white;
+      font-size: 20px;
+    }
   }
 
 @media screen and (max-width: 768px) {
@@ -181,7 +189,7 @@ $east-draw-color: #CC49D3;
             height: 40px;
             background-color:  #F60000;
             color: white;
-            font-size: 15px;
+            font-size: 12px;
         }
 
         .btnmain {
@@ -189,7 +197,15 @@ $east-draw-color: #CC49D3;
             height: 40px;
             background-color:  #257CFF;
             color: white;
-            font-size: 15px;
+            font-size: 12px;
+        }
+
+        .btn-main-disabled {
+            width: 200px;
+            height: 40px;
+            background-color:  gray;
+            color: white;
+            font-size: 12px;
         }
     }
 

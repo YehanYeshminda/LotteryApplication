@@ -3,45 +3,6 @@
         <div class="section-wrapper">
             <div class="cart-top">
                 <table>
-                    <!-- <ng-container *ngIf="(cartItems$ | async) as items">
-                            <thead>
-                                <tr>
-                                    <th class="cat-product">Product</th>
-                                    <th class="cat-price">Price</th>
-                                    <th class="cat-toprice">Reference Id</th>
-                                    <th class="cat-edit">Edit</th>
-                                </tr>
-                            </thead>
-                        <ng-container *ngIf="items.length > 0; else noCartItemsTemplate">
-                            <tbody>
-                                <tr *ngFor="let item of items">
-                                    <td class="product-item cat-product">
-                                        <div class="p-thumb">
-                                            <a href="#">
-                                                <img ngSrc="assets/images/shop/01.jpg" alt="product" height="300" width="250">
-                                            </a>
-                                        </div>
-                                        <div class="p-content">
-                                            <a href="#">{{ item.lotteryName }}</a>
-                                        </div>
-                                    </td>
-                                    <td class="cat-price">{{ item.paid | currency: "₹"}}</td>
-                                    <ng-container *ngIf="item.lotteryNo && item.lotteryNo.length > 1; else template">
-                                        <td class="cat-toprice">{{ item.lotteryReferenceId }} with Lottery No : {{ item.lotteryNo }}</td>
-                                    </ng-container>
-                                    <ng-template #template>
-                                        <td class="cat-toprice">{{ item.lotteryReferenceId }}</td>
-                                    </ng-template>
-                                    <td class="cat-edit">
-                                        <button (click)="removeCartItem(item)" class="btn btn-light">
-                                            <i class="icofont-delete-alt text-danger"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </ng-container>
-                    </ng-container> -->
-                    
                     <ng-container *ngIf="(cartItems$ | async) as items">
                     <thead>
                         <tr>
@@ -166,7 +127,7 @@
                     <div class="coupon">
                     </div>
                     <div class="cart-checkout">
-                        <button routerLink="/dashboard/user-home" class="default-button m-2">
+                        <button routerLink="/dashboard/user-package/packages" class="default-button m-2">
                             <span>Shop More</span>
                         </button>
                         <ng-container *ngIf="!loading; else loadingTemplateForCart">

@@ -19,7 +19,7 @@ export class EasyDrawComponent implements OnInit {
   constructor(private easyDrawHttpService: EasyDrawHttpService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
-    this.drawRandomNumber();
+    // this.drawRandomNumber();
     this.easyDraw$ = this.easyDrawHttpService.getEasyDraw();
   }
 
@@ -41,23 +41,18 @@ export class EasyDrawComponent implements OnInit {
         raffleId: "2",
         ticketNo: this.latestNumbers.join(""),
       }
-
-      confirmApproveNotification('Are you sure you want to buy this ticket?').then((result) => {
-        if (result.isConfirmed) {
-          this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
-            next: response => {
-              if (response.isSuccess) {
-                successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
-                this.drawRandomNumber();
-              } else {
-                errorNotification(response.message);
-              }
-            },
-          });
-        }
-      })
-
-    } else {
+      this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
+        next: response => {
+          if (response.isSuccess) {
+            successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
+            this.drawRandomNumber();
+          } else {
+            errorNotification(response.message);
+          }
+        },
+      });
+    }
+    else {
       errorNotification('Please login to add to cart');
     }
   }

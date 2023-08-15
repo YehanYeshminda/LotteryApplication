@@ -39,6 +39,8 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblraffle> Tblraffles { get; set; }
 
+    public virtual DbSet<Tblregion> Tblregions { get; set; }
+
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -195,6 +197,9 @@ public partial class LotteryContext : DbContext
                 .HasPrecision(10)
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.LottoUniqueId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.WinnerNo)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
         });
@@ -355,11 +360,37 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.WinAmount).HasPrecision(10);
         });
 
+        modelBuilder.Entity<Tblregion>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tblregions");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Code)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Country)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.RegionName)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+        });
+
         modelBuilder.Entity<Tblregister>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("tblregister");
+
+            entity.HasIndex(e => e.ContactNo, "ContactNo_UNIQUE").IsUnique();
+
+            entity.HasIndex(e => e.CustName, "CustName_UNIQUE").IsUnique();
+
+            entity.HasIndex(e => e.Email, "Email_UNIQUE").IsUnique();
+
+            entity.HasIndex(e => e.Nic, "NIC_UNIQUE").IsUnique();
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.AccountBalance)

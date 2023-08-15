@@ -102,6 +102,7 @@ const entityMetaData: EntityMetadataMap = {
     UserHistoryModule,
     NgOptimizedImage,
     PipesModule,
+
   ]
 })
 

@@ -56,11 +56,30 @@
                 <p> Leave it all to chance and let fate reveal your winning combination!</p>
             </div>
 
-            <div class="digit-containers">
-                <div class="number" *ngFor="let item of latestNumbers">
-                    <p>{{ item }}</p>
+            <ng-container *ngIf="latestNumbers.length > 0; else noItemsTemplate">
+              <div class="digit-containers">
+                  <div class="number" *ngFor="let item of latestNumbers">
+                      <p>{{ item }}</p>
+                  </div>
+              </div>
+
+            </ng-container>
+            <ng-template #noItemsTemplate>
+              <div class="digit-containers">
+                <div class="number">
+                    <p></p>
                 </div>
-            </div>
+                <div class="number">
+                  <p></p>
+                </div>
+                <div class="number">
+                  <p></p>
+                </div>
+                <div class="number">
+                  <p></p>
+                </div>
+              </div>
+            </ng-template>
 
             <div class="row row-container">
                 <div class="col-4">
@@ -91,6 +110,6 @@
 <div class="container">
   <div class="button-container" *ngIf="(easyDraw$ | async) as drawData">
     <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-random" aria-hidden="true"></i> RESHUFFLE</button>
-    <button (click)="buyEasyDraw()" type="button" class="btnmain"><i class="fas fa-money-bill"></i> Buy {{ drawData.rafflePrice| currency: "₹" }}</button>
+    <button (click)="buyEasyDraw()" type="button" [disabled]="latestNumbers.length == 0" [ngClass]="latestNumbers.length == 0 ? 'btn-main-disabled' : 'btnmain'"><i class="fas fa-money-bill"></i> Buy {{ drawData.rafflePrice| currency: "₹" }}</button>
   </div>
 </div>

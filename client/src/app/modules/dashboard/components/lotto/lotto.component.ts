@@ -55,20 +55,16 @@ export class LottoComponent implements OnInit {
   }
 
   buyNewLotto() {
-    confirmApproveNotification(`Are you sure you want to buy this Lotto?`).then(response => {
-      if (response.isConfirmed) {
-        if (getAuthDetails(this.cookieService.get('user')) != null) {
-          this.lottoHttpService.buyLotto(this.numValue).subscribe(response => {
-            if (response.isSuccess) {
-              successNotification(response.message);
-            }
-
-            if (!response.isSuccess) {
-              errorNotification(response.message);
-            }
-          })
+    if (getAuthDetails(this.cookieService.get('user')) != null) {
+      this.lottoHttpService.buyLotto(this.numValue).subscribe(response => {
+        if (response.isSuccess) {
+          successNotification(response.message);
         }
-      }
-    })
+
+        if (!response.isSuccess) {
+          errorNotification(response.message);
+        }
+      })
+    }
   }
 }

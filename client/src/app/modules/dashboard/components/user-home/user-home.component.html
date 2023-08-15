@@ -1,20 +1,25 @@
-<section class="banner" style="background-image: url(assets/images/banner/bg.jpg);">
-    <div class="container">
-        <div class="row g-0">
-            <div class="col-xl-6 col-lg-7 col-12">
-                <div class="banner__content">
-                    <h3>the best website</h3>
-                    <h1>Online Casino</h1>
-                    <h2>Genuine Money Transaction</h2>
-                    <p>Assertively communicate an expanded array of mindshare rather than diverse technologies for magnetic applications eamlessly virtual then Conveniently monetize synergistic human capital</p>
-                    <a routerLink="/" class="default-button"><span>join us today  <i class="icofont-play-alt-1"></i></span> </a>
-                </div>
-            </div>
+<div class="container-fluid">
+    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active" routerLink="/dashboard/easy-draw" data-bs-interval="5000">
+            <img src="assets/EasyDrawCard.png" class="" alt="...">
+          </div>
+          <div class="carousel-item" data-bs-interval="5000">
+            <img src="assets/MegaDrawCard.png" routerLink="/dashboard/mega-draw" class="" alt="...">
+          </div>
         </div>
-    </div>
-</section>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+</div>
 
-<section class="counter">
+<section class="counter couter-header">
     <div class="container">
         <div class="counter__area">
             <div class="row align-items-center">
@@ -41,7 +46,7 @@
 
 
 <!-- ===========Collection Section Start Here========== -->
-<section class="collection-section padding-top padding-bottom">
+<!-- <section class="collection-section padding-top padding-bottom">
     <div class="container">
         <div class="section-header">
             <h2>welcome to casino</h2>
@@ -90,7 +95,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 
 <div class="jaqport padding-top padding-bottom" style="background-image: url(assets/images/jaqport/jaqport-bg.jpg);">
@@ -107,146 +112,24 @@
                             <div class="jaqport__title-title">
                                 <h4>top winners list</h4>
                             </div>
-                            <div class="jaqport__title-button">
-                                <a href="jaqpot.html" class="default-button"><span>View All <i class="icofont-circled-right"></i></span></a>
+                        </div>
+                        <ng-container *ngIf="userWinnerHistory$ | async as data">
+                            <div class="jaqport__body">
+                                <ul>
+                                    <li class="jaqport__gamelist" *ngFor="let item of data; let i = index">
+                                        <div class="jaqport__gamelist-left">
+                                            <p>{{ i + 1 }}. {{ item.custName }}</p>
+                                        </div>
+                                        <div class="jaqport__gamelist-middle">
+                                            <img src="assets/images/jaqport/country/03.jpg" alt="jaqport-thumb" class="rounded-circle">
+                                        </div>
+                                        <div class="jaqport__gamelist-right">
+                                            <h6>{{ item.addOn | date: "short" }}</h6>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                        <div class="jaqport__body">
-                            <ul>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>1.Christopher</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/02.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>2.Mark</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/02.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>3.Craigr</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/03.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>4.Philip</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/04.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>5.Jimmy</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/03.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>6.Arthur</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/02.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>7.Jaime</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/04.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>8.Perry</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/08.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>9.Harold</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/02.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>10.Jerry</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/02.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>11.Shawn</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/03.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                                <li class="jaqport__gamelist">
-                                    <div class="jaqport__gamelist-left">
-                                        <p>12.Walter</p>
-                                    </div>
-                                    <div class="jaqport__gamelist-middle">
-                                        <img src="assets/images/jaqport/country/04.jpg" alt="jaqport-thumb" class="rounded-circle">
-                                    </div>
-                                    <div class="jaqport__gamelist-right">
-                                        <h6>$2365.96</h6>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                        </ng-container>
                     </div>
                 </div>
                 <div class="col-lg-8 col-12">
@@ -474,42 +357,6 @@
                     </div>
                 </div>
             </ng-container>
-            <div class="col-lg-6 col-12 cat-3">
-                <div class="game__item item-layer">
-                    <div class="game__inner text-center p-0">
-                        <div class="game__thumb mb-0">
-                            <img src="assets/images/game/03.jpg" alt="game-img" class="rounded-3 w-100">
-                        </div>
-                        <div class="game__overlay">
-                            <div class="game__overlay-left">
-                                <h4>free poker games</h4>
-                                <p>Catagory: Roulette</p>
-                            </div>
-                            <div class="game__overlay-right">
-                                <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-12 cat-4">
-                <div class="game__item item-layer">
-                    <div class="game__inner text-center p-0">
-                        <div class="game__thumb mb-0">
-                            <img src="assets/images/game/04.jpg" alt="game-img" class="rounded-3 w-100">
-                        </div>
-                        <div class="game__overlay">
-                            <div class="game__overlay-left">
-                                <h4>free poker games</h4>
-                                <p>Catagory: Roulette</p>
-                            </div>
-                            <div class="game__overlay-right">
-                                <a href="#" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="button-wrapper text-center mt-5">
             <!-- <a href="game-list2.html" class="default-button"><span>Browse All Matches <i class="icofont-circled-right"></i></span>
