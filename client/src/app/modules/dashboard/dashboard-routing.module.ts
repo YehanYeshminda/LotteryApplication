@@ -13,7 +13,6 @@ import { DrawHistoryResolver } from './components/home/resolvers/draw-history.re
 import { SearchHistoryComponent } from './components/search-history/search-history.component';
 import { UserHomeComponent } from './components/user-home/user-home.component';
 import { LottoComponent } from "./components/lotto/lotto.component";
-import { StatusCheckComponent } from './components/status-check/status-check.component';
 
 const routes: Routes = [
   {
@@ -25,7 +24,7 @@ const routes: Routes = [
       { path: 'lotto', component: LottoComponent, resolve: { CartItems: CartResolver } },
       { path: 'cart', component: CartComponent, resolve: { CartItems: CartResolver } },
       // { path: 'checkout', component: CheckoutComponent, resolve: { CartItems: CartResolver } },
-      { path: 'payment-status', component: StatusCheckComponent, resolve: { CartItems: CartResolver } },
+      // { path: 'payment-status', component: StatusCheckComponent, resolve: { CartItems: CartResolver } },
       { path: 'search-history/:id', component: SearchHistoryComponent },
     ]
   },

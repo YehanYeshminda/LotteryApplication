@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using static API.Repos.Dtos.DrawDto;
 
 namespace API.Controllers
 {
@@ -12,12 +13,16 @@ namespace API.Controllers
     {
         private readonly LotteryContext _lotteryContext;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly Generators _generators;
         private readonly string baseUrl = "https://app.pinwallet.in/api/";
+        private readonly ResponseDto _response;
 
-        public UpiController(LotteryContext lotteryContext, IHttpClientFactory clientFactory)
+        public UpiController(LotteryContext lotteryContext, IHttpClientFactory clientFactory, Generators generators)
         {
             _lotteryContext = lotteryContext;
             _clientFactory = clientFactory;
+            _generators = generators;
+            _response = new ResponseDto();
         }
 
         public class GenerateUpiDto
@@ -127,6 +132,120 @@ namespace API.Controllers
             else
             {
                 return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        [NonAction]
+        public string GenerateUniquRequestNumber()
+        {
+            string requestNo;
+            do
+            {
+                requestNo = _generators.GenerateRandomStringForTblRequestOrders(10);
+            } while (!_generators.IsUniqueOrderForOrders(requestNo));
+
+            return requestNo;
+        }
+
+        [HttpPost("MakeUpiWithDrawalRequest")]
+        public async Task<ResponseDto> MakeUpiWithdrawalRequest(MakeUpiWithdrawalRequestDto makeUpiWithdrawalRequest)
+        {
+            if (makeUpiWithdrawalRequest == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            if (makeUpiWithdrawalRequest.AuthDto.Hash == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(makeUpiWithdrawalRequest.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == makeUpiWithdrawalRequest.AuthDto.Hash);
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    // MAKE EDIT BANK DETAILS
+                    // MAKE THE VALUES FROM THE WALLET GO DOWN FROM THE AMOUNT WITHDRAWN
+
+                    var existingBank = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.UserId == _user.Id.ToString());
+
+                    if (existingBank == null)
+                    {
+                        var newBank = new Tblbankdetail
+                        {
+                            BenificiaryAccountNo = makeUpiWithdrawalRequest.BenificiaryAccountNo,
+                            BenificiaryIfscCode = makeUpiWithdrawalRequest.BenificiaryIfscCode,
+                            BenificiaryName = makeUpiWithdrawalRequest.BenificiaryName,
+                            UserId = _user.Id.ToString()
+                        };
+
+                        await _lotteryContext.Tblbankdetails.AddAsync(newBank);
+                        await _lotteryContext.SaveChangesAsync();
+
+                        var newRequest = new Tblrequestwithdrawal
+                        {
+                            Amount = makeUpiWithdrawalRequest.Amount,
+                            BankId = newBank.Id,
+                            RequestUniqueId = GenerateUniquRequestNumber(),
+                            UserId = _user.Id,
+                            Status = "0",
+                            Longitude = makeUpiWithdrawalRequest.Longitude,
+                            Latitude = makeUpiWithdrawalRequest.Latitude,
+                        };
+
+                        await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
+                        await _lotteryContext.SaveChangesAsync();
+
+                        _response.IsSuccess = true;
+                        _response.Message = "Successfully added transaction";
+                        _response.Result = newRequest;
+                        return _response;
+                    } else
+                    {
+                        var newRequest = new Tblrequestwithdrawal
+                        {
+                            Amount = makeUpiWithdrawalRequest.Amount,
+                            BankId = existingBank.Id,
+                            RequestUniqueId = GenerateUniquRequestNumber(),
+                            UserId = _user.Id,
+                            Status = "0",
+                            Longitude = makeUpiWithdrawalRequest.Longitude,
+                            Latitude = makeUpiWithdrawalRequest.Latitude,
+                        };
+
+                        await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
+                        await _lotteryContext.SaveChangesAsync();
+
+                        _response.IsSuccess = true;
+                        _response.Message = "Successfully added transaction";
+                        _response.Result = newRequest;
+                        return _response;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Error while fetching current user history! " + ex.Message;
+                    return _response;
+                }
+
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
             }
         }
 

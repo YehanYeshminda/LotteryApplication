@@ -12,7 +12,7 @@
                                 <h5 class="user-name">{{ userInfo.custName | titlecase }}</h5>
                                 <h6 class="user-email">{{ userInfo.email }}</h6>
                                 <h6 class="user-email mt-1">Joined On: <b>{{ userInfo.addOn  | timezoneConverter: getUserTimeZone() }}</b></h6>
-                                <h6 class="user-balance mt-2">Account Balance: <b class="text-decoration-underline">{{ userInfo.accountBalance }}</b></h6>
+                                <h6 class="user-balance mt-2">Account Balance: <b class="text-decoration-underline">{{ userInfo.accountBalance }}</b> </h6>
                                 
                                 <div class="user-won-lost-container">
                                     <ng-container *ngIf="userWonAmount$ | async as data; else loadingTemplate">
@@ -24,6 +24,10 @@
                                     <ng-template #loadingTemplate>
                                         <h6 class="user-balance mt-2">Loading....</h6>
                                     </ng-template>
+                                </div>
+
+                                <div class="win-lost-btncontainer">
+                                    <button class="btn btn-primary btn-sm" type="button" (click)="openWithdrawWindow()">Withdraw</button>
                                 </div>
                             </div>
                         </div>

@@ -146,5 +146,20 @@ namespace API.Helpers
         {
             return !_context.Tblorderhistories.Any(l => l.RaffleUniqueId == referenceId);
         }
+
+        public string GenerateRandomStringForTblRequestOrders(int length)
+        {
+            StringBuilder sb = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+            {
+                sb.Append(numericChars[random.Next(numericChars.Length)]);
+            }
+            return sb.ToString();
+        }
+
+        public bool IsUniqueOrderForOrders(string referenceId)
+        {
+            return !_context.Tblrequestwithdrawals.Any(l => l.RequestUniqueId == referenceId);
+        }
     }
 }

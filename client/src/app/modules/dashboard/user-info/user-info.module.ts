@@ -12,11 +12,13 @@ import { SingleUserHttpService } from './services/single-user-http.service';
 import { SingleUserInfoResolver } from './resolver/single-user-info.resolver';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WithdrawDialogComponent } from './components/edit-user/components/withdraw-dialog/withdraw-dialog.component';
 
 @NgModule({
   declarations: [
     UserInfoComponent,
-    EditUserComponent
+    EditUserComponent,
+    WithdrawDialogComponent
   ],
   providers: [
     SingleUserHttpService,

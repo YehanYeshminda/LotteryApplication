@@ -10,6 +10,8 @@ import { AuthDetails } from 'src/app/shared/models/auth';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { WithdrawDialogComponent } from './components/withdraw-dialog/withdraw-dialog.component';
 
 @Component({
   selector: 'app-edit-user',
@@ -22,8 +24,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
   userLostAmount$: Observable<UserWinningAndLosing> = of();
   userWonAmount$: Observable<UserWinningAndLosing> = of();
   private destroy$ = new Subject<void>();
+  bsModalRef?: BsModalRef;
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService) { }
+  constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService, private modalService: BsModalService) { }
 
   ngOnInit(): void {
     this.intializeForm();
@@ -93,5 +96,9 @@ export class EditUserComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  openWithdrawWindow() {
+    this.bsModalRef = this.modalService.show(WithdrawDialogComponent);
   }
 }

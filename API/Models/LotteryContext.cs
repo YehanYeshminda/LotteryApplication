@@ -15,6 +15,8 @@ public partial class LotteryContext : DbContext
     {
     }
 
+    public virtual DbSet<Tblbankdetail> Tblbankdetails { get; set; }
+
     public virtual DbSet<Tblcashgiven> Tblcashgivens { get; set; }
 
     public virtual DbSet<Tblcompany> Tblcompanies { get; set; }
@@ -43,8 +45,31 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblregister> Tblregisters { get; set; }
 
+    public virtual DbSet<Tblrequestwithdrawal> Tblrequestwithdrawals { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Tblbankdetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tblbankdetails");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.BenificiaryAccountNo)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.BenificiaryIfscCode)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.BenificiaryName)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+        });
+
         modelBuilder.Entity<Tblcashgiven>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -95,20 +120,18 @@ public partial class LotteryContext : DbContext
 
         modelBuilder.Entity<Tbldrawhistory>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.Sequence }).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("tbldrawhistory");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnType("int(11)");
-            entity.Property(e => e.Sequence).HasMaxLength(45);
+            entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.DrawDate)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
             entity.Property(e => e.LotteryId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
+            entity.Property(e => e.Sequence).HasMaxLength(45);
             entity.Property(e => e.UniqueLotteryId)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
@@ -447,6 +470,36 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Role)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
+        });
+
+        modelBuilder.Entity<Tblrequestwithdrawal>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tblrequestwithdrawal");
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.Amount)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.BankId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.Latitude)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Longitude)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.RequestUniqueId)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Status)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
         });
 
         OnModelCreatingPartial(modelBuilder);
