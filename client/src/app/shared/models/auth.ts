@@ -4,4 +4,5 @@ export interface AuthDetails {
   username: string;
   role: string;
   phone: string;
+  StateId: string;
 }

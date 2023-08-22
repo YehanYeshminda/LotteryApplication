@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { RouterReducerState } from '@ngrx/router-store';
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { Router } from '@angular/router';
-import { StatusCheckHttpService } from './components/status-check/services/status-check-http.service';
-import { StatusCheckData } from './components/status-check/models/statuscheck';
 
 @Component({
   selector: 'app-dashboard',

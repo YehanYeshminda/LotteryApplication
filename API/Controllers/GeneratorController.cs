@@ -3,6 +3,7 @@ using API.Repos.Dtos;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -41,29 +42,35 @@ namespace API.Controllers
             {
                 try
                 {
+                    // Fetch existing raffle numbers with ID 2
+                    var existingRaffleNumbers = await _lotteryContext.Tblraffles
+                        .Where(x => x.Id == 2)
+                        .Select(x => x.TicketNo) // This might be the cause of the error
+                        .ToListAsync();
+
                     var count = 0;
                     var random = new Random();
                     var randomNumbers = new List<int>();
-                    int value;
 
                     do
                     {
-                        value = random.Next(0, 31);
-                        var existingRandomNo = await _lotteryContext.Tbllotterynos.SingleOrDefaultAsync(x => x.LotteryNo == value.ToString());
+                        int value;
 
-                        if (existingRandomNo == null)
+                        // Generate a random number
+                        do
                         {
-                            if (randomNumbers.Count() != 4)
-                            {
-                                count++;
-                                randomNumbers.Add(value);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
+                            value = random.Next(0, 31);
 
+                            // Introduce a 1% chance of generating a number that matches an existing number
+                            if (random.Next(100) < 1 && existingRaffleNumbers.Contains(value.ToString()))
+                            {
+                                value = random.Next(0, 31);
+                            }
+                        } while (randomNumbers.Contains(value));
+
+                        // Add the unique random number to the list
+                        randomNumbers.Add(value);
+                        count++;
 
                     } while (count != 4);
 
@@ -73,13 +80,13 @@ namespace API.Controllers
                 {
                     return BadRequest("Error occurred while generating random number! " + ex.Message);
                 }
-
             }
             else
             {
-                  return Unauthorized("Invalid Authentication Details");
+                return Unauthorized("Invalid Authentication Details");
             }
         }
+
 
         [NonAction]
         public string GenerateUniqueRaffleNumber()
@@ -178,7 +185,6 @@ namespace API.Controllers
                         if (resultList[i] == orderHistoryList[i])
                         {
                             matchCount++;
-                            Console.WriteLine(resultList[i] + " is matching for " + orderHistoryList[i]);
                         }
                     }
                     matchingIndexes.Add(matchCount);
@@ -221,19 +227,25 @@ namespace API.Controllers
                         };
 
                         await _lotteryContext.Tbllotterywinners.AddAsync(newWin);
+
+                        var uniqueLottery = await _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.UniqueRaffleId == existingTicketNo.UniqueRaffleId);
+                        var userById = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == orderHistories[i].UserId);
+
+                        userById.AccountBalance += uniqueLottery.RafflePrice;
+                        await _lotteryContext.SaveChangesAsync();
                     }
                 }
 
                 if (existingTicketNo.RaffleName == "MegaDraw")
                 {
-                    existingTicketNo.RaffleDate = existingTicketNo.RaffleDate?.AddDays(1);
+                    existingTicketNo.RaffleDate = IndianTimeHelper.GetIndianLocalTime().AddDays(1);
                     existingTicketNo.EndOn = existingTicketNo.RaffleDate?.AddMinutes(5);
                     existingTicketNo.TicketNo = GenerateUniqueRaffleNumberMegaDraw(); // adding the new ticket no for the raffle no
                     existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6);
                 }
                 else if (existingTicketNo.RaffleName == "EasyDraw")
                 {
-                    existingTicketNo.RaffleDate = existingTicketNo.RaffleDate?.AddMinutes(30);
+                    existingTicketNo.RaffleDate = IndianTimeHelper.GetIndianLocalTime().AddMinutes(30);
                     existingTicketNo.EndOn = existingTicketNo.RaffleDate?.AddMinutes(5);
                     existingTicketNo.TicketNo = GenerateUniqueRaffleNumber(); // adding the new ticket no for the raffle no
                     existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6); //  generating a unique raffle id for the raffle

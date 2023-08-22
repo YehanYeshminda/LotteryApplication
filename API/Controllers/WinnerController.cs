@@ -3,18 +3,18 @@ using API.Models;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using static API.Controllers.CartController;
+using static API.Repos.Dtos.DrawDto;
 
 namespace API.Controllers
 {
     public class WinnerController : BaseApiController
     {
         private readonly LotteryContext _lotteryContext;
-
+        private ResponseDto _response;
         public WinnerController(LotteryContext lotteryContext)
         {
             _lotteryContext = lotteryContext;
+            _response = new ResponseDto();
         }
 
         public class GetAllWinnersDto
@@ -99,7 +99,7 @@ namespace API.Controllers
                 return Unauthorized("Invalid Authentication Details");
             }
 
-            var currentDate = DateTime.UtcNow.Date;
+            var currentDate = IndianTimeHelper.GetIndianLocalTime();
             var threeDaysAgo = currentDate.AddDays(-3);
 
             try
@@ -131,7 +131,7 @@ namespace API.Controllers
                     winner.DrawDate,
                     winner.AddOn,
                     RaffleName = raffles.TryGetValue((uint)winner.RaffleId, out var raffleName) ? raffleName : "Unknown"
-                }).ToList();
+                }).Take(10).ToList();
 
                 return Ok(winnersList);
             }
@@ -141,6 +141,100 @@ namespace API.Controllers
             }
         }
 
+        [HttpPost("GetCurrentUserLotteryHistory")]
+        public async Task<ResponseDto> GetCurrentUserLotteryHistory(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
 
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            var currentDate = IndianTimeHelper.GetIndianLocalTime();
+            var threeDaysAgo = currentDate.AddDays(-3);
+
+            try
+            {
+                var currentUserOrderHistory = await _lotteryContext.Tblorderhistories.Where(x => x.UserId == _user.Id).ToListAsync();
+
+                if (currentUserOrderHistory == null)
+                {
+                    _response.IsSuccess = true;
+                    _response.Message = "No History for the current user";
+                    return _response;
+                }
+
+                _response.IsSuccess = true;
+                _response.Message = "Succssfully gotten user lottery history";
+                _response.Result = currentUserOrderHistory;
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Error while fetching current user history! " + ex.Message;
+                return _response;
+            }
+        }
+
+        [HttpPost("GetCurrentUserLottoHistory")]
+        public async Task<ResponseDto> GetCurrentUserLottoHistory(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            var currentDate = IndianTimeHelper.GetIndianLocalTime();
+            var threeDaysAgo = currentDate.AddDays(-3);
+
+            try
+            {
+                var currentUserOrderHistory = await _lotteryContext.Tbllottoorderhistories.Where(x => x.UserId == _user.Id).ToListAsync();
+
+                if (currentUserOrderHistory == null)
+                {
+                    _response.IsSuccess = true;
+                    _response.Message = "No History for the current user";
+                    return _response;
+                }
+
+                _response.IsSuccess = true;
+                _response.Message = "Succssfully gotten user Lotto history";
+                _response.Result = currentUserOrderHistory;
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Error while fetching current user history! " + ex.Message;
+                return _response;
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, of, Subject, takeUntil } from 'rxjs';
-import { SingleUserInfo, UpdateSingleUserInfo } from '../../models/single-user';
+import { SingleUserInfo, UpdateSingleUserInfo, UserWinningAndLosing } from '../../models/single-user';
 import { AppState } from 'src/app/reducer';
 import { Store } from '@ngrx/store';
 import { selectSingleUserInfo } from '../../features/user-info.selectors';
@@ -19,6 +19,8 @@ import { errorNotification, successNotification } from 'src/app/shared/alerts/sw
 export class EditUserComponent implements OnInit, OnDestroy {
   singleUserInfo$: Observable<SingleUserInfo | undefined> = of();
   form: FormGroup = new FormGroup({});
+  userLostAmount$: Observable<UserWinningAndLosing> = of();
+  userWonAmount$: Observable<UserWinningAndLosing> = of();
   private destroy$ = new Subject<void>();
 
   constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService) { }
@@ -26,6 +28,8 @@ export class EditUserComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.intializeForm();
     this.singleUserInfo$ = this.store.select(selectSingleUserInfo);
+    this.userLostAmount$ = this.singleUserHttpService.getUserLostAmount();
+    this.userWonAmount$ = this.singleUserHttpService.getUserWonAmount();
 
     this.singleUserInfo$.pipe(
       takeUntil(this.destroy$)

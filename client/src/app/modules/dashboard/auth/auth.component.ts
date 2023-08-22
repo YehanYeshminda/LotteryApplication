@@ -39,7 +39,7 @@ export class AuthComponent implements OnInit {
   initializeForm() {
     if (!this.registerMode) {
       this.form = this.fb.group({
-        custName: ['', [Validators.required]],
+        custName: ['', [Validators.required, Validators.pattern(REGEXFORNUMBER)]],
         custPassword: ['', [Validators.required]],
         captcha: ['', [Validators.required]],
         enteredCaptcha: ['', [Validators.required]],

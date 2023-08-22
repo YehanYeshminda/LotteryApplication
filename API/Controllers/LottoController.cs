@@ -221,7 +221,7 @@ namespace API.Controllers
                 existingLotto.WinnerNo = keyWithLowestValue.ToString();
                 await _lotteryContext.SaveChangesAsync();
 
-                return Ok(response);
+                return Ok(keyWithLowestValue.ToString());
             }
             catch (Exception ex)
             {

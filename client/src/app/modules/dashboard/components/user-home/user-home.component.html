@@ -113,23 +113,83 @@
                                 <h4>top winners list</h4>
                             </div>
                         </div>
-                        <ng-container *ngIf="userWinnerHistory$ | async as data">
+                        <ng-container *ngIf="userWinnerHistory$ | async as data; else noWinners">
                             <div class="jaqport__body">
                                 <ul>
-                                    <li class="jaqport__gamelist" *ngFor="let item of data; let i = index">
+                                    <ng-container *ngIf="data.length > 0; else noItems">
+                                        <li class="jaqport__gamelist" *ngFor="let item of data; let i = index">
+                                            <div class="jaqport__gamelist-left">
+                                                <p class="fw-bolder">{{ item.custName }}</p>
+                                            </div>
+                                            <div class="jaqport__gamelist-middle">
+                                                <img src="assets/images/jaqport/country/indianflag.svg" alt="jaqport-thumb" class="rounded-circle">
+                                            </div>
+                                            <div class="jaqport__gamelist-right">
+                                                <h6>{{ item.drawDate| date: "short" }}</h6>
+                                            </div>
+                                        </li>
+                                    </ng-container>
+
+                                    <ng-template #noItems>
+                                        <div class="jaqport__body">
+                                            <ul>
+                                                <li class="jaqport__gamelist">
+                                                    <div class="jaqport__gamelist-left">
+                                                        <p class="fw-bolder">Jared Gabrial</p>
+                                                    </div>
+                                                    <div class="jaqport__gamelist-middle">
+                                                        <img src="assets/images/jaqport/country/indianflag.svg" alt="jaqport-thumb" class="rounded-circle">
+                                                    </div>
+                                                    <div class="jaqport__gamelist-right">
+                                                        <h6>{{ today | date: "short"  }}</h6>
+                                                    </div>
+                                                </li>
+                                                <li class="jaqport__gamelist">
+                                                    <div class="jaqport__gamelist-left">
+                                                        <p class="fw-bolder">James Ryan</p>
+                                                    </div>
+                                                    <div class="jaqport__gamelist-middle">
+                                                        <img src="assets/images/jaqport/country/indianflag.svg" alt="jaqport-thumb" class="rounded-circle">
+                                                    </div>
+                                                    <div class="jaqport__gamelist-right">
+                                                        <h6>{{ today | date: "short"  }}</h6>
+                                                    </div>
+                                                </li>
+                                                <li class="jaqport__gamelist">
+                                                    <div class="jaqport__gamelist-left">
+                                                        <p class="fw-bolder">Ryan Upeka</p>
+                                                    </div>
+                                                    <div class="jaqport__gamelist-middle">
+                                                        <img src="assets/images/jaqport/country/indianflag.svg" alt="jaqport-thumb" class="rounded-circle">
+                                                    </div>
+                                                    <div class="jaqport__gamelist-right">
+                                                        <h6>{{ today | date: "short"  }}</h6>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </ng-template>
+                                </ul>
+                            </div>
+                        </ng-container>
+
+                        <ng-template #noWinners>
+                            <div class="jaqport__body">
+                                <ul>
+                                    <li class="jaqport__gamelist">
                                         <div class="jaqport__gamelist-left">
-                                            <p>{{ i + 1 }}. {{ item.custName }}</p>
+                                            <p class="fw-bolder">Jared Gabrial</p>
                                         </div>
                                         <div class="jaqport__gamelist-middle">
-                                            <img src="assets/images/jaqport/country/03.jpg" alt="jaqport-thumb" class="rounded-circle">
+                                            <img src="assets/images/jaqport/country/indianflag.svg" alt="jaqport-thumb" class="rounded-circle">
                                         </div>
                                         <div class="jaqport__gamelist-right">
-                                            <h6>{{ item.addOn | date: "short" }}</h6>
+                                            <h6>{{ today | date: "short"  }}</h6>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-                        </ng-container>
+                        </ng-template>
                     </div>
                 </div>
                 <div class="col-lg-8 col-12">
@@ -181,6 +241,7 @@
                                           <div class="game__overlay">
                                             <h4>{{ item.raffleName }}</h4>
                                             <p>{{ item.winAmount | currency:"₹" }}</p>
+                                            <p>{{ item.raffleDate| date: "short" }}</p>
                                             <ng-container *ngIf="item.raffleName === 'MegaDraw'">
                                               <a routerLink="/dashboard/mega-draw" class="default-button"><span>play now <i class="icofont-circled-right"></i></span> </a>
                                             </ng-container>
@@ -195,19 +256,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="jaqport__bottom">
+                        <!-- <div class="jaqport__bottom">
                             <div class="jaqport__title">
                                 <div class="jaqport__title-title">
                                     <h4>RUNNING JACKPOTS</h4>
-                                </div>
+                                </div> -->
                                 <!-- <div class="jaqport__title-button">
                                     <a href="game-list.html" class="default-button"><span>browse all games <i class="icofont-circled-right"></i></span></a>
                                 </div> -->
-                            </div>
-                            <div class="jaqport__body">
+                            <!-- </div> -->
+                            <!-- <div class="jaqport__body">
                                 <div class="row g-4 justify-content-center">
                                     <!--USED TO SHOW THE UPCOMING DRAWS-->
-                                  <ng-container *ngIf="(tournamentDraws$ | async) as data">
+                                  <!-- <ng-container *ngIf="(tournamentDraws$ | async) as data">
                                     <div class="col-lg-4 col-sm-6 col-12" *ngFor="let item of data">
                                       <div class="game__item item-layer">
                                         <div class="game__inner text-center p-0">
@@ -234,8 +295,8 @@
                                     </div>
                                   </ng-container>
                                 </div>
-                            </div>
-                        </div>
+                            </div> -->
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -244,85 +305,11 @@
 </div>
 <!-- ===========Jaqport Section Ends Here========== -->
 
-
-<!-- ===========Collection Section Start Here========== -->
-<section class="collection-section padding-top padding-bottom">
-    <div class="container">
-        <div class="section-header">
-            <h2>BE IN CONTROL</h2>
-            <p>At Modeltheme, we show only the best websites and portfolios built completely with passion, simplicity and creativity !</p>
-        </div>
-        <div class="section-wrapper game game-style2">
-            <div class="row g-4 justify-content-center">
-                <div class="col-lg-6 col-12">
-                    <div class="game__item item-layer">
-                        <div class="game__inner text-center">
-                            <div class="game__thumb">
-                                <img ngSrc="assets/images/game/04.png" alt="game-img" height="180" width="152">
-                            </div>
-                            <div class="game__content">
-                                <h4><a href="#">PAYMENT LIMITATION</a> </h4>
-                                <p>Holisticly underwhe fully researched deliverables for revoluonary sourcess skills and technically sound</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <div class="game__item item-layer">
-                        <div class="game__inner text-center">
-                            <div class="game__thumb">
-                                <img ngSrc="assets/images/game/05.png" alt="game-img" height="180" width="152">
-                            </div>
-                            <div class="game__content">
-                                <h4><a href="team-single.html">Great Solutions</a> </h4>
-                                <p>Holisticly underwhe fully researched deliverables for revoluonary sourcess skills and technically sound</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <div class="game__item item-layer">
-                        <div class="game__inner text-center">
-                            <div class="game__thumb">
-                                <img ngSrc="assets/images/game/06.png" alt="game-img" height="180" width="152">
-                            </div>
-                            <div class="game__content">
-                                <h4><a href="team-single.html">Support in Person</a> </h4>
-                                <p>Holisticly underwhe fully researched deliverables for revoluonary sourcess skills and technically sound</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-12">
-                    <div class="game__item item-layer">
-                        <div class="game__inner text-center">
-                            <div class="game__thumb">
-                                <img ngSrc="assets/images/game/07.png" alt="game-img" height="180" width="152">
-                            </div>
-                            <div class="game__content">
-                                <h4><a href="team-single.html">Support in Person</a> </h4>
-                                <p>Holisticly underwhe fully researched deliverables for revoluonary sourcess skills and technically sound</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <div class="game-section padding-top padding-bottom overflow-hidden" style="background-image:url(assets/images/match/bg.jpg)">
     <div class="container">
         <div class="section-header">
             <h2>RELATED OTHER GAMES</h2>
         </div>
-        <ul class="game__filter">
-            <li data-filter="*" class="is-checked"><span class="category">All</span></li>
-            <li data-filter=".lottery-1"><span class="category">Lottery</span></li>
-            <li data-filter=".cat-2"><span class="category">Roulette</span></li>
-            <li data-filter=".cat-3"><span class="category">Black Jack</span></li>
-            <li data-filter=".cat-4"><span class="category">Poker Games</span></li>
-        </ul>
         <div class="row g-4 grid">
             <ng-container *ngIf="(tournamentDraws$ | async) as data">
                 <div class="col-lg-6 col-12 lottery-1" *ngFor="let item of data">
@@ -365,84 +352,3 @@
     </div>
 </div>
 <!-- ===========Game Section Ends Here========== -->
-
-
-
-<!-- faq section start here -->
-<section class="faq padding-top padding-bottom">
-    <div class="container">
-        <div class="row justify-content-center flex-row-reverse">
-            <div class="col-lg-6 col-12">
-                <div class="faq-right-part">
-                    <div class="faq-thumb">
-                        <img src="assets/images/faq/01.png" alt="faq-thumb">
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-12">
-                <div class="faq-left-part">
-                    <div class="section-header text-start">
-                        <h2>FREQUENTLY ASK QUESTION</h2>
-                        <p>At Modeltheme we show only the best websites and portfolios built completely with passion simplicity and creativity !</p>
-                    </div>
-                    <div class="section-wrapper">
-                        <ul class="accordion">
-                            <li class="accordion-item">
-                                <div class="accordion-list">
-                                    <div class="left">
-                                        <div class="icon"></div>
-                                    </div>
-                                    <div class="right">
-                                        <h6>01. How do I create Casine Account ?</h6>
-                                    </div>
-                                </div>
-                                <div class="accordion-answer">
-                                    <p>Competen diseminate mpactful proceses with client centered Holistic maximize multimedia based supply chains for resourc channels e-leveling action items.</p>
-                                </div>
-                            </li>
-                            <li class="accordion-item">
-                                <div class="accordion-list in">
-                                    <div class="left">
-                                        <div class="icon"></div>
-                                    </div>
-                                    <div class="right">
-                                        <h6>02. Where can I Redeem My Earnings ?</h6>
-                                    </div>
-                                </div>
-                                <div class="accordion-answer active">
-                                    <p>Competen diseminate mpactful proceses with client centered Holistic maximize multimedia based supply chains for resourc channels e-leveling action items.</p>
-                                </div>
-                            </li>
-                            <li class="accordion-item">
-                                <div class="accordion-list">
-                                    <div class="left">
-                                        <div class="icon"></div>
-                                    </div>
-                                    <div class="right">
-                                        <h6>03. How do I Start Playing ?</h6>
-                                    </div>
-                                </div>
-                                <div class="accordion-answer">
-                                    <p>Competen diseminate mpactful proceses with client centered Holistic maximize multimedia based supply chains for resourc channels e-leveling action items.</p>
-                                </div>
-                            </li>
-                            <li class="accordion-item">
-                                <div class="accordion-list">
-                                    <div class="left">
-                                        <div class="icon"></div>
-                                    </div>
-                                    <div class="right">
-                                        <h6>04. How do I Move Up a Level ?</h6>
-                                    </div>
-                                </div>
-                                <div class="accordion-answer">
-                                    <p>Competen diseminate mpactful proceses with client centered Holistic maximize multimedia based supply chains for resourc channels e-leveling action items.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>  

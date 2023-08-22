@@ -1,0 +1,47 @@
+<div class="add-margin-bottom">
+    <mat-tab-group>
+        <ng-container *ngIf="userWinnings$ | async as winnings; else loadingTemplate">
+            <mat-tab label="Winnings">
+                <ng-container *ngIf="winnings.result.length > 0; else noWinningsTemplate">
+                    <div class="row">
+                        <div class="col-12 col-sm-4 col-md-4 my-3" *ngFor="let item of winnings.result">
+                            <app-transaction-card [userTransaction]="item"></app-transaction-card>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noWinningsTemplate>
+                    <div class="card w-100" >
+                        <div class="card-body">
+                          <h2>No Winnings...</h2>
+                        </div>
+                      </div>
+                </ng-template>
+            </mat-tab>
+        </ng-container>
+
+        <ng-container *ngIf="userLosings$ | async as winnings; else loadingTemplate">
+            <mat-tab label="Lost">
+                <ng-container *ngIf="winnings.result.length > 0; else noWinningsTemplate">
+                    <div class="row">
+                        <div class="col-12 col-sm-4 col-md-4 my-3" *ngFor="let item of winnings.result">
+                            <app-transaction-losing-card [userLosings]="item"></app-transaction-losing-card>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #noWinningsTemplate>
+                    <div class="card w-100" >
+                        <div class="card-body">
+                          <h2>No Lost draws to show...</h2>
+                        </div>
+                      </div>
+                </ng-template>
+            </mat-tab>
+        </ng-container>
+
+        <ng-template #loadingTemplate>
+            <h2>Loading...</h2>
+        </ng-template>
+    </mat-tab-group>
+</div>

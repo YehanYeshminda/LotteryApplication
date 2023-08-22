@@ -287,7 +287,10 @@ namespace API.Controllers
                 {
                     var user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Email == _user.Email);
 
-                    var existingUser = await _registerRepository.GetUserByNicOrContactNo(data.Nic, data.ContactNo, data.CustName);
+
+                    //var existingUser = await _registerRepository.GetUserByNicOrContactNo(data.Nic, data.ContactNo, data.CustName);
+
+                    var existingUser = await _registerRepository.GetUserByNicOremail(data.Nic, data.Email);
 
                     if (existingUser != null)
                     {
@@ -394,6 +397,170 @@ namespace API.Controllers
             {
                 return Unauthorized("Invalid Authentication Details");
             }
+        }
+
+        [HttpGet("Userreport")]
+        public async Task<ActionResult<Tblregister>> ReturnHtmlReport()
+        {
+            var users = await _lotteryContext.Tblregisters.Where(x => x.Role == "Customer").ToListAsync();
+
+
+            string html = @"
+            <html>
+            <head>
+                <title>User</title> 
+                <style>
+                     body { font-family: Tahoma; }
+                        .header { display: flex; align-items: center; padding: 20px; background-color: #f5f5f5; }
+                        .logo { width: 100px; height: 100px; }
+                        .company-info { display: flex; flex-direction: column; margin-left: 10px; }
+                        .company-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+                        .address { font-size: 16px; margin-bottom: 10px; }
+                        .telephone { font-size: 16px; }
+                        .containerheader { text-align: center; }
+                        table { width: 100%; border-collapse: collapse; }
+                        td, th { padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .auto-style5, .auto-style6, .auto-style4 { width: 150px; }
+                        .border { border: 1px solid #ccc; }  
+                </style>
+            </head>
+            <body>
+                <div class='header' style='text-align:left;'>
+                   
+                    <div class='company-info'>
+                        <div class='company-name'>ABCD CLUBS</div>
+                        <div class='address'>Near North Villa</div>
+                        <div class='telephone'>9087654</div>
+                    </div>
+                </div>
+               
+                 <div class='report-container'>
+                        <table>
+                            <tr>
+                                <th class='border'>Sl No</th>
+                                <th class='border'>Customer Name</th>
+                                <th class='border'>NIC</th>
+                                <th class='border'>Email</th>
+                                <th class='border'>Address</th>
+                                <th class='border'>Mobile</th>
+                                <th class='border'>Alternate Number</th>
+                                <th class='border'>Acc Balance</th>
+                            </tr>";
+
+
+            foreach (var items in users)
+            {
+
+
+                html += $@"
+                                <tr>
+                                    <td class='border'>{items.Id}</td>
+                                    <td class='border'>{items.CustName}</td>
+                                    <td class='border'>{items.Nic}</td>
+                                    <td class='border'>{items.Email}</td>
+                                    <td class='border'>{items.CustAddress}</td>
+                                    <td class='border'>{items.Mobile}</td>
+                                    <td class='border'>{items.AlternatePhone}</td>
+                                    <td class='border'>{items.AccountBalance}</td>
+                                </tr>
+                                ";
+            }
+
+            html += $@"
+                           
+                </table>
+                </div>
+                </body>
+                </html>";
+
+            var response = new HtmlResponseDto { Content = html };
+
+            return Ok(response);
+        }
+
+
+        [HttpGet("Adminreport")]
+        public async Task<ActionResult<Tblregister>> ReturnAdminHtmlReport()
+        {
+            //var tableForReport = await _lotteryContext.Tblregisters.ToListAsync();
+
+            //var company = await _lotteryContext.tbl.FirstOrDefaultAsync();
+            var admins = await _lotteryContext.Tblregisters.Where(x => x.Role == "Admin").ToListAsync();
+
+
+            string html = @"
+            <html>
+            <head>
+                <title>User</title> 
+                <style>
+                     body { font-family: Tahoma; }
+                        .header { display: flex; align-items: center; padding: 20px; background-color: #f5f5f5; }
+                        .logo { width: 100px; height: 100px; }
+                        .company-info { display: flex; flex-direction: column; margin-left: 10px; }
+                        .company-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+                        .address { font-size: 16px; margin-bottom: 10px; }
+                        .telephone { font-size: 16px; }
+                        .containerheader { text-align: center; }
+                        table { width: 100%; border-collapse: collapse; }
+                        td, th { padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .auto-style5, .auto-style6, .auto-style4 { width: 150px; }
+                        .border { border: 1px solid #ccc; }  
+                </style>
+            </head>
+            <body>
+                <div class='header' style='text-align:left;'>
+                   
+                    <div class='company-info'>
+                        <div class='company-name'>ABCD CLUBS</div>
+                        <div class='address'>Near North Villa</div>
+                        <div class='telephone'>9087654</div>
+                    </div>
+                </div>
+               
+                 <div class='report-container'>
+                        <table>
+                            <tr>
+                                <th class='border'>Sl No</th>
+                                <th class='border'>Customer Name</th>
+                                <th class='border'>NIC</th>
+                                <th class='border'>Email</th>
+                                <th class='border'>Address</th>
+                                <th class='border'>Mobile</th>
+                                <th class='border'>Alternate Number</th>
+                                <th class='border'>Acc Balance</th>
+                            </tr>";
+
+
+            foreach (var items in admins)
+            {
+
+
+                html += $@"
+                                <tr>
+                                    <td class='border'>{items.Id}</td>
+                                    <td class='border'>{items.CustName}</td>
+                                    <td class='border'>{items.Nic}</td>
+                                    <td class='border'>{items.Email}</td>
+                                    <td class='border'>{items.CustAddress}</td>
+                                    <td class='border'>{items.Mobile}</td>
+                                    <td class='border'>{items.AlternatePhone}</td>
+                                    <td class='border'>{items.AccountBalance}</td>
+                                </tr>
+                                ";
+            }
+
+            html += $@"
+                           
+                </table>
+                </div>
+                </body>
+                </html>";
+
+            var response = new HtmlResponseDto { Content = html };
+
+            return Ok(response);
         }
     }
 }

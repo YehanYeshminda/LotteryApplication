@@ -3,7 +3,6 @@ using API.Repos.Dtos;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace API.Controllers
 {
@@ -379,6 +378,102 @@ namespace API.Controllers
             {
                 return Unauthorized("Invalid Authentication Details");
             }
+        }
+
+        [HttpGet("report")]
+        public async Task<ActionResult<Tblregister>> ReturnHtmlReport()
+        {
+            var tableForReport = await _lotteryContext.Tbllotterynos.ToListAsync();
+
+            //var company = await _lotteryContext.tbl.FirstOrDefaultAsync();
+
+
+
+            //decimal totalReturn = 0;
+
+
+            //string companyName = company?.CompanyName ?? "";
+            //string address = company?.Address ?? "";
+            //string telephone = company?.Phone ?? "";
+            //foreach (var vPurchaseReturnH in tableForReport)
+            //{
+            //    string grnno = vPurchaseReturnH?.Rtnno ?? "";
+            //}
+
+            string html = @"
+            <html>
+            <head>
+                <title>Cart Items</title> 
+                <style>
+                     body { font-family: Tahoma; }
+                        .header { display: flex; align-items: center; padding: 20px; background-color: #f5f5f5; }
+                        .logo { width: 100px; height: 100px; }
+                        .company-info { display: flex; flex-direction: column; margin-left: 10px; }
+                        .company-name { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+                        .address { font-size: 16px; margin-bottom: 10px; }
+                        .telephone { font-size: 16px; }
+                        .containerheader { text-align: center; }
+                        table { width: 100%; border-collapse: collapse; }
+                        td, th { padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .auto-style5, .auto-style6, .auto-style4 { width: 150px; }
+                        .border { border: 1px solid #ccc; }  
+                </style>
+            </head>
+            <body>
+                <div class='header' style='text-align:left;'>
+                   
+                    <div class='company-info'>
+                        <div class='company-name'>ABCD CLUBS</div>
+                        <div class='address'>Near North Villa</div>
+                        <div class='telephone'>9087654</div>
+                    </div>
+                </div>
+               
+                 <div class='report-container'>
+                        <table>
+                            <tr>
+                              <th class='border'>Id</th>
+                              <th class='border'>RaffleNo</th>
+                              <th class='border'>LotteryNo</th>
+                              <th class='border'>UserId</th>
+                              <th class='border'>AmountToPay</th>
+                              <th class='border'>Paid</th>
+                              <th class='border'>LotteryStatus</th>
+                              <th class='border'>LotteryName</th>
+                              <th class='border'>LotteryReferenceId</th>
+                            </tr>";
+
+
+            foreach (var items in tableForReport)
+            {
+
+
+                html += $@"
+                                <tr>
+                                      <td class='border'>{items.Id}</td>
+                                      <td class='border'>{items.RaffleNo}</td>
+                                      <td class='border'>{items.LotteryNo}</td>
+                                      <td class='border'>{items.UserId}</td>
+                                      <td class='border'>{items.AmountToPay}</td>
+                                      <td class='border'>{items.Paid}</td>
+                                      <td class='border'>{items.LotteryStatus}</td>
+                                      <td class='border'>{items.LotteryName}</td>
+                                      <td class='border'>{items.LotteryReferenceId}</td>
+                                </tr>
+                                ";
+            }
+
+            html += $@"
+                           
+                </table>
+                </div>
+                </body>
+                </html>";
+
+            var response = new HtmlResponseDto { Content = html };
+
+            return Ok(response);
         }
 
     }

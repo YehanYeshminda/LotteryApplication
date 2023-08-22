@@ -26,3 +26,9 @@ export interface UpdateSingleUserInfo {
     contactNo: string
     authDto?: AuthDetails | null
 }
+
+export interface UserWinningAndLosing {
+    result: number
+    isSuccess: boolean
+    message: string
+}

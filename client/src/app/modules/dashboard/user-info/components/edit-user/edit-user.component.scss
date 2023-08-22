@@ -128,3 +128,23 @@ label {
         background-color: white;
     }
 }
+
+.user-won {
+    font-size: 12px;
+    font-weight: bold;
+    color: green;
+}
+
+.user-lost {
+    font-size: 12px;
+    font-weight: bold;
+    color: red;
+}
+
+.user-won-lost-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
+}

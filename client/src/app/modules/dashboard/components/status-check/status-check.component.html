@@ -1,9 +1,9 @@
 <div class="container">
     <ng-container *ngIf="(statusCheckResult$ | async) as data; else NoPaymentTemplate">
         <ng-container *ngIf="showStatus">
-          <div class="row">
+          <div class="row mb-5 mb-sm-0">
             <div class="col-12 col-md-6" *ngFor="let order of data">
-              <div class="card m-2">
+              <div class="card m-4 mb-sm-4 mb-md-2">
                 <div class="card-body">
                     <h4 class="card-title">Package Name: {{ order.packageName }}</h4>
                     <p class="text-fields-for-card"> <b>Package Price:</b> {{ order.packagePrice }}</p>

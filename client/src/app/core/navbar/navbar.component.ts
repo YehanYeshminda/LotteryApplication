@@ -37,6 +37,7 @@ export class NavbarComponent implements OnInit {
 
   logOut() {
     this.store.dispatch(logout());
+    this.cookieService.delete('user');
     this.cartEntityService.clearCache();
     this.homeEntityService.clearCache();
     this.store.dispatch(RestoreInitialState());
@@ -45,7 +46,7 @@ export class NavbarComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.isLessThan768 = event.target.innerWidth < 768 ? true : false;
+    this.isLessThan768 = event.target.innerWidth < 1000 ? true : false;
   }
 
   ngOnInit(): void {

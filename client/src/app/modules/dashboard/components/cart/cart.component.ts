@@ -3,12 +3,11 @@ import { CartReponse } from "./models/cart";
 import { Observable, map, of, tap } from "rxjs";
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { confirmApproveNotification, confirmDeleteNotification, errorNotification } from 'src/app/shared/alerts/sweetalert';
+import { confirmDeleteNotification, errorNotification } from 'src/app/shared/alerts/sweetalert';
 import { CartEntityService } from './services/cart-entity.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UpiGenerateHttpService } from './services/upi-generate-http.service';
 import { CartHttpService } from './services/cart-http.service';
-import { NgxQrcodeElementTypes, NgxQrcodeErrorCorrectionLevels } from '@techiediaries/ngx-qrcode';
 import { GenerateUpi } from './models/upi';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { UpiGenerateModalComponent } from './components/upi-generate-modal/upi-generate-modal.component';
@@ -75,7 +74,7 @@ export class CartComponent implements OnInit {
       const data: GenerateUpi = {
         authDto: getAuthDetails(this.cookieService.get('user')),
         orderNo: orderNo,
-        total: this.total.toString()
+        total: this.total.toString(),
       }
 
       this.upiHttpService.getUpiQrCode(data).subscribe({

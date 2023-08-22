@@ -4,7 +4,8 @@ import { CookieService } from "ngx-cookie-service";
 import { getAuthDetails } from "src/app/shared/methods/methods";
 import { AuthDetails } from "src/app/shared/models/auth";
 import { environment } from "src/environments/environment.development";
-import { SingleUserInfo, UpdateSingleUserInfo } from "../models/single-user";
+import { SingleUserInfo, UpdateSingleUserInfo, UserWinningAndLosing } from "../models/single-user";
+import { Observable } from "rxjs";
 
 @Injectable()
 export class SingleUserHttpService {
@@ -18,5 +19,15 @@ export class SingleUserHttpService {
 
     updateSingleUserHistory(updateDetails: UpdateSingleUserInfo) {
         return this.http.post<SingleUserInfo>(this.baseUrl + 'Account/UpdateUserInfo', updateDetails)
+    }
+
+    getUserWonAmount(): Observable<UserWinningAndLosing> {
+        const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+        return this.http.post<UserWinningAndLosing>(this.baseUrl + "History/GetUserTransactionHistoryWinningAmount", auth)
+    }
+
+    getUserLostAmount(): Observable<UserWinningAndLosing> {
+        const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+        return this.http.post<UserWinningAndLosing>(this.baseUrl + "History/GetUserTransactionLoserHistoryTotal", auth)
     }
 }

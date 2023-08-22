@@ -45,11 +45,19 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
 
       this.selectedItemsSubscription = this.selectedItems$.subscribe({
         next: response => {
+          const newList: Array<string> = []; // Use string array to preserve leading zeros
+
+          response.forEach(element => {
+            const paddedElement = element.toString().padStart(2, '0');
+            newList.push(paddedElement);
+          });
+
           const newEasyDraw: BuyEasyDraw = {
             authDto: getAuthDetails(this.cookieService.get('user')),
             raffleId: "1",
-            ticketNo: response.join(""),
+            ticketNo: newList.join(""),
           }
+
           this.easyDrawHttpService.buyEasyDrawNo(newEasyDraw).subscribe({
             next: response => {
               if (response.isSuccess) {

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="add-margin-bottom">
   <mat-tab-group>
     <ng-container *ngIf="(userHistoryData$ | async) as allHistoryData">
       <mat-tab label="All Orders">
@@ -27,14 +27,14 @@
         <!-- used for the infinate scroll -->
         <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()" (scrolledUp)="onUp()">
       </div>
-      </mat-tab>w
+      </mat-tab>
     </ng-container>
   </mat-tab-group>
 
   <ng-template #noDrawsTemplate>
     <div class="card w-100" >
       <div class="card-body">
-        <h2 class="card-title">No Order History to show...</h2>
+        <h2>No Order History to show...</h2>
       </div>
     </div>
   </ng-template>
@@ -42,7 +42,7 @@
   <ng-template #noWinHistoryTemplate>
     <div class="card w-100" >
       <div class="card-body">
-        <h2 class="card-title">No Winnings...</h2>
+        <h2>No Winnings...</h2>
       </div>
     </div>
   </ng-template>
@@ -50,7 +50,7 @@
   <ng-template #noLatestOrdersTemplate>
     <div class="card w-100" >
       <div class="card-body">
-        <h2 class="card-title">No Orders for the last 3 days...</h2>
+        <h2>No Orders for the last 3 days...</h2>
       </div>
     </div>
   </ng-template>

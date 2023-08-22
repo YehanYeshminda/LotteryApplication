@@ -57,6 +57,19 @@ namespace API.Repos.Services
             return null;
         }
 
+        public async Task<Tblregister> GetUserByPhoneNo(string phoneNo)
+        {
+            var user = await _lotteryContext.Tblregisters
+                .FirstOrDefaultAsync(x => x.ContactNo == phoneNo);
+
+            if (user != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
         public async Task AddUser(Tblregister user)
         {
             _lotteryContext.Tblregisters.Add(user);
@@ -77,6 +90,19 @@ namespace API.Repos.Services
         public async Task SaveChangesAsync()
         {
             await _lotteryContext.SaveChangesAsync();
+        }
+
+        public async Task<Tblregister> GetUserByNicOremail(string nic, string email)
+        {
+            var user = await _lotteryContext.Tblregisters
+                .FirstOrDefaultAsync(x => x.Nic == nic || x.Email == email);
+
+            if (user != null)
+            {
+                return user;
+            }
+
+            return null;
         }
     }
 }

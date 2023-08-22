@@ -183,12 +183,20 @@
         <h3 class="title">Login</h3>
         <form class="account-form text-start" [formGroup]="form">
           <div class="form-group-sm">
-            <label>User Name:</label>
-            <input formControlName="custName" type="text" name="username" [class.is-invalid]="isInvalid('custName')">
-            <div *ngIf="form.get('custName')?.invalid && (form.get('custName')?.dirty || form.get('custName')?.touched)" class="invalid-feedback">
-              <div *ngIf="form.get('custName')?.errors?.['required']">Customer name is required.</div>
-              <div *ngIf="form.get('custName')?.errors?.['maxLength']">Max character limit exceeded.</div>
-              <div *ngIf="form.get('custName')?.errors?.['pattern']">Enter a valid number.</div>
+            <label>Phone No:</label>
+            <div class="row">
+              <div class="col-3">
+                <input type="text" disabled value="+91">
+              </div>
+              
+              <div class="col-9">
+                <input formControlName="custName" type="text" name="username" [class.is-invalid]="isInvalid('custName')">
+                <div *ngIf="form.get('custName')?.invalid && (form.get('custName')?.dirty || form.get('custName')?.touched)" class="invalid-feedback">
+                  <div *ngIf="form.get('custName')?.errors?.['required']">Phone Number is required.</div>
+                  <div *ngIf="form.get('custName')?.errors?.['maxLength']">Max character limit exceeded.</div>
+                  <div *ngIf="form.get('custName')?.errors?.['pattern']">Enter a valid number.</div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-group-sm">

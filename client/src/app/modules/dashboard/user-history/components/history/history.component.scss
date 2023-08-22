@@ -1,3 +1,13 @@
-.container {
-    margin-top: 40px;
+.card-body h2 {
+    color: black;
+}
+
+.add-margin-bottom {
+    margin-bottom: 0px;
+}
+
+@media screen and (max-width: 768px) { 
+    .add-margin-bottom {
+        margin-bottom: 80px;
+    }   
 }

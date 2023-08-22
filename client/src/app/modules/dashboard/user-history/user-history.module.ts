@@ -15,12 +15,18 @@ import { TimezoneConverterPipe } from 'src/app/shared/pipes/timezonePipe/timezon
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
+import { TransactionCardComponent } from './components/transaction-history/components/transaction-card/transaction-card.component';
+import { TransactionLosingCardComponent } from './components/transaction-history/components/transaction-losing-card/transaction-losing-card.component';
 
 @NgModule({
   declarations: [
     UserHistoryComponent,
     HistoryComponent,
     HistorycardComponent,
+    TransactionHistoryComponent,
+    TransactionCardComponent,
+    TransactionLosingCardComponent,
   ],
   imports: [
     CommonModule,

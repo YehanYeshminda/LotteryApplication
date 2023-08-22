@@ -102,7 +102,9 @@ namespace API.Repos.Services
                 return LoginResult.Error("User data is empty!");
             }
 
-            var existingUser = await _registerRepository.GetUserByUsername(loginDto.Username);
+            loginDto.Username = "+91" + loginDto.Username;
+
+            var existingUser = await _registerRepository.GetUserByPhoneNo(loginDto.Username);
 
             if (existingUser == null)
             {

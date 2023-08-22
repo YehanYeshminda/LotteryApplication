@@ -4,6 +4,7 @@ import { UserHistoryComponent } from './user-history.component';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { HistoryComponent } from './components/history/history.component';
 import { UserHistoryResolver } from './resolvers/user-history.resolver';
+import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
         path: 'user-history',
         component: HistoryComponent,
         resolve: { userHistoryData: UserHistoryResolver }
+      },
+      {
+        path: 'user-trasanction-history',
+        component: TransactionHistoryComponent,
       },
     ]
   }
