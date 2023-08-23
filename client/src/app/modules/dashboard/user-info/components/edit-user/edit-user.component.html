@@ -16,10 +16,10 @@
                                 
                                 <div class="user-won-lost-container">
                                     <ng-container *ngIf="userWonAmount$ | async as data; else loadingTemplate">
-                                        <div class="user-won">Won Amount: <b class="text-decoration-underline">{{ data.result }}</b></div>
+                                        <div class="user-won">Lottery Won Amount: <b class="text-decoration-underline">{{ data.result }}</b></div>
                                     </ng-container>
                                     <ng-container *ngIf="userLostAmount$ | async as data; else loadingTemplate">
-                                        <div class="user-lost">Lost Amount: <b class="text-decoration-underline">{{ data.result }}</b></div>
+                                        <div class="user-lost">Lottery Lost Amount: <b class="text-decoration-underline">{{ data.result }}</b></div>
                                     </ng-container>
                                     <ng-template #loadingTemplate>
                                         <h6 class="user-balance mt-2">Loading....</h6>

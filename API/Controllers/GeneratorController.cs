@@ -231,7 +231,31 @@ namespace API.Controllers
                         var uniqueLottery = await _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.UniqueRaffleId == existingTicketNo.UniqueRaffleId);
                         var userById = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == orderHistories[i].UserId);
 
-                        userById.AccountBalance += uniqueLottery.RafflePrice;
+                        // Adjust account balance based on matching index
+                        switch (matchingIndexes[i])
+                        {
+                            case 1:
+                                userById.AccountBalance += uniqueLottery.RafflePrice * 5;
+                                break;
+                            case 2:
+                                userById.AccountBalance += uniqueLottery.RafflePrice * 50;
+                                break;
+                            case 3:
+                                userById.AccountBalance += uniqueLottery.RafflePrice * 500;
+                                break;
+                            case 4:
+                                userById.AccountBalance += uniqueLottery.RafflePrice * 5000;
+                                break;
+                            case 5:
+                                userById.AccountBalance += uniqueLottery.RafflePrice * 50000;
+                                break;
+                            case 6:
+                                userById.AccountBalance += uniqueLottery.RafflePrice * 500000;
+                                break;
+                            default:
+                                break;
+                        }
+
                         await _lotteryContext.SaveChangesAsync();
                     }
                 }

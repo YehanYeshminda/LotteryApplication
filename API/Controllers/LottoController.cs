@@ -218,6 +218,26 @@ namespace API.Controllers
                     return BadRequest("Unable to find lotto!");
                 }
 
+                var winningUsers = await _lotteryContext.Tbllottoorderhistories
+                    .Where(x => x.UserId.HasValue && x.LottoNumbers.StartsWith(existingCompany.CompanyCode + "-" + "0" + keyWithLowestValue) && x.AddOn >= checkForLottoNoDto.DateFrom && x.AddOn <= checkForLottoNoDto.DateTo)
+                    .GroupBy(x => x.UserId)  // Group by user to count their entries
+                    .Select(g => new { UserId = g.Key.Value, EntryCount = g.Count() })
+                    .ToListAsync();
+
+                // Update user balances based on the number of entries they have
+                foreach (var userEntry in winningUsers)
+                {
+                    var getExistingUser = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == userEntry.UserId);
+
+                    if (getExistingUser == null)
+                    {
+                        return BadRequest("Error while getting user");
+                    }
+
+                    // Add 100 times the number of entries to the user's balance
+                    getExistingUser.AccountBalance += userEntry.EntryCount * 100;
+                }
+
                 existingLotto.WinnerNo = keyWithLowestValue.ToString();
                 await _lotteryContext.SaveChangesAsync();
 
