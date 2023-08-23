@@ -4,9 +4,7 @@ using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Crypto;
 using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
 using static API.Repos.Dtos.DrawDto;
 
 namespace API.Controllers
@@ -37,6 +35,120 @@ namespace API.Controllers
         public class QrCode
         {
             public string Qr { get; set; }
+        }
+
+        public class GenerateTransactionDto
+        {
+            public AuthDto authDto { get; set; }
+            public string RequestUniqueId { get; set; }
+        }
+
+        [HttpPost("make-transaction")]
+        public async Task<IActionResult> MakeTransactionPayment(GenerateTransactionDto generateTransactionDto)
+        {
+            if (generateTransactionDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            if (generateTransactionDto.authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(generateTransactionDto.authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == generateTransactionDto.authDto.Hash);
+
+            if (_user == null && _user.Role != "Admin")
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(_user.Email))
+                    {
+                        // Get Auth Details for User
+                        var upiPerson = await _lotteryContext.Tblregisters.Where(x => x.Role == "UPIPerson").FirstOrDefaultAsync();
+
+                        if (upiPerson == null)
+                        {
+                            return BadRequest("UPI Person does not exist");
+                        }
+
+                        var newUpiPersonData = new GetUpiPerson
+                        {
+                            password = upiPerson.CustPassword,
+                            username = upiPerson.CustName,
+                        };
+
+                        BaseResponse authResponse = await GetAuthDetailsAsync(newUpiPersonData);
+
+                        if (authResponse.success)
+                        {
+
+                            if (upiPerson != null)
+                            {
+                                var existingOrder = await _lotteryContext.Tblrequestwithdrawals.FirstOrDefaultAsync(x => x.RequestUniqueId == generateTransactionDto.RequestUniqueId);
+                                var existingBankForUser = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.UserId == _user.Id.ToString());
+
+                                if (existingOrder == null || existingBankForUser == null)
+                                {
+                                    return BadRequest("Order not found order user not found for this bank");
+                                }
+
+                                DataToSendTransaction sendData = new DataToSendTransaction
+                                {
+                                    Amount = existingOrder.Amount ?? 0,
+                                    BenificiaryAccount = existingBankForUser.BenificiaryAccountNo,
+                                    BenificiaryIfsc = existingBankForUser.BenificiaryIfscCode,
+                                    BenificiaryName = existingBankForUser.BenificiaryName,
+                                    Latitude = existingOrder.Latitude,
+                                    Longitude = existingOrder.Longitude,
+                                    TransactionId = existingOrder.RequestUniqueId
+                                };
+
+                                BaseResponseFromDoTransaction upiResponse = await DoTransaction(sendData, authResponse.data.token, upiPerson.CustPassword);
+
+                                if (upiResponse.success)
+                                {
+                                    existingOrder.Status = "1";
+                                    _user.AccountBalance -= existingOrder.Amount;
+                                    _lotteryContext.Tblrequestwithdrawals.Update(existingOrder);
+                                    await _lotteryContext.SaveChangesAsync();
+
+                                    return Ok(upiResponse.data);
+                                }
+                                else
+                                {
+                                    return BadRequest($"Error while doing transaction: {upiResponse.message}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return BadRequest($"Error while getting auth: {authResponse.message}");
+                        }
+                    }
+
+                    return BadRequest("Invalid username from UPI user.");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occured while creating Draw!" + ex.Message);
+                }
+
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
         }
 
         [HttpPost("generate-upi")]
@@ -511,6 +623,37 @@ namespace API.Controllers
             HttpResponseMessage response = await client.PostAsJsonAsync("https://app.pinwallet.in/api/DyupiV2/V4/GenerateUPI", data);
             string responseContent = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<BaseResponseFromUPi>(responseContent);
+        }
+
+        public class BaseResponseFromDoTransaction
+        {
+            public int responseCode { get; set; }
+            public bool success { get; set; }
+            public string message { get; set; }
+            public object data { get; set; }
+        }
+
+        public class DataToSendTransaction
+        {
+            public string BenificiaryAccount { get; set; }
+            public string BenificiaryIfsc { get; set; }
+            public string BenificiaryName { get; set; }
+            public int Amount { get; set; }
+            public string TransactionId { get; set; }
+            public string Latitude { get; set; }
+            public string Longitude { get; set; }
+        }
+
+        private async Task<BaseResponseFromDoTransaction> DoTransaction(DataToSendTransaction data, string token, string password)
+        {
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Add("AuthKey", password);
+            client.DefaultRequestHeaders.Add("IPAddress", "16.16.243.167");
+
+            HttpResponseMessage response = await client.PostAsJsonAsync("http://app.pinwallet.in/api/payout/dotransaction", data);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<BaseResponseFromDoTransaction>(responseContent);
         }
 
         private async Task<GetStatusCheckResponse> DoStatusCheck(string transactionId, string token, string password)
