@@ -46,7 +46,7 @@ export class AuthComponent implements OnInit {
       });
     } else {
       this.form = this.fb.group({
-        custName: ['', [Validators.required]],
+        custName: ['', [Validators.required, Validators.minLength(6)]],
         nic: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
         custAddress: ['', [Validators.required]],

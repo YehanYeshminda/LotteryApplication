@@ -5,6 +5,7 @@ import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { HistoryComponent } from './components/history/history.component';
 import { UserHistoryResolver } from './resolvers/user-history.resolver';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
+import { LottoHistoryComponent } from './components/lotto-history/lotto-history.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
       {
         path: 'user-trasanction-history',
         component: TransactionHistoryComponent,
+      },
+      {
+        path: 'GetLottoTransactionHistory',
+        component: LottoHistoryComponent,
       },
     ]
   }

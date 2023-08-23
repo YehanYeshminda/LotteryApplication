@@ -1,0 +1,24 @@
+.add-header-top {
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.add-background {
+    background-color: white;
+    height: 50px;
+
+    h2 {
+        color: black;
+        font-weight: bolder;
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .add-background {
+
+        h2 {
+            font-size: 16px;
+        }
+    }
+}

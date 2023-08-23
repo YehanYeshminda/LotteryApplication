@@ -332,5 +332,63 @@ namespace API.Controllers
                 return Unauthorized("Invalid Authentication Details");
             }
         }
+
+        [HttpPost("GetLottoTransactionHistory")]
+        public async Task<IActionResult> GetLottoTrasacntionHistory(AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Invalid data!");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var newHistoryToReturn = new List<LottoHistoryToReturn>();
+                    var existingLottosForUser = await _lotteryContext.Tbllottoorderhistories.Where(x => x.UserId == _user.Id).ToListAsync();
+
+                    if (existingLottosForUser == null)
+                    {
+                        return BadRequest("Unable to lottos for this user");
+                    }
+
+                    foreach (var item in existingLottosForUser)
+                    {
+                        var newItem = new LottoHistoryToReturn
+                        {
+                            AddOn = item.AddOn,
+                            LottoNumbers = item.LottoNumbers,
+                            LottoUnqueReferenceId = item.LottoUnqueReferenceId,
+                            Price = item.Price
+                        };
+
+                        newHistoryToReturn.Add(newItem);
+                    }
+                    return Ok(newHistoryToReturn);
+
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error occurred while buying lottos! " + ex.Message);
+                }
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
     }
 }

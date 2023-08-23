@@ -18,6 +18,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { TransactionHistoryComponent } from './components/transaction-history/transaction-history.component';
 import { TransactionCardComponent } from './components/transaction-history/components/transaction-card/transaction-card.component';
 import { TransactionLosingCardComponent } from './components/transaction-history/components/transaction-losing-card/transaction-losing-card.component';
+import { LottoHistoryComponent } from './components/lotto-history/lotto-history.component';
+import { LottoHistoryCardComponent } from './components/lotto-history-card/lotto-history-card.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { TransactionLosingCardComponent } from './components/transaction-history
     TransactionHistoryComponent,
     TransactionCardComponent,
     TransactionLosingCardComponent,
+    LottoHistoryComponent,
+    LottoHistoryCardComponent,
   ],
   imports: [
     CommonModule,

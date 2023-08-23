@@ -89,6 +89,7 @@
             <input type="text" placeholder="First Name" formControlName="custName" [class.is-invalid]="isInvalid('custName')">
             <div *ngIf="form.get('custName')?.invalid && (form.get('custName')?.dirty || form.get('custName')?.touched)" class="invalid-feedback">
 							<div *ngIf="form.get('custName')?.errors?.['required']">custName is required.</div>
+							<div *ngIf="form.get('custName')?.errors?.['minlength']">Minimum of 6 character are required.</div>
 						</div>
           </div>
 

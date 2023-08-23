@@ -1,0 +1,22 @@
+
+<div class="container">
+    <div class="row add-header-top">
+        <ng-container *ngIf="lottoHistory$ | async as data; else loadingTemplate">
+            <ng-container *ngIf="data.length > 0; else noDataTemplate">
+                <div class="col-12 col-sm-6 col-md-4 my-3" *ngFor="let item of data">
+                    <app-lotto-history-card [lotto]="item"></app-lotto-history-card>
+                </div>
+            </ng-container>
+    
+            <ng-template #noDataTemplate>
+                <div class="add-background">
+                    <h2>No Lottos drawn for this user</h2>    
+                </div>
+            </ng-template>
+        </ng-container>
+    
+        <ng-template #loadingTemplate>
+            <h2>Loading...</h2>
+        </ng-template>
+    </div>
+</div>
