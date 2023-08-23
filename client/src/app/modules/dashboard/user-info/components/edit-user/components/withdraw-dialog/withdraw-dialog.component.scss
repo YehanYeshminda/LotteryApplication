@@ -12,3 +12,16 @@
     font-weight: bold;
     color: black;
 }
+
+.buttoncontainerwithdraw {
+    display: flex;
+    justify-content: space-around;
+}
+
+@media screen and (max-width: 768px) {
+    .buttoncontainerwithdraw {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+    }
+}

@@ -139,4 +139,14 @@ export class WithdrawDialogComponent implements OnInit {
       }
     })
   }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+
+    if (control) {
+      return control.invalid && control.touched;
+    }
+
+    return false;
+  }
 }
