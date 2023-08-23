@@ -56,6 +56,7 @@ public partial class LotteryContext : DbContext
             entity.ToTable("tblbankdetails");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AddOn).HasColumnType("datetime");
             entity.Property(e => e.BenificiaryAccountNo)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
@@ -65,6 +66,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.BenificiaryName)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.Upiid)
+                .HasMaxLength(105)
+                .HasColumnName("UPIId");
             entity.Property(e => e.UserId)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
@@ -479,6 +483,7 @@ public partial class LotteryContext : DbContext
             entity.ToTable("tblrequestwithdrawal");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.AddOn).HasColumnType("datetime");
             entity.Property(e => e.Amount)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");

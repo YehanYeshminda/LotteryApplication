@@ -20,3 +20,29 @@ export interface MakeWithdrawalRequest {
     latitude: string
     authDto: AuthDetails
 }
+
+export interface ComboData {
+    id: number
+    value: string
+}
+
+export interface ExistingBankDetails {
+    benificiaryAccountNo: string
+    benificiaryIfscCode: string
+    benificiaryName: string
+    upiid: string
+}
+
+export interface MakeRequestToForBankDetials {
+    authDto: AuthDetails
+    id: number
+}
+
+export interface EditExistingBankDetails {
+    benificiaryAccountNo: string
+    benificiaryIfscCode: string
+    benificiaryName: string
+    amount: number
+    upiId: string
+    authDto: AuthDetails
+}

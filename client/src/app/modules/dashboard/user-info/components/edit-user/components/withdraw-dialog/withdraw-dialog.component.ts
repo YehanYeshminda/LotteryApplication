@@ -6,7 +6,8 @@ import { WithdrawHttpService } from './services/withdraw-http.service';
 import { AuthDetails } from '@shared/models/auth';
 import { getAuthDetails } from '@shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { MakeWithdrawalRequest } from './models/withdraw';
+import { ComboData, EditExistingBankDetails, MakeRequestToForBankDetials, MakeWithdrawalRequest } from './models/withdraw';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-withdraw-dialog',
@@ -17,11 +18,14 @@ export class WithdrawDialogComponent implements OnInit {
   latitude: number = 0;
   longitude: number = 0;
   form: FormGroup = new FormGroup({});
+  bankDetails$: Observable<ComboData[]> = of([]);
+  isEdit: boolean = false;
 
   constructor(public bsModalRef: BsModalRef, private fb: FormBuilder, private withDrawHttpService: WithdrawHttpService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     this.intializeForm();
+    this.bankDetails$ = this.withDrawHttpService.getBankDetails();
   }
 
   makeWithdrawalRequest() {
@@ -37,7 +41,7 @@ export class WithdrawDialogComponent implements OnInit {
         }
       );
     } else {
-      errorNotification("Geolocation is not available in this browser.");
+      errorNotification("Please enter valid details");
     }
   }
 
@@ -65,6 +69,34 @@ export class WithdrawDialogComponent implements OnInit {
 
   }
 
+  editExistingBank() {
+    const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+
+    if (auth !== null) {
+      const data: EditExistingBankDetails = {
+        ...this.form.value,
+        authDto: auth
+      }
+
+      if (this.form.valid) {
+        this.withDrawHttpService.editExistingBankDetails(data).subscribe({
+          next: response => {
+            if (response.isSuccess) {
+              successNotification(response.message);
+            } else {
+              errorNotification(response.message)
+            }
+          }
+        })
+
+      } else {
+        errorNotification("Please enter the required fields")
+      }
+    } else {
+      errorNotification("Invaid Login");
+    }
+  }
+
   intializeForm() {
     this.form = this.fb.group({
       benificiaryAccountNo: ['', [Validators.required]],
@@ -73,6 +105,38 @@ export class WithdrawDialogComponent implements OnInit {
       amount: [null, [Validators.required]],
       longitude: ['', []],
       latitude: ['', []],
+      upiId: ['', []],
+      bankId: ['', []]
+    })
+
+    this.form.controls['bankId'].valueChanges.subscribe({
+      next: response => {
+        if (response !== 0 || response !== '') {
+          const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+
+          if (auth !== null) {
+            var data: MakeRequestToForBankDetials = {
+              authDto: auth,
+              id: response
+            }
+
+            this.withDrawHttpService.getExistingBankDetailByID(data).subscribe({
+              next: response => {
+                this.form.controls['benificiaryAccountNo'].setValue(response.benificiaryAccountNo);
+                this.form.controls['benificiaryIfscCode'].setValue(response.benificiaryIfscCode);
+                this.form.controls['benificiaryName'].setValue(response.benificiaryName);
+                this.form.controls['upiId'].setValue(response.upiid);
+                this.form.controls['amount'].setValue(0);
+
+                this.isEdit = true;
+              },
+              error: err => {
+                console.log(err);
+              }
+            })
+          }
+        }
+      }
     })
   }
 }

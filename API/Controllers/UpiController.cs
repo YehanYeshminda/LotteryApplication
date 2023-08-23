@@ -4,7 +4,9 @@ using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto;
 using System.Net.Http.Headers;
+using System.Reflection.Metadata.Ecma335;
 using static API.Repos.Dtos.DrawDto;
 
 namespace API.Controllers
@@ -147,6 +149,180 @@ namespace API.Controllers
             return requestNo;
         }
 
+        [HttpPost("EditExistingUserBankDetails")]
+        public async Task<ResponseDto> EditExistingUserBankDetails(EditUpiWithdrawalRequestDto makeUpiWithdrawalRequest)
+        {
+            if (makeUpiWithdrawalRequest == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            if (makeUpiWithdrawalRequest.AuthDto.Hash == null)
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(makeUpiWithdrawalRequest.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == makeUpiWithdrawalRequest.AuthDto.Hash);
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    // MAKE THE VALUES FROM THE WALLET GO DOWN FROM THE AMOUNT WITHDRAWN
+
+                    var existingBank = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.UserId == _user.Id.ToString());
+
+                    if (existingBank == null)
+                    {
+                        _response.Message = "Cannot find a bank for this user";
+                        _response.IsSuccess = false;
+                        return _response;
+                    }
+
+                    existingBank.BenificiaryName = makeUpiWithdrawalRequest.BenificiaryName;
+                    existingBank.BenificiaryIfscCode = makeUpiWithdrawalRequest.BenificiaryIfscCode;
+                    existingBank.BenificiaryAccountNo = makeUpiWithdrawalRequest.BenificiaryAccountNo;
+                    existingBank.Upiid = makeUpiWithdrawalRequest.UpiId;
+
+                    _lotteryContext.Tblbankdetails.Update(existingBank);
+                    await _lotteryContext.SaveChangesAsync();
+
+                    _response.IsSuccess = true;
+                    _response.Message = "Bank account has been updated successfully";
+                    return _response;
+                }
+                catch (Exception ex)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Error while fetching current user history! " + ex.Message;
+                    return _response;
+                }
+
+            }
+            else
+            {
+                _response.IsSuccess = false;
+                _response.Message = "Missing Authentication Details";
+                return _response;
+            }
+        }
+
+        [HttpPost("GetExistingBankDetails")]
+        public async Task<ActionResult<GetExistingBankDetails>> GetExistingBankInformation(GetSingleBankInfoDto getSingleBankInfoDto)
+        {
+            if (getSingleBankInfoDto.AuthDto== null)
+            {
+                return BadRequest("Missing Authentication Details");
+            }
+
+            if (getSingleBankInfoDto.AuthDto.Hash == null)
+            {
+                return BadRequest("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(getSingleBankInfoDto.AuthDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == getSingleBankInfoDto.AuthDto.Hash);
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var existingBank = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.Id == getSingleBankInfoDto.Id);
+
+                    if (existingBank == null)
+                    {
+                        return BadRequest("Bank does not exist with this id for this user");
+                    }
+
+                    var newBankToReturn = new GetExistingBankDetails
+                    {
+                        BenificiaryAccountNo = existingBank.BenificiaryAccountNo,
+                        BenificiaryIfscCode = existingBank.BenificiaryIfscCode,
+                        BenificiaryName = existingBank.BenificiaryName,
+                        Upiid = existingBank.Upiid
+                    };
+
+                    return Ok(newBankToReturn);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error while fetching current user history");
+                }
+
+            }
+            else
+            {
+                return BadRequest("Missing Authentication Details");
+            }
+        }
+
+        [HttpPost("GetBankID")]
+        public async Task<ActionResult<ComboValueReturn>> GetBankInformation(AuthDto authDto)
+        {
+            if (authDto == null)
+            {
+                return BadRequest("Missing Authentication Details");
+            }
+
+            if (authDto.Hash == null)
+            {
+                return BadRequest("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                try
+                {
+                    var newComboItem = new List<ComboValueReturn>();
+                    var existingBanksForUser = await _lotteryContext.Tblbankdetails.Where(x => x.UserId == _user.Id.ToString()).ToListAsync();
+
+                    foreach (var item in existingBanksForUser)
+                    {
+                        var newItem = new ComboValueReturn 
+                        {
+                            Id = item.Id,
+                            Value = item.BenificiaryAccountNo
+                        };
+
+
+                        newComboItem.Add(newItem);
+                    }
+
+
+                    return Ok(newComboItem);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest("Error while fetching current user history");
+                }
+
+            }
+            else
+            {
+                return BadRequest("Missing Authentication Details");
+            }
+        }
+
         [HttpPost("MakeUpiWithDrawalRequest")]
         public async Task<ResponseDto> MakeUpiWithdrawalRequest(MakeUpiWithdrawalRequestDto makeUpiWithdrawalRequest)
         {
@@ -175,62 +351,130 @@ namespace API.Controllers
             {
                 try
                 {
-                    // MAKE EDIT BANK DETAILS
                     // MAKE THE VALUES FROM THE WALLET GO DOWN FROM THE AMOUNT WITHDRAWN
 
                     var existingBank = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.UserId == _user.Id.ToString());
 
-                    if (existingBank == null)
+                    if (makeUpiWithdrawalRequest.UpiId == null || makeUpiWithdrawalRequest.UpiId == "")
                     {
-                        var newBank = new Tblbankdetail
+                        if (existingBank == null)
                         {
-                            BenificiaryAccountNo = makeUpiWithdrawalRequest.BenificiaryAccountNo,
-                            BenificiaryIfscCode = makeUpiWithdrawalRequest.BenificiaryIfscCode,
-                            BenificiaryName = makeUpiWithdrawalRequest.BenificiaryName,
-                            UserId = _user.Id.ToString()
-                        };
+                            var newBank = new Tblbankdetail
+                            {
+                                BenificiaryAccountNo = makeUpiWithdrawalRequest.BenificiaryAccountNo,
+                                BenificiaryIfscCode = makeUpiWithdrawalRequest.BenificiaryIfscCode,
+                                BenificiaryName = makeUpiWithdrawalRequest.BenificiaryName,
+                                UserId = _user.Id.ToString(),
+                                Upiid = "",
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                            };
 
-                        await _lotteryContext.Tblbankdetails.AddAsync(newBank);
-                        await _lotteryContext.SaveChangesAsync();
+                            await _lotteryContext.Tblbankdetails.AddAsync(newBank);
+                            await _lotteryContext.SaveChangesAsync();
 
-                        var newRequest = new Tblrequestwithdrawal
+                            var newRequest = new Tblrequestwithdrawal
+                            {
+                                Amount = makeUpiWithdrawalRequest.Amount,
+                                BankId = newBank.Id,
+                                RequestUniqueId = GenerateUniquRequestNumber(),
+                                UserId = _user.Id,
+                                Status = "0",
+                                Longitude = makeUpiWithdrawalRequest.Longitude,
+                                Latitude = makeUpiWithdrawalRequest.Latitude,
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                            };
+
+                            await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
+                            await _lotteryContext.SaveChangesAsync();
+
+                            _response.IsSuccess = true;
+                            _response.Message = "Successfully added transaction";
+                            _response.Result = newRequest;
+                            return _response;
+
+                        }
+                        else
                         {
-                            Amount = makeUpiWithdrawalRequest.Amount,
-                            BankId = newBank.Id,
-                            RequestUniqueId = GenerateUniquRequestNumber(),
-                            UserId = _user.Id,
-                            Status = "0",
-                            Longitude = makeUpiWithdrawalRequest.Longitude,
-                            Latitude = makeUpiWithdrawalRequest.Latitude,
-                        };
+                            var newRequest = new Tblrequestwithdrawal
+                            {
+                                Amount = makeUpiWithdrawalRequest.Amount,
+                                BankId = existingBank.Id,
+                                RequestUniqueId = GenerateUniquRequestNumber(),
+                                UserId = _user.Id,
+                                Status = "0",
+                                Longitude = makeUpiWithdrawalRequest.Longitude,
+                                Latitude = makeUpiWithdrawalRequest.Latitude,
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                            };
 
-                        await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
-                        await _lotteryContext.SaveChangesAsync();
+                            await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
+                            await _lotteryContext.SaveChangesAsync();
 
-                        _response.IsSuccess = true;
-                        _response.Message = "Successfully added transaction";
-                        _response.Result = newRequest;
-                        return _response;
+                            _response.IsSuccess = true;
+                            _response.Message = "Successfully added transaction";
+                            _response.Result = newRequest;
+                            return _response;
+                        }
                     } else
                     {
-                        var newRequest = new Tblrequestwithdrawal
+                        var existingUpi = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.UserId == _user.Id.ToString());
+
+                        if (existingUpi == null)
                         {
-                            Amount = makeUpiWithdrawalRequest.Amount,
-                            BankId = existingBank.Id,
-                            RequestUniqueId = GenerateUniquRequestNumber(),
-                            UserId = _user.Id,
-                            Status = "0",
-                            Longitude = makeUpiWithdrawalRequest.Longitude,
-                            Latitude = makeUpiWithdrawalRequest.Latitude,
-                        };
+                            var newBank = new Tblbankdetail
+                            {
+                                BenificiaryAccountNo = makeUpiWithdrawalRequest.BenificiaryAccountNo,
+                                BenificiaryName = makeUpiWithdrawalRequest.BenificiaryName,
+                                UserId = _user.Id.ToString(),
+                                Upiid = makeUpiWithdrawalRequest.UpiId,
+                                BenificiaryIfscCode = "",
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                            };
 
-                        await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
-                        await _lotteryContext.SaveChangesAsync();
+                            await _lotteryContext.Tblbankdetails.AddAsync(newBank);
+                            await _lotteryContext.SaveChangesAsync();
 
-                        _response.IsSuccess = true;
-                        _response.Message = "Successfully added transaction";
-                        _response.Result = newRequest;
-                        return _response;
+                            var newRequest = new Tblrequestwithdrawal
+                            {
+                                Amount = makeUpiWithdrawalRequest.Amount,
+                                BankId = newBank.Id,
+                                RequestUniqueId = GenerateUniquRequestNumber(),
+                                UserId = _user.Id,
+                                Status = "0",
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                            };
+
+                            await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
+                            await _lotteryContext.SaveChangesAsync();
+
+                            _response.IsSuccess = true;
+                            _response.Message = "Successfully added transaction";
+                            _response.Result = newRequest;
+                            return _response;
+
+                        }
+                        else
+                        {
+                            var newRequest = new Tblrequestwithdrawal
+                            {
+                                Amount = makeUpiWithdrawalRequest.Amount,
+                                BankId = existingUpi.Id,
+                                RequestUniqueId = GenerateUniquRequestNumber(),
+                                UserId = _user.Id,
+                                Status = "0",
+                                Longitude = makeUpiWithdrawalRequest.Longitude,
+                                Latitude = makeUpiWithdrawalRequest.Latitude,
+                                AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                            };
+
+                            await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
+                            await _lotteryContext.SaveChangesAsync();
+
+                            _response.IsSuccess = true;
+                            _response.Message = "Successfully added transaction";
+                            _response.Result = newRequest;
+                            return _response;
+                        }
                     }
                 }
                 catch (Exception ex)

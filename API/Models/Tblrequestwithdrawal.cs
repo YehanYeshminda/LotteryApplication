@@ -20,4 +20,6 @@ public partial class Tblrequestwithdrawal
     public string? Latitude { get; set; }
 
     public string? Status { get; set; }
+
+    public DateTime AddOn { get; set; }
 }

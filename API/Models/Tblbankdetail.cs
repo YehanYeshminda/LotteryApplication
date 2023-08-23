@@ -14,4 +14,8 @@ public partial class Tblbankdetail
     public string? BenificiaryName { get; set; }
 
     public string? UserId { get; set; }
+
+    public string Upiid { get; set; } = null!;
+
+    public DateTime AddOn { get; set; }
 }

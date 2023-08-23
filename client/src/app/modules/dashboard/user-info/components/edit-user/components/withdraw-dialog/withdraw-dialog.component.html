@@ -6,6 +6,26 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
+        <label class="form-label">Existing Bank</label>
+        <ng-container *ngIf="bankDetails$ | async as data; else loadingTemplate">
+          <ng-container *ngIf="data.length > 0; else noBankTemplate">
+            <select formControlName="bankId" class="form-select" aria-label="Default select example">
+              <option *ngFor="let item of data" [value]="item.id"> {{ item.value }}</option>
+            </select>
+          </ng-container>
+
+          <ng-template #noBankTemplate>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>No Bank for this user</option>
+            </select>
+          </ng-template>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Loading...</option>
+          </select>
+        </ng-template>
+
         <div class="input-container">
             <label class="form-label">Account No</label>
             <input formControlName="benificiaryAccountNo" type="text" class="form-control">
@@ -26,9 +46,20 @@
             <input formControlName="amount" type="number" class="form-control">
         </div>
 
+        <div class="input-container">
+          <label class="form-label">UPI-ID</label>
+          <input formControlName="upiId" type="text" class="form-control" placeholder="OPTIONAL">
+      </div>
+
         <button class="btn btn-primary mt-2" (click)="makeWithdrawalRequest()">
             Make Withdrawal Request
         </button>
+
+        <ng-container *ngIf="isEdit">
+          <button type="button" class="btn btn-success mt-2" (click)="editExistingBank()">
+            Edit Existing Bank Detail
+          </button>
+        </ng-container>
     </form>
   </div>
   <div class="modal-footer">
