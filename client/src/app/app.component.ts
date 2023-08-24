@@ -44,11 +44,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.intervalSubscription = interval(this.intervalDurationInMilliseconds)
           .subscribe(() => {
-            this.sendNotification();
+            // this.sendNotification();
           });
 
         setTimeout(() => {
-          this.sendNotification();
+          // this.sendNotification();
         }, initialDelay);
       }
     }

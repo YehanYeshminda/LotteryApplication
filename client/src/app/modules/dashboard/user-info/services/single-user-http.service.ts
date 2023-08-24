@@ -6,6 +6,7 @@ import { AuthDetails } from "src/app/shared/models/auth";
 import { environment } from "src/environments/environment.development";
 import { SingleUserInfo, UpdateSingleUserInfo, UserWinningAndLosing } from "../models/single-user";
 import { Observable } from "rxjs";
+import { SingleUserBalance } from "../components/edit-user/models/singleuser";
 
 @Injectable()
 export class SingleUserHttpService {
@@ -29,5 +30,10 @@ export class SingleUserHttpService {
     getUserLostAmount(): Observable<UserWinningAndLosing> {
         const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
         return this.http.post<UserWinningAndLosing>(this.baseUrl + "History/GetUserTransactionLoserHistoryTotal", auth)
+    }
+
+    getUserAccountBalance(): Observable<SingleUserBalance> {
+        const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+        return this.http.post<SingleUserBalance>(this.baseUrl + "Account/GetUserBalance", auth)
     }
 }

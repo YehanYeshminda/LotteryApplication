@@ -12,7 +12,12 @@
                                 <h5 class="user-name">{{ userInfo.custName | titlecase }}</h5>
                                 <h6 class="user-email">{{ userInfo.email }}</h6>
                                 <h6 class="user-email mt-1">Joined On: <b>{{ userInfo.addOn  | timezoneConverter: getUserTimeZone() }}</b></h6>
-                                <h6 class="user-balance mt-2">Account Balance: <b class="text-decoration-underline">{{ userInfo.accountBalance }}</b> </h6>
+
+                                <ng-container *ngIf="singleUserBalance$ | async as data; else loadingBalance">
+                                    <h6 class="user-balance mt-2">Account Balance: {{ data.userBalance }}<b class="text-decoration-underline"></b> </h6>
+                                </ng-container>
+
+                                <ng-template #loadingBalance></ng-template>
                                 
                                 <div class="user-won-lost-container">
                                     <ng-container *ngIf="userWonAmount$ | async as data; else loadingTemplate">

@@ -52,6 +52,7 @@ export class CartComponent implements OnInit {
     this.loading = true;
     this.cartHttpService.removeAllFromCart().subscribe({
       next: response => {
+        console.log(response);
         if (response.packageId) {
           this.generateUPI(response.packageId);
         }

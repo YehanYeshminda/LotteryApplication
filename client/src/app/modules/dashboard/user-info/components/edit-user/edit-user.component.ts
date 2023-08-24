@@ -12,6 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { WithdrawDialogComponent } from './components/withdraw-dialog/withdraw-dialog.component';
+import { SingleUserBalance } from './models/singleuser';
 
 @Component({
   selector: 'app-edit-user',
@@ -25,6 +26,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   userWonAmount$: Observable<UserWinningAndLosing> = of();
   private destroy$ = new Subject<void>();
   bsModalRef?: BsModalRef;
+  singleUserBalance$: Observable<SingleUserBalance> = of();
 
   constructor(private store: Store<AppState>, private fb: FormBuilder, private singleUserHttpService: SingleUserHttpService, private cookieService: CookieService, private modalService: BsModalService) { }
 
@@ -33,6 +35,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
     this.singleUserInfo$ = this.store.select(selectSingleUserInfo);
     this.userLostAmount$ = this.singleUserHttpService.getUserLostAmount();
     this.userWonAmount$ = this.singleUserHttpService.getUserWonAmount();
+    this.singleUserBalance$ = this.singleUserHttpService.getUserAccountBalance();
 
     this.singleUserInfo$.pipe(
       takeUntil(this.destroy$)
