@@ -43,4 +43,8 @@ export class LottoHttpService {
   getCompanyCode(): Observable<CompanyCode> {
     return this.http.get<CompanyCode>(this.baseUrl + "Company/CompanyCode")
   }
+
+  getLottoDrawRemainingTime(): Observable<Date> {
+    return this.http.get<Date>(this.baseUrl + "Account/nextexecution-lotti");
+  }
 }

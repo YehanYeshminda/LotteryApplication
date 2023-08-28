@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { NotificationDialogComponent } from './components/notification-dialog/notification-dialog.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ModalModule.forRoot()
   ],
   providers: [
-    CookieService
+    CookieService,
+    {
+      provide: LocationStrategy, useClass: HashLocationStrategy
+    }
   ],
   bootstrap: [AppComponent]
 })

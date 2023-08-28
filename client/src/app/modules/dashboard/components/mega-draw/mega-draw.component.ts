@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription, map, of, take } from "rxjs";
+import { Observable, Subscription, map, of, shareReplay, take } from "rxjs";
 import { ActivatedRoute } from '@angular/router';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { confirmApproveNotification, errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { FullMegaDraw } from './models/megaDraw';
 import { MegaDrawHttpService } from './services/mega-draw-http.service';
 import { BuyEasyDraw } from '../easy-draw/models/EasyDrawResponse';
@@ -19,6 +19,8 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   selectedItems$: Observable<number[]> = of([]);
   latestNumbers: number[] = [];
   megaDrawInfo$: Observable<FullMegaDraw> = of();
+  megaDrawTime!: Date; // The time of the next Mega Draw
+  remainingTime!: string;
   private selectedItemsSubscription!: Subscription;
 
   constructor(private route: ActivatedRoute, private cookieService: CookieService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService) { }
@@ -27,6 +29,42 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
     this.getRandomDraw();
+    this.loadMegaDrawTime();
+    setInterval(() => {
+      this.updateRemainingTime()
+    }, 1000);
+
+    setInterval(() => {
+      this.loadMegaDrawTime();
+    }, 5000)
+  }
+
+  loadMegaDrawTime(): void {
+    this.megaDrawHttpService.getMegaDrawRemainingTime().subscribe(
+      (nextExecutionTime: Date) => {
+        this.megaDrawTime = nextExecutionTime;
+        this.updateRemainingTime(); // Update remaining time after setting megaDrawTime
+      },
+      (error) => {
+        console.error('Error loading Mega Draw time:', error);
+      }
+    );
+  }
+
+  updateRemainingTime(): void {
+    if (!this.megaDrawTime) {
+      return; // Ensure megaDrawTime is set before calculating remaining time
+    }
+
+    const currentTime = new Date().getTime();
+    const endTime = new Date(this.megaDrawTime).getTime();
+    const timeDiff = endTime - currentTime;
+
+    const seconds = Math.floor((timeDiff / 1000) % 60);
+    const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
+    const hours = Math.floor(timeDiff / 1000 / 3600);
+
+    this.remainingTime = `${hours}:${minutes}:${seconds}`;
   }
 
   selectDrawNumber(item: number) {

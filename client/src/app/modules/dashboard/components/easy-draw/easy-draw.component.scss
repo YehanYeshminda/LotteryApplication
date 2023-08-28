@@ -181,6 +181,12 @@ $east-draw-color: #CC49D3;
     }
   }
 
+  .flex-container-setup {
+  display: flex;
+  justify-content: space-between;
+}
+
+
 @media screen and (max-width: 768px) {
     .button-container {
 

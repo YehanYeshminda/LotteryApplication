@@ -5,6 +5,11 @@
   margin-top: 20px;
 }
 
+.flex-container-setup {
+  display: flex;
+  justify-content: space-between;
+}
+
 .lottery-body li {
   list-style-type: none;
 }

@@ -14,13 +14,23 @@ import { Observable, of } from 'rxjs';
 export class EasyDrawComponent implements OnInit {
   latestNumbers: number[] = [];
   drawExecuted = false;
+  megaDrawTime!: Date; // The time of the next Mega Draw
+  remainingTime!: string;
   easyDraw$: Observable<FullEasyDraw> = of();
 
   constructor(private easyDrawHttpService: EasyDrawHttpService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
-    // this.drawRandomNumber();
     this.easyDraw$ = this.easyDrawHttpService.getEasyDraw();
+
+    this.loadMegaDrawTime();
+    setInterval(() => {
+      this.updateRemainingTime()
+    }, 1000);
+
+    setInterval(() => {
+      this.loadMegaDrawTime();
+    }, 5000)
   }
 
   drawRandomNumber() {
@@ -33,6 +43,36 @@ export class EasyDrawComponent implements OnInit {
       });
     }
   }
+
+  loadMegaDrawTime(): void {
+    this.easyDrawHttpService.getEasyDrawRemainingTime().subscribe(
+      (nextExecutionTime: Date) => {
+        this.megaDrawTime = nextExecutionTime;
+        console.log(nextExecutionTime);
+        this.updateRemainingTime(); // Update remaining time after setting megaDrawTime
+      },
+      (error) => {
+        console.error('Error loading Mega Draw time:', error);
+      }
+    );
+  }
+
+  updateRemainingTime(): void {
+    if (!this.megaDrawTime) {
+      return; // Ensure megaDrawTime is set before calculating remaining time
+    }
+
+    const currentTime = new Date().getTime();
+    const endTime = new Date(this.megaDrawTime).getTime();
+    const timeDiff = endTime - currentTime;
+
+    const seconds = Math.floor((timeDiff / 1000) % 60);
+    const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
+    const hours = Math.floor(timeDiff / 1000 / 3600);
+
+    this.remainingTime = `${hours}:${minutes}:${seconds}`;
+  }
+
 
   buyEasyDraw() {
     if (getAuthDetails(this.cookieService.get('user')) != null) {

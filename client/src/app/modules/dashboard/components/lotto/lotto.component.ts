@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CompanyCode, LottoHttpService } from "./services/lotto-http.service";
 import { debounceTime, Observable, of, tap } from "rxjs";
 import { GetLotto } from "./models/lotto";
-import { confirmApproveNotification, errorNotification, successNotification } from "@shared/alerts/sweetalert";
+import { errorNotification, successNotification } from "@shared/alerts/sweetalert";
 import { getAuthDetails } from "@shared/methods/methods";
 import { CookieService } from "ngx-cookie-service";
 import { CartEntityService } from "../cart/services/cart-entity.service";
@@ -20,6 +20,8 @@ export class LottoComponent implements OnInit {
   companyCode$: Observable<CompanyCode> = of();
   selectedCode$: Observable<string> = of();
   numValue: string = ""
+  lottoDrawTime!: Date; // The time of the next Mega Draw
+  remainingTime!: string;
 
   constructor(private lottoHttpService: LottoHttpService, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
@@ -30,6 +32,43 @@ export class LottoComponent implements OnInit {
         this.numValue = response.companyCode + "-01";
       })
     )
+
+    this.loadLottoDrawTime();
+    setInterval(() => {
+      this.updateRemainingTime()
+    }, 1000);
+
+    setInterval(() => {
+      this.loadLottoDrawTime();
+    }, 5000)
+  }
+
+  loadLottoDrawTime(): void {
+    this.lottoHttpService.getLottoDrawRemainingTime().subscribe(
+      (nextExecutionTime: Date) => {
+        this.lottoDrawTime = nextExecutionTime;
+        this.updateRemainingTime();
+      },
+      (error) => {
+        console.error('Error loading Mega Draw time:', error);
+      }
+    );
+  }
+
+  updateRemainingTime(): void {
+    if (!this.lottoDrawTime) {
+      return; // Ensure megaDrawTime is set before calculating remaining time
+    }
+
+    const currentTime = new Date().getTime();
+    const endTime = new Date(this.lottoDrawTime).getTime();
+    const timeDiff = endTime - currentTime;
+
+    const seconds = Math.floor((timeDiff / 1000) % 60);
+    const minutes = Math.floor((timeDiff / 1000 / 60) % 60);
+    const hours = Math.floor(timeDiff / 1000 / 3600);
+
+    this.remainingTime = `${hours}:${minutes}:${seconds}`;
   }
 
   formatNumber(num: number | null, companyCode: string): string {

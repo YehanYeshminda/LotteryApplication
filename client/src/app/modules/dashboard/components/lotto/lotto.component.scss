@@ -149,5 +149,10 @@ $wheel-numbers-color: #F60000;
     background-color:  #257CFF;
     color: white;
     font-size: 15px;
+  }
 }
+
+.flex-container-setup {
+  display: flex;
+  justify-content: space-between;
 }

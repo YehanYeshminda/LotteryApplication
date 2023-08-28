@@ -26,4 +26,8 @@ export class MegaDrawHttpService {
     const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
     return this.http.post<FullMegaDraw>(this.baseUrl + 'Draw/GetMegaDrawInfo', auth)
   }
+
+  getMegaDrawRemainingTime(): Observable<Date> {
+    return this.http.get<Date>(this.baseUrl + "Account/nextexecution-megadraw");
+  }
 }

@@ -352,7 +352,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var existingBank = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.Id == getSingleBankInfoDto.Id);
+                    var existingBank = await _lotteryContext.Tblbankdetails.FirstOrDefaultAsync(x => x.Id == getSingleBankInfoDto.Id && x.UserId == _user.Id.ToString());
 
                     if (existingBank == null)
                     {

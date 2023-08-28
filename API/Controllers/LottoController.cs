@@ -378,7 +378,7 @@ namespace API.Controllers
                 try
                 {
                     var newHistoryToReturn = new List<LottoHistoryToReturn>();
-                    var existingLottosForUser = await _lotteryContext.Tbllottoorderhistories.Where(x => x.UserId == _user.Id).ToListAsync();
+                    var existingLottosForUser = await _lotteryContext.Tbllottoorderhistories.Where(x => x.UserId == _user.Id).OrderByDescending(x => x.AddOn).ToListAsync();
 
                     if (existingLottosForUser == null)
                     {
@@ -392,7 +392,7 @@ namespace API.Controllers
                             AddOn = item.AddOn,
                             LottoNumbers = item.LottoNumbers,
                             LottoUnqueReferenceId = item.LottoUnqueReferenceId,
-                            Price = item.Price
+                            Price = item.Price,
                         };
 
                         newHistoryToReturn.Add(newItem);

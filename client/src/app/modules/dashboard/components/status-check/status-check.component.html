@@ -10,7 +10,7 @@
                     <p class="text-fields-for-card">Package Order Id: {{ order.packageOrderUniqueId }}</p>
                     <p class="text-fields-for-card">Bought On: {{ order.addOn | date: 'short' }}</p>
                     
-                    <div class="btn-container">
+                    <!-- <div class="btn-container">
                       <ng-container *ngIf="order.orderStatus === 0; else PaidTemplate">
                           <a class="btn btn-danger">PAYMENT PENDING</a>
                       </ng-container>
@@ -18,7 +18,7 @@
                         <a class="btn btn-success">PAID</a>
                     </ng-template>
                     <button [disabled]="paymentProcessing" type="button" class="btn btn-primary" (click)="updateStatusCheckForPayments(order.packageOrderUniqueId)">Update Payment</button>
-                    </div>
+                    </div> -->
                 </div>
               </div>
             </div>

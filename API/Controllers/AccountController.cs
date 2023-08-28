@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
+using Quartz;
 
 namespace API.Controllers
 {
@@ -18,16 +19,18 @@ namespace API.Controllers
         private readonly IRegisterRepository _registerRepository;
         private readonly GlobalDataService _globalDataService;
         private readonly LotteryContext _lotteryContext;
+        private readonly ISchedulerFactory _schedulerFactory;
         private readonly TwillioSettings _twilioSettings;
 
         string url = "https://verify.twilio.com/v2/Services/VAc057cb0dc538d2255ff47cbf76e10b3f/Verifications";
 
-        public AccountController(IAccountRepository accountRepository, IRegisterRepository registerRepository, IOptions<TwillioSettings> twilioSettingsOptions, GlobalDataService globalDataService,LotteryContext lotteryContext)
+        public AccountController(IAccountRepository accountRepository, IRegisterRepository registerRepository, IOptions<TwillioSettings> twilioSettingsOptions, GlobalDataService globalDataService,LotteryContext lotteryContext, ISchedulerFactory schedulerFactory)
         {
             _accountRepository = accountRepository;
             _registerRepository = registerRepository;
             _globalDataService = globalDataService;
             _lotteryContext = lotteryContext;
+            _schedulerFactory = schedulerFactory;
             _twilioSettings = twilioSettingsOptions.Value;
         }
 
@@ -43,6 +46,66 @@ namespace API.Controllers
             }
 
             return Ok(users);
+        }
+
+        [HttpGet("nextexecution-easydraw")]
+        public async Task<IActionResult> GetNextExecutionTime()
+        {
+            try
+            {
+                var scheduler = await _schedulerFactory.GetScheduler();
+                var jobKey = new JobKey("EasyDrawJob");
+                var triggerKey = new TriggerKey("EasyDrawTrigger", "MyTriggerGroup");
+
+                var trigger = await scheduler.GetTrigger(triggerKey);
+                var nextFireTime = trigger.GetNextFireTimeUtc();
+
+                return Ok(nextFireTime?.ToLocalTime());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpGet("nextexecution-lotti")]
+        public async Task<IActionResult> GetNextExecutionTimeLotti()
+        {
+            try
+            {
+                var scheduler = await _schedulerFactory.GetScheduler();
+                var jobKey = new JobKey("LottiJob");
+                var triggerKey = new TriggerKey("LotiTrigger", "MyTriggerGroup");
+
+                var trigger = await scheduler.GetTrigger(triggerKey);
+                var nextFireTime = trigger.GetNextFireTimeUtc();
+
+                return Ok(nextFireTime?.ToLocalTime());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpGet("nextexecution-megadraw")]
+        public async Task<IActionResult> GetNextExecutionTimeMega()
+        {
+            try
+            {
+                var scheduler = await _schedulerFactory.GetScheduler();
+                var jobKey = new JobKey("MegaDrawJob");
+                var triggerKey = new TriggerKey("MegaDrawTrigger", "MyTriggerGroup");
+
+                var trigger = await scheduler.GetTrigger(triggerKey);
+                var nextFireTime = trigger.GetNextFireTimeUtc();
+
+                return Ok(nextFireTime?.ToLocalTime());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPost("Register")]
@@ -392,6 +455,44 @@ namespace API.Controllers
                 _lotteryContext.Tblregisters.Update(_user);
                 await _lotteryContext.SaveChangesAsync();
                 return Ok();
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        public class GetUserBalance
+        {
+            public string UserBalance { get; set; }
+        }
+
+        [HttpPost("GetUserBalance")]
+        public async Task<ActionResult<GetUserBalance>> GetUserWalletBalance(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                return Ok(new GetUserBalance
+                {
+                    UserBalance = _user.AccountBalance.ToString()
+                });
             }
             else
             {

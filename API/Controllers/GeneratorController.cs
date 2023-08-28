@@ -3,7 +3,6 @@ using API.Repos.Dtos;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace API.Controllers
 {
@@ -127,6 +126,13 @@ namespace API.Controllers
             public string UniqueRaffleId { get; set; }
         }
 
+        [HttpGet("servertime")]
+        public IActionResult GetServerTime()
+        {
+            var currentTime = IndianTimeHelper.GetIndianLocalTime();
+            return Ok(currentTime);
+        }
+
         [HttpPost("VerifyBasedOnOrder")]
         public async Task<ActionResult<GetRaffleBasedDto>> VerifyBasedOnOrders([FromQuery] string raffleName)
         {
@@ -235,22 +241,22 @@ namespace API.Controllers
                         switch (matchingIndexes[i])
                         {
                             case 1:
-                                userById.AccountBalance += uniqueLottery.RafflePrice * 5;
+                                userById.AccountBalance += 1000;
                                 break;
                             case 2:
-                                userById.AccountBalance += uniqueLottery.RafflePrice * 50;
+                                userById.AccountBalance += 10000;
                                 break;
                             case 3:
-                                userById.AccountBalance += uniqueLottery.RafflePrice * 500;
+                                userById.AccountBalance += 100000;
                                 break;
                             case 4:
-                                userById.AccountBalance += uniqueLottery.RafflePrice * 5000;
+                                userById.AccountBalance += 1000000;
                                 break;
                             case 5:
-                                userById.AccountBalance += uniqueLottery.RafflePrice * 50000;
+                                userById.AccountBalance += 10000000;
                                 break;
                             case 6:
-                                userById.AccountBalance += uniqueLottery.RafflePrice * 500000;
+                                userById.AccountBalance += 100000000;
                                 break;
                             default:
                                 break;
@@ -262,7 +268,7 @@ namespace API.Controllers
 
                 if (existingTicketNo.RaffleName == "MegaDraw")
                 {
-                    existingTicketNo.RaffleDate = IndianTimeHelper.GetIndianLocalTime().AddDays(1);
+                    existingTicketNo.RaffleDate = IndianTimeHelper.GetIndianLocalTime().AddHours(1);
                     existingTicketNo.EndOn = existingTicketNo.RaffleDate?.AddMinutes(5);
                     existingTicketNo.TicketNo = GenerateUniqueRaffleNumberMegaDraw(); // adding the new ticket no for the raffle no
                     existingTicketNo.UniqueRaffleId = _generators.GenerateRandomNumericStringForRaffle(6);

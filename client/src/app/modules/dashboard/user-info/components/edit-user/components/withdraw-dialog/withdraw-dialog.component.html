@@ -1,82 +1,89 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">Enter Bank Details</h4>
-    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
-      <span aria-hidden="true" class="visually-hidden">&times;</span>
+ <h4 class="modal-title pull-left">Enter Bank Details</h4>
+ <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+  <span aria-hidden="true" class="visually-hidden">&times;</span>
+ </button>
+</div>
+<div class="modal-body">
+ <form [formGroup]="form">
+  <label class="form-label">Existing Bank</label>
+  <ng-container *ngIf="bankDetails$ | async as data; else loadingTemplate">
+   <ng-container *ngIf="data.length > 0; else noBankTemplate">
+      <select formControlName="bankId" class="form-select" aria-label="Default select example">
+        <option *ngFor="let item of data" [value]="item.id">
+          {{ item.value }}
+        </option>
+      </select>
+   </ng-container>
+
+   <ng-template #noBankTemplate>
+    <select
+     class="form-select"
+     aria-label="Default select example">
+     <option selected>No Bank for this user</option>
+    </select>
+   </ng-template>
+  </ng-container>
+  <ng-template #loadingTemplate>
+   <select class="form-select" aria-label="Default select example">
+    <option selected>Loading...</option>
+   </select>
+  </ng-template>
+
+  <div class="input-container">
+   <label class="form-label">Account No</label>
+   <input formControlName="benificiaryAccountNo" type="text" class="form-control" [class.is-invalid]="isInvalid('benificiaryAccountNo')" />
+
+   <div
+    *ngIf="form.get('benificiaryAccountNo')?.invalid && (form.get('benificiaryAccountNo')?.dirty || form.get('benificiaryAccountNo')?.touched)" class="invalid-feedback">
+      <div *ngIf="form.get('benificiaryAccountNo')?.errors?.['required']">BenificiaryAccountNo is required.</div>
+   </div>
+  </div>
+
+  <div class="input-container">
+   <label class="form-label">Ifsc Code</label>
+   <input formControlName="benificiaryIfscCode" type="text" class="form-control" [class.is-invalid]="isInvalid('benificiaryIfscCode')" />
+   <div
+    *ngIf="form.get('benificiaryIfscCode')?.invalid && (form.get('benificiaryIfscCode')?.dirty || form.get('benificiaryIfscCode')?.touched)" class="invalid-feedback">
+    <div *ngIf="form.get('benificiaryIfscCode')?.errors?.['required']">BenificiaryIfscCode is required.</div>
+   </div>
+  </div>
+
+  <div class="input-container">
+   <label class="form-label">Name</label>
+   <input formControlName="benificiaryName" type="text" class="form-control" [class.is-invalid]="isInvalid('benificiaryName')" />
+   <div *ngIf="form.get('benificiaryName')?.invalid && (form.get('benificiaryName')?.dirty || form.get('benificiaryName')?.touched)" class="invalid-feedback">
+    <div *ngIf="form.get('benificiaryName')?.errors?.['required']">BenificiaryName is required.</div>
+   </div>
+  </div>
+
+  <div class="input-container">
+   <label class="form-label">Amount</label>
+   <input formControlName="amount" type="number" class="form-control" [class.is-invalid]="isInvalid('amount')" />
+   <div *ngIf="form.get('amount')?.invalid && (form.get('amount')?.dirty || form.get('amount')?.touched)"class="invalid-feedback">
+    <div *ngIf="form.get('amount')?.errors?.['required']">Amount is required.</div>
+   </div>
+  </div>
+
+  <div class="input-container">
+   <label class="form-label">UPI-ID</label>
+   <input formControlName="upiId" type="text" class="form-control" placeholder="OPTIONAL" />
+  </div>
+
+  <div class="buttoncontainerwithdraw">
+   <button class="btn btn-primary mt-2" (click)="makeWithdrawalRequest()" [disabled]="form.invalid">
+    Make Withdrawal Request
+   </button>
+
+   <ng-container *ngIf="isEdit">
+    <button type="button" class="btn btn-success mt-2" (click)="editExistingBank()" [disabled]="form.invalid">
+     Edit Existing Bank Detail
     </button>
+   </ng-container>
   </div>
-  <div class="modal-body">
-    <form [formGroup]="form">
-        <label class="form-label">Existing Bank</label>
-        <ng-container *ngIf="bankDetails$ | async as data; else loadingTemplate">
-          <ng-container *ngIf="data.length > 0; else noBankTemplate">
-            <select formControlName="bankId" class="form-select" aria-label="Default select example">
-              <option *ngFor="let item of data" [value]="item.id"> {{ item.value }}</option>
-            </select>
-          </ng-container>
-
-          <ng-template #noBankTemplate>
-            <select class="form-select" aria-label="Default select example">
-              <option selected>No Bank for this user</option>
-            </select>
-          </ng-template>
-        </ng-container>
-        <ng-template #loadingTemplate>
-          <select class="form-select" aria-label="Default select example">
-            <option selected>Loading...</option>
-          </select>
-        </ng-template>
-
-        <div class="input-container">
-            <label class="form-label">Account No</label>
-            <input formControlName="benificiaryAccountNo" type="text" class="form-control" [class.is-invalid]="isInvalid('benificiaryAccountNo')">
-
-            <div *ngIf="form.get('benificiaryAccountNo')?.invalid && (form.get('benificiaryAccountNo')?.dirty || form.get('benificiaryAccountNo')?.touched)" class="invalid-feedback">
-              <div *ngIf="form.get('benificiaryAccountNo')?.errors?.['required']">BenificiaryAccountNo is required.</div>
-            </div>
-        </div>
-
-        <div class="input-container">
-            <label class="form-label">Ifsc Code</label>
-            <input formControlName="benificiaryIfscCode" type="text" class="form-control" [class.is-invalid]="isInvalid('benificiaryIfscCode')">
-            <div *ngIf="form.get('benificiaryIfscCode')?.invalid && (form.get('benificiaryIfscCode')?.dirty || form.get('benificiaryIfscCode')?.touched)" class="invalid-feedback">
-              <div *ngIf="form.get('benificiaryIfscCode')?.errors?.['required']">BenificiaryIfscCode is required.</div>
-            </div>
-        </div>
-
-        <div class="input-container">
-            <label class="form-label">Name</label>
-            <input formControlName="benificiaryName" type="text" class="form-control" [class.is-invalid]="isInvalid('benificiaryName')">
-            <div *ngIf="form.get('benificiaryName')?.invalid && (form.get('benificiaryName')?.dirty || form.get('benificiaryName')?.touched)" class="invalid-feedback">
-              <div *ngIf="form.get('benificiaryName')?.errors?.['required']">BenificiaryName is required.</div>
-            </div>
-        </div>
-
-        <div class="input-container">
-            <label class="form-label">Amount</label>
-            <input formControlName="amount" type="number" class="form-control" [class.is-invalid]="isInvalid('amount')">
-            <div *ngIf="form.get('amount')?.invalid && (form.get('amount')?.dirty || form.get('amount')?.touched)" class="invalid-feedback">
-              <div *ngIf="form.get('amount')?.errors?.['required']">Amount is required.</div>
-            </div>
-        </div>
-
-        <div class="input-container">
-          <label class="form-label">UPI-ID</label>
-          <input formControlName="upiId" type="text" class="form-control" placeholder="OPTIONAL">
-      </div>
-
-      <div class="buttoncontainerwithdraw">
-        <button class="btn btn-primary mt-2" (click)="makeWithdrawalRequest()" [disabled]="form.invalid">
-            Make Withdrawal Request
-        </button>
-
-        <ng-container *ngIf="isEdit">
-          <button type="button" class="btn btn-success mt-2" (click)="editExistingBank()" [disabled]="form.invalid">
-            Edit Existing Bank Detail
-          </button>
-        </ng-container>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Close</button>
-  </div>
+ </form>
+</div>
+<div class="modal-footer">
+ <button type="button" class="btn btn-default"
+  (click)="bsModalRef.hide()">Close</button>
+</div>

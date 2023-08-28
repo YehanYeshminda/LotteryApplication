@@ -29,4 +29,8 @@ export class EasyDrawHttpService {
   buyEasyDrawNo(buyEasyDraw: BuyEasyDraw): Observable<Root<GetDrawResult>> {
     return this.http.post<Root<GetDrawResult>>(this.baseUrl + 'Draw/BuyDraws', buyEasyDraw);
   }
+
+  getEasyDrawRemainingTime(): Observable<Date> {
+    return this.http.get<Date>(this.baseUrl + "Account/nextexecution-easydraw");
+  }
 }

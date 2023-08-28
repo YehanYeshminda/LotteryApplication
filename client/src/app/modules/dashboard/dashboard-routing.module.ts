@@ -33,6 +33,7 @@ const routes: Routes = [
   { path: 'info', loadChildren: () => import('./user-info/user-info.module').then(m => m.UserInfoModule), canActivate: [AuthGuard] },
   { path: 'user-package', loadChildren: () => import('./user-packages/user-packages.module').then(m => m.UserPackagesModule), canActivate: [AuthGuard] },
   { path: 'tournaments', loadChildren: () => import('./tournaments/tournaments.module').then(m => m.TournamentsModule), canActivate: [AuthGuard] },
+  { path: 'policy', loadChildren: () => import('./policys/policys.module').then(m => m.PolicysModule) },
 ];
 
 @NgModule({
