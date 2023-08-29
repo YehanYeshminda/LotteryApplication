@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
-import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw } from './models/EasyDrawResponse';
+import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw, GetMegaDrawHistory } from './models/EasyDrawResponse';
 import { CookieService } from "ngx-cookie-service";
-import { confirmApproveNotification, errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { getAuthDetails } from '@shared/methods/methods';
 import { Observable, of } from 'rxjs';
 
@@ -17,11 +17,13 @@ export class EasyDrawComponent implements OnInit {
   megaDrawTime!: Date; // The time of the next Mega Draw
   remainingTime!: string;
   easyDraw$: Observable<FullEasyDraw> = of();
+  easyDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
 
   constructor(private easyDrawHttpService: EasyDrawHttpService, private cookieService: CookieService) { }
 
   ngOnInit(): void {
     this.easyDraw$ = this.easyDrawHttpService.getEasyDraw();
+    this.easyDrawHistory$ = this.easyDrawHttpService.getEasyDrawPastDayHistory();
 
     this.loadMegaDrawTime();
     setInterval(() => {

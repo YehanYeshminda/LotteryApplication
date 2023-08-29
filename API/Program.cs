@@ -43,7 +43,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey) // Associate the trigger with the job's key
         .WithIdentity(triggerKey) // Provide an identity for the trigger
-        .WithCronSchedule($"0 0/30 {ist9AM.Hour}-{ist9PM.Hour} * * ?"));
+        .WithCronSchedule("0 0/30 * * * ?")); // Run every 30 minutes between 9 AM and 9 PM IST
 
 
     var jobKeyMega = new JobKey("MegaDrawJob");
@@ -54,7 +54,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKeyMega)
         .WithIdentity(triggerKeyMega)
-        .WithCronSchedule($"0 0/59 {ist9AM.Hour}-{ist9PM.Hour} * * ?")); // Run every 30 minutes between 9 AM and 9 PM IST
+        .WithCronSchedule("0 0/59 * * * ?")); // Run every 59 minutes between 9 AM and 9 PM IST
 
 
     var jobKeyLotti = new JobKey("LottiJob");

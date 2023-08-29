@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { AuthDetails } from '@shared/models/auth';
 import { getAuthDetails } from '@shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
+import { GetMegaDrawHistory } from '../../easy-draw/models/EasyDrawResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,10 @@ export class MegaDrawHttpService {
 
   getMegaDrawRemainingTime(): Observable<Date> {
     return this.http.get<Date>(this.baseUrl + "Account/nextexecution-megadraw");
+  }
+
+  getMegaDrawPastDayHistory(): Observable<GetMegaDrawHistory[]> {
+    const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetPastMegaDraws", auth);
   }
 }

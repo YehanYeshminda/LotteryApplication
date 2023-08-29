@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw, GetDrawResult, Root } from "../models/EasyDrawResponse";
+import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw, GetDrawResult, GetMegaDrawHistory, Root } from "../models/EasyDrawResponse";
 import { getAuthDetails } from '@shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '@env/environment.development';
@@ -32,5 +32,10 @@ export class EasyDrawHttpService {
 
   getEasyDrawRemainingTime(): Observable<Date> {
     return this.http.get<Date>(this.baseUrl + "Account/nextexecution-easydraw");
+  }
+
+  getEasyDrawPastDayHistory(): Observable<GetMegaDrawHistory[]> {
+    const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetPastEasyDraws", auth);
   }
 }

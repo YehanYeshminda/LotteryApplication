@@ -26,6 +26,122 @@ namespace API.Controllers
             public string RafflePrice { get; set; }
         }
 
+        [HttpPost("GetPastEasyDraws")]
+        public async Task<ActionResult<DrawItemsToReturn>> GetPastEasyDayDrawsBoughts(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                var newList = new List<DrawItemsToReturn>();
+                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddDays(-1);
+                var items = await _lotteryContext.Tblorderhistories
+                    .Where(order => order.AddOn >= yesterday && order.RaffleId == 2)
+                    .ToListAsync();
+
+                foreach (var item in items)
+                {
+                    var newItemToAdd = new DrawItemsToReturn
+                    {
+                        AddOn = item.AddOn,
+                        RaffleName = _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.Id == item.RaffleId).Result.RaffleName,
+                        TicketNo = item.TicketNo,
+                        Username = _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == item.UserId).Result.CustName
+                    };
+
+                    newList.Add(newItemToAdd);
+                }
+
+                if (items == null)
+                {
+                    return BadRequest("Error while finding Raffles");
+                }
+
+                return Ok(newList);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        public class DrawItemsToReturn
+        {
+            public string RaffleName { get; set; }
+            public string TicketNo { get; set; }
+            public string Username { get; set; }
+            public DateTime? AddOn { get; set; }
+        }
+
+        [HttpPost("GetPastMegaDraws")]
+        public async Task<ActionResult<DrawItemsToReturn>> GetPastMegaDayDrawsBoughts(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                var newList = new List<DrawItemsToReturn>();
+                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddDays(-1);
+                var items = await _lotteryContext.Tblorderhistories
+                    .Where(order => order.AddOn >= yesterday && order.RaffleId == 1)
+                    .ToListAsync();
+
+                foreach (var item in items)
+                {
+                    var newItemToAdd = new DrawItemsToReturn
+                    {
+                        AddOn = item.AddOn,
+                        RaffleName = _lotteryContext.Tblraffles.FirstOrDefaultAsync(x => x.Id == item.RaffleId).Result.RaffleName,
+                        TicketNo = item.TicketNo,
+                        Username = _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == item.UserId).Result.CustName
+                    };
+
+                    newList.Add(newItemToAdd);
+                }
+
+                if (items == null)
+                {
+                    return BadRequest("Error while finding Raffles");
+                }
+
+                return Ok(newList);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
         [HttpPost("GetHomeInfo")]
         public async Task<ActionResult<IEnumerable<GetRaffleDto>>> GetRaffleInformation([FromBody] AuthDto authDto)
         {

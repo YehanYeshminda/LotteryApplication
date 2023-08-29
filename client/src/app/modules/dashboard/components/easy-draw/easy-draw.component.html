@@ -1,47 +1,8 @@
-<!-- <div class="row mt-5">
-  <div class="col-12">
-  </div>
-
-  <div class="col-12">
-    <ul class="item-container">
-      <li class="item-list-container" *ngFor="let item of latestNumbers">
-        {{ item }}
-      </li>
-    </ul>
-  </div>
-</div>
-
-<div class="col-6">
-  <button class="btn btn-primary" type="button" (click)="buyEasyDraw()" *ngIf="drawExecuted">Buy Now!</button>
-</div> -->
-
 <div class="container mt-5 flex-container-setup">
   <h1>Easy Draw</h1>
 
   <h3>Next Draw in: {{ remainingTime }}</h3>
 </div>
-
-<!-- <div class="container container-easy-draw">
-  <div class="easy-draw-container">
-    <div class="text-header-container">
-      <img src="assets/EASYDRAW.svg" alt="EASYDRAW">
-    </div>
-    <div class="text-header-bottom-container">
-      <p>Leave it all for the chance and let fate reveal your winning combination!</p>
-    </div>
-
-    <div class="number-container mt-5">
-      <div class="number-item-container" *ngFor="let item of latestNumbers">
-        <div class="circle">{{ item }}</div>
-      </div>
-    </div>
-    
-
-  </div>
-  <div class="col-6">
-    <button (click)="drawRandomNumber()" type="button" class="btn btn-primary">Draw</button>
-  </div>
-</div> -->
 
 <div class="flex-center-container mt-5">
   <div class="easy-draw-container">
@@ -114,4 +75,28 @@
     <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-random" aria-hidden="true"></i> RESHUFFLE</button>
     <button (click)="buyEasyDraw()" type="button" [disabled]="latestNumbers.length == 0" [ngClass]="latestNumbers.length == 0 ? 'btn-main-disabled' : 'btnmain'"><i class="fas fa-money-bill"></i> Buy {{ drawData.rafflePrice| currency: "₹" }}</button>
   </div>
+</div>
+
+<div class="container">
+  <h3>Bought Lotteries.</h3>
+
+  <ng-container *ngIf="easyDrawHistory$ | async as data; else loadingTemplate">
+    <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
+      <ul>
+        <li class="d-flex gap-2" *ngFor="let item of data">
+          <p class="text-white">{{ item.raffleName }}</p>
+          <p class="text-white">{{ item.ticketNo }}</p>
+          <p class="text-white">{{ item.username }}</p>
+          <p class="text-white">Bought on: {{ item.addOn | date: 'medium' }}</p>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #noDrawHistoryTemplate>
+      <h5>No Bought Lotteries for the past 1 day</h5>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingTemplate>
+    <h4>Loading...</h4>
+  </ng-template>
 </div>

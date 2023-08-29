@@ -6,7 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { FullMegaDraw } from './models/megaDraw';
 import { MegaDrawHttpService } from './services/mega-draw-http.service';
-import { BuyEasyDraw } from '../easy-draw/models/EasyDrawResponse';
+import { BuyEasyDraw, GetMegaDrawHistory } from '../easy-draw/models/EasyDrawResponse';
 import { EasyDrawHttpService } from '../easy-draw/services/easy-draw-http.service';
 
 @Component({
@@ -22,11 +22,14 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   megaDrawTime!: Date; // The time of the next Mega Draw
   remainingTime!: string;
   private selectedItemsSubscription!: Subscription;
+  megaDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
 
   constructor(private route: ActivatedRoute, private cookieService: CookieService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService) { }
 
   ngOnInit(): void {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
+    this.megaDrawHistory$ = this.megaDrawHttpService.getMegaDrawPastDayHistory();
+
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
     this.getRandomDraw();
     this.loadMegaDrawTime();

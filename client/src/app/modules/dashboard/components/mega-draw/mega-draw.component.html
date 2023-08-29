@@ -106,3 +106,28 @@
     </div>
   </div>
 </div>
+
+
+<div class="container">
+  <h3>Bought Lotteries.</h3>
+
+  <ng-container *ngIf="megaDrawHistory$ | async as data; else loadingTemplate">
+    <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
+      <ul>
+        <li class="d-flex gap-2" *ngFor="let item of data">
+          <p class="text-white">{{ item.raffleName }}</p>
+          <p class="text-white">{{ item.ticketNo }}</p>
+          <p class="text-white">{{ item.username }}</p>
+          <p class="text-white">Bought on: {{ item.addOn | date: 'medium' }}</p>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #noDrawHistoryTemplate>
+      <h5>No Bought Lotteries for the past 1 day</h5>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadingTemplate>
+    <h4>Loading...</h4>
+  </ng-template>
+</div>

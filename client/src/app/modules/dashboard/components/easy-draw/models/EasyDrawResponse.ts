@@ -39,3 +39,10 @@ export interface FullEasyDraw {
     uniqueRaffleId: string
     winAmount: number
 }
+
+export interface GetMegaDrawHistory {
+    raffleName: string
+    ticketNo: string
+    username: string
+    addOn: string
+}
