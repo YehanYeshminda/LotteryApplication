@@ -30,12 +30,6 @@ builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionJobFactory();
 
-    DateTime utc9AM = DateTime.UtcNow.Date.AddHours(9);
-    DateTime ist9AM = utc9AM.AddHours(5).AddMinutes(30);
-
-    DateTime utc9PM = DateTime.UtcNow.Date.AddHours(21);
-    DateTime ist9PM = utc9PM.AddHours(5).AddMinutes(30);
-
     var jobKey = new JobKey("EasyDrawJob");
     q.AddJob<VerifyWinnerService>(opts => opts.WithIdentity(jobKey)); // Add the job using the class name
 
@@ -43,7 +37,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey) // Associate the trigger with the job's key
         .WithIdentity(triggerKey) // Provide an identity for the trigger
-        .WithCronSchedule("0 0/30 * * * ?")); // Run every 30 minutes between 9 AM and 9 PM IST
+        .WithCronSchedule("0 0/30 9-21 * * ?")); // Run every 30 minutes between 9 AM and 9 PM IST
 
 
     var jobKeyMega = new JobKey("MegaDrawJob");
@@ -54,7 +48,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKeyMega)
         .WithIdentity(triggerKeyMega)
-        .WithCronSchedule("0 0/59 * * * ?")); // Run every 59 minutes between 9 AM and 9 PM IST
+        .WithCronSchedule("0 0/59 9-21 * * ?"));  // Run every 59 minutes between 9 AM and 9 PM IST
 
 
     var jobKeyLotti = new JobKey("LottiJob");
@@ -96,14 +90,5 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
-
-//using (var scope = app.Services.CreateScope())
-//{
-//    var serviceProvider = scope.ServiceProvider;
-//    var lotteryContext = serviceProvider.GetRequiredService<LotteryContext>();
-//    var generators = serviceProvider.GetRequiredService<Generators>();
-//    var yourApiController = new GeneratorController(lotteryContext, generators);
-//    var cronJob = new CronJob(serviceProvider);
-//}
 
 app.Run();

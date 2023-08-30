@@ -9,10 +9,12 @@ namespace API.Repos.Services
     public class VerifyWinnerService : IJob
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly ISchedulerFactory _schedulerFactory;
 
-        public VerifyWinnerService(IServiceProvider serviceProvider)
+        public VerifyWinnerService(IServiceProvider serviceProvider, ISchedulerFactory schedulerFactory)
         {
             _serviceProvider = serviceProvider;
+            _schedulerFactory = schedulerFactory;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -170,15 +172,31 @@ namespace API.Repos.Services
 
                     if (existingTicketNo.RaffleName == "MegaDraw")
                     {
-                        existingTicketNo.RaffleDate = IndianTimeHelper.GetIndianLocalTime().AddHours(1);
-                        existingTicketNo.EndOn = existingTicketNo.RaffleDate?.AddMinutes(5);
+                        var scheduler = await _schedulerFactory.GetScheduler();
+                        var jobKey = new JobKey("MegaDrawJob");
+                        var triggerKey = new TriggerKey("MegaDrawTrigger", "MyTriggerGroup");
+
+                        var trigger = await scheduler.GetTrigger(triggerKey);
+                        var nextFireTime = trigger.GetNextFireTimeUtc();
+
+                        existingTicketNo.RaffleDate = nextFireTime?.LocalDateTime;
+                        existingTicketNo.StartOn = nextFireTime?.LocalDateTime;
+                        existingTicketNo.EndOn = nextFireTime?.LocalDateTime.AddMinutes(1);
                         existingTicketNo.TicketNo = GenerateUniqueRaffleNumberMegaDraw(generators); // adding the new ticket no for the raffle no
                         existingTicketNo.UniqueRaffleId = generators.GenerateRandomNumericStringForRaffle(6);
                     }
                     else if (existingTicketNo.RaffleName == "EasyDraw")
                     {
-                        existingTicketNo.RaffleDate = IndianTimeHelper.GetIndianLocalTime().AddMinutes(30);
-                        existingTicketNo.EndOn = existingTicketNo.RaffleDate?.AddMinutes(5);
+                        var scheduler = await _schedulerFactory.GetScheduler();
+                        var jobKey = new JobKey("EasyDrawJob");
+                        var triggerKey = new TriggerKey("EasyDrawTrigger", "MyTriggerGroup");
+
+                        var trigger = await scheduler.GetTrigger(triggerKey);
+                        var nextFireTime = trigger.GetNextFireTimeUtc();
+
+                        existingTicketNo.RaffleDate = nextFireTime?.LocalDateTime;
+                        existingTicketNo.StartOn = nextFireTime?.LocalDateTime;
+                        existingTicketNo.EndOn = nextFireTime?.LocalDateTime.AddMinutes(1);
                         existingTicketNo.TicketNo = GenerateUniqueRaffleNumber(generators); // adding the new ticket no for the raffle no
                         existingTicketNo.UniqueRaffleId = generators.GenerateRandomNumericStringForRaffle(6); //  generating a unique raffle id for the raffle
                     }

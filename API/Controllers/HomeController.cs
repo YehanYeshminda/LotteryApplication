@@ -50,7 +50,8 @@ namespace API.Controllers
             if (currentDate < decryptedDateWithOffset.Date)
             {
                 var newList = new List<DrawItemsToReturn>();
-                var items = await _lotteryContext.Tbldrawhistories.Where(x => x.LotteryId == 2).ToListAsync();
+                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddDays(-1);
+                var items = await _lotteryContext.Tbldrawhistories.Where(x => x.LotteryId == 2 && x.DrawDate >= yesterday).ToListAsync();
 
                 foreach (var item in items)
                 {
@@ -101,7 +102,8 @@ namespace API.Controllers
             if (currentDate < decryptedDateWithOffset.Date)
             {
                 var newList = new List<DrawItemsToReturn>();
-                var items = await _lotteryContext.Tbldrawhistories.Where(x => x.LotteryId == 1).ToListAsync();
+                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddDays(-1);
+                var items = await _lotteryContext.Tbldrawhistories.Where(x => x.LotteryId == 1 && x.DrawDate >= yesterday).ToListAsync();
 
                 foreach (var item in items)
                 {

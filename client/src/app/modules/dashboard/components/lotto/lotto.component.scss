@@ -166,13 +166,18 @@ $buyNow-btn-color: white;
 }
 
 * { box-sizing: border-box; }
-$duration: 70s;
+$duration: 80s;
 
 @-webkit-keyframes ticker {
   0% {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     visibility: visible;
+  }
+
+  50% {
+    -webkit-transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-50%, 0, 0);
   }
 
   100% {

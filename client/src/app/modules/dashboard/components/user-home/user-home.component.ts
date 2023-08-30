@@ -35,6 +35,12 @@ export class UserHomeComponent implements OnInit {
     interval(60000).subscribe(() => {
       this.fetchTournamentInfo();
     });
+
+    this.tournamentDraws$.subscribe({
+      next: response => {
+        console.log(response)
+      }
+    })
   }
 
   animateValue() {
