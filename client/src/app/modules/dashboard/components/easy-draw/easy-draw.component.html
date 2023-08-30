@@ -9,62 +9,63 @@
     <ng-container *ngIf="(easyDraw$ | async) as drawData">
       <div class="row">
         <div class="col-12">
-            <div class="image-container">
-                <img src="assets/EASYDRAW.svg" alt="EASYDRAW">
-            </div>
+          <div class="image-container">
+            <img src="assets/EASYDRAW.svg" alt="EASYDRAW">
+          </div>
         </div>
-        
+
         <div class="col-9">
-            <div class="text-container">
-                <p> Leave it all to chance and let fate reveal your winning combination!</p>
+          <div class="text-container">
+            <p> Leave it all to chance and let fate reveal your winning combination!</p>
+          </div>
+
+          <ng-container *ngIf="latestNumbers.length > 0; else noItemsTemplate">
+            <div class="digit-containers">
+              <div class="number" *ngFor="let item of latestNumbers">
+                <p>{{ item }}</p>
+              </div>
             </div>
 
-            <ng-container *ngIf="latestNumbers.length > 0; else noItemsTemplate">
-              <div class="digit-containers">
-                  <div class="number" *ngFor="let item of latestNumbers">
-                      <p>{{ item }}</p>
-                  </div>
+          </ng-container>
+          <ng-template #noItemsTemplate>
+            <div class="digit-containers">
+              <div class="number">
+                <p></p>
               </div>
-
-            </ng-container>
-            <ng-template #noItemsTemplate>
-              <div class="digit-containers">
-                <div class="number">
-                    <p></p>
-                </div>
-                <div class="number">
-                  <p></p>
-                </div>
-                <div class="number">
-                  <p></p>
-                </div>
-                <div class="number">
-                  <p></p>
-                </div>
+              <div class="number">
+                <p></p>
               </div>
-            </ng-template>
-
-            <div class="row row-container">
-                <div class="col-4">
-                    <p class="text-color-inside-card">Draw No: {{ drawData.drawCount }}</p>
-                </div>
-                <div class="col-8">
-                    <p class="text-color-inside-card add-margin-left">Draws on: {{ drawData.raffleDate | timezoneConverter: getUserTimeZone() }}</p>
-                </div>
+              <div class="number">
+                <p></p>
+              </div>
+              <div class="number">
+                <p></p>
+              </div>
             </div>
+          </ng-template>
+
+          <div class="row row-container">
+            <div class="col-4">
+              <p class="text-color-inside-card">Draw No: {{ drawData.drawCount }}</p>
+            </div>
+            <div class="col-8">
+              <p class="text-color-inside-card add-margin-left">Draws on: {{ drawData.raffleDate | timezoneConverter:
+                getUserTimeZone() }}</p>
+            </div>
+          </div>
         </div>
 
         <div class="col-3 right-line">
-            <div class="right-container">
-                <div class="line-up"></div>
+          <div class="right-container">
+            <div class="line-up"></div>
 
-                <div class="number-container">
-                    <p>{{ drawData.uniqueRaffleId }}</p>
-                </div>
+            <div class="number-container">
+              <p>{{ drawData.uniqueRaffleId }}</p>
             </div>
+          </div>
         </div>
         <div class="col-3"></div>
-    </div>
+      </div>
     </ng-container>
   </div>
 
@@ -72,29 +73,36 @@
 
 <div class="container">
   <div class="button-container" *ngIf="(easyDraw$ | async) as drawData">
-    <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-random" aria-hidden="true"></i> RESHUFFLE</button>
-    <button (click)="buyEasyDraw()" type="button" [disabled]="latestNumbers.length == 0" [ngClass]="latestNumbers.length == 0 ? 'btn-main-disabled' : 'btnmain'"><i class="fas fa-money-bill"></i> Buy {{ drawData.rafflePrice| currency: "₹" }}</button>
+    <button (click)="drawRandomNumber()" type="button" class="btn"><i class="fa fa-random" aria-hidden="true"></i>
+      RESHUFFLE</button>
+    <button (click)="buyEasyDraw()" type="button" [disabled]="latestNumbers.length == 0"
+      [ngClass]="latestNumbers.length == 0 ? 'btn-main-disabled' : 'btnmain'"><i class="fas fa-money-bill"></i> Buy {{
+      drawData.rafflePrice| currency: "₹" }}</button>
   </div>
 </div>
 
 <div class="container">
   <h3>Bought Lotteries.</h3>
 
-  <ng-container *ngIf="easyDrawHistory$ | async as data; else loadingTemplate">
-    <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
-      <ul>
-        <li class="d-flex gap-2" *ngFor="let item of data">
-          <p class="text-white">{{ item.raffleName }}</p>
-          <p class="text-white">{{ item.ticketNo }}</p>
-          <p class="text-white">{{ item.username }}</p>
-          <p class="text-white">Bought on: {{ item.addOn | date: 'medium' }}</p>
-        </li>
-      </ul>
+  <div class="row">
+    <ng-container *ngIf="easyDrawHistory$ | async as data; else loadingTemplate">
+      <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
+        <div class="col-6 my-2" *ngFor="let item of data">
+          <div class="card">
+            <h5 class="card-header blac-color-add">{{ item.raffleName }} has been bought for the No: {{ item.ticketNo }}
+            </h5>
+            <div class="card-body">
+              <h5 class="card-title blac-color-add">Bought by: {{ item.username }} at {{ item.addOn | date: 'medium' }}
+              </h5>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noDrawHistoryTemplate>
+        <h5>No Bought Lotteries for the past 1 day</h5>
+      </ng-template>
     </ng-container>
-    <ng-template #noDrawHistoryTemplate>
-      <h5>No Bought Lotteries for the past 1 day</h5>
-    </ng-template>
-  </ng-container>
+  </div>
 
   <ng-template #loadingTemplate>
     <h4>Loading...</h4>

@@ -19,7 +19,7 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   selectedItems$: Observable<number[]> = of([]);
   latestNumbers: number[] = [];
   megaDrawInfo$: Observable<FullMegaDraw> = of();
-  megaDrawTime!: Date; // The time of the next Mega Draw
+  megaDrawTime!: Date;
   remainingTime!: string;
   private selectedItemsSubscription!: Subscription;
   megaDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
@@ -29,17 +29,21 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
     this.megaDrawHistory$ = this.megaDrawHttpService.getMegaDrawPastDayHistory();
-
     this.drawNumbers$ = this.route.data.pipe(map(data => data['drawNumbers']));
     this.getRandomDraw();
     this.loadMegaDrawTime();
+
     setInterval(() => {
       this.updateRemainingTime()
     }, 1000);
 
     setInterval(() => {
       this.loadMegaDrawTime();
-    }, 5000)
+    }, 5000);
+
+    setInterval(() => {
+      this.megaDrawHistory$ = this.megaDrawHttpService.getMegaDrawPastDayHistory();
+    }, 10000)
   }
 
   loadMegaDrawTime(): void {
@@ -56,7 +60,7 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
 
   updateRemainingTime(): void {
     if (!this.megaDrawTime) {
-      return; // Ensure megaDrawTime is set before calculating remaining time
+      return;
     }
 
     const currentTime = new Date().getTime();
