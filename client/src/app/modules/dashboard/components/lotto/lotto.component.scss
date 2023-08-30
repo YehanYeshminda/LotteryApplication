@@ -5,70 +5,6 @@ $reshuffle-btn-color: white;
 $buyNow-btn-background: #257CFF;
 $buyNow-btn-color: white;
 
-
-// wheel numbers
-$wheel-numbers-color: #F60000;
-
-
-.row.justify-content-center.align-items-center.g-2.lottery-wheel {
-  background: url(../../../../../assets/wheel.svg);
-  height: 390px;
-  background-size: 390px;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.col.wheel-numbers {
-  color: $wheel-numbers-color;
-  text-align: center;
-  font-family: 'Oswald', sans-serif;
-  font-size: 60px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.3px;
-  position: relative;
-}
-
-.wheel-index-0 {
-  transform: translateX(295px);
-  top: 5px;
-}
-
-.wheel-index-1 {
-  transform: translateX(90px);
-  top: 7px;
-}
-
-.wheel-index-2 {
-  transform: translateX(-115px);
-  top: 7px;
-}
-
-.wheel-index-3 {
-  transform: translateX(-320px);
-  top: 7px;
-}
-
-.flipX {
-  animation: 1s anim-flipX ease-in-out;
-}
-
-@keyframes anim-flipX {
-  0% {
-    opacity: 0;
-    transform: rotateX(5def);
-  }
-  50% {
-    opacity: 1;
-    transform: rotateX(10def);
-  }
-  100% {
-    opacity: 1;
-    transform: rotateX(20def);
-  }
-}
-
 .blac-color-add {
   color: black;
 }
@@ -90,6 +26,17 @@ $wheel-numbers-color: #F60000;
   border-radius: 10px;
 }
 
+.tickerContainer{
+   overflow-x: hidden;
+   overflow-y: scroll;
+   white-space: nowrap;
+}
+#ghost{
+    display: inline-block;
+    height: 0;
+    position: absolute;
+}
+
 .buynow-btn {
   background: $buyNow-btn-background;
   color: $buyNow-btn-color;
@@ -103,20 +50,46 @@ $wheel-numbers-color: #F60000;
 
 .number-container {
   display: flex;
+  margin-top: 30px;
   flex-wrap: wrap;
   width: 100%;
+  justify-content: center;
+
+  .number-surrounding {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    flex-wrap: wrap;
+  }
 }
 
 .number {
-  width: 50px;
-  height: 50px;
-  font-weight: bolder;
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  font-size: 25px;
+  color: black;
+  font-weight: 700;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid #ccc;
+  background-color: #FD0;
   cursor: pointer;
   margin: 5px;
+
+  &_add_dropshadown {
+    filter: drop-shadow(1px 2px 4px #FD0);
+  }
+
+  &_add_dropshadown_green {
+    filter: drop-shadow(1px 2px 4px #05FF00);
+  }
+
+  &_add_dropshadown_red {
+    filter: drop-shadow(1px 2px 4px red);
+  }
 }
 
 .selected {
@@ -131,10 +104,27 @@ $wheel-numbers-color: #F60000;
 
 .lotto-value-container {
   margin-top: 50px;
+  display: flex;
+  justify-content: center;
 
   .lotto-value {
     color: white;
     font-size: 30px;
+    width: 250px;
+    border: 1px solid transparent;
+    text-align: center;
+    border-radius: 16px;
+    height: 140px;
+    background: #F22;
+  }
+
+  .lotto-value-number {
+    width: 100%;
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 80px;
+    text-align: center;
+    font-family: Oswald;
   }
 }
 
@@ -159,4 +149,88 @@ $wheel-numbers-color: #F60000;
 .flex-container-setup {
   display: flex;
   justify-content: space-between;
+}
+
+.add-color-red {
+  color: white;
+  background-color: red;
+  border: none;
+  font-size: 35px;
+}
+
+.add-color-green {
+  color: white;
+  background-color: #05FF00;
+  font-size: 40px;
+  border: none;
+}
+
+* { box-sizing: border-box; }
+$duration: 70s;
+
+@-webkit-keyframes ticker {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+  }
+
+  100% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+  }
+
+  100% {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.ticker-wrap {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  height: 2rem;
+  background-color: rgba(#000, 0.9); 
+  padding-left: 100%;
+  box-sizing: content-box;
+
+  .ticker {
+    display: inline-block;
+    height: 4rem;
+    line-height: 2rem;  
+    white-space: nowrap;
+    padding-right: 100%;
+    box-sizing: content-box;
+
+    -webkit-animation-iteration-count: infinite; 
+            animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+            animation-timing-function: linear;
+   -webkit-animation-name: ticker;
+           animation-name: ticker;
+    -webkit-animation-duration: $duration;
+            animation-duration: $duration;
+
+    &__item {
+
+      display: inline-block;
+      padding: 0 2rem;
+      font-size: 1rem;
+      color: white;   
+
+    }
+
+  }
+
 }

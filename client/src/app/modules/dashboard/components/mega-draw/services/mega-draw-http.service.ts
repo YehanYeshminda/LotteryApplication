@@ -34,6 +34,6 @@ export class MegaDrawHttpService {
 
   getMegaDrawPastDayHistory(): Observable<GetMegaDrawHistory[]> {
     const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
-    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetPastMegaDraws", auth);
+    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetLottoWinnerMega", auth);
   }
 }

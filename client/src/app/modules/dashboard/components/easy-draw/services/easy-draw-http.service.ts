@@ -36,6 +36,6 @@ export class EasyDrawHttpService {
 
   getEasyDrawPastDayHistory(): Observable<GetMegaDrawHistory[]> {
     const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
-    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetPastEasyDraws", auth);
+    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetLottoWinnerEasy", auth);
   }
 }

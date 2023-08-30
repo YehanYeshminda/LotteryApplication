@@ -16,7 +16,7 @@ import { GetMegaDrawHistory } from '../easy-draw/models/EasyDrawResponse';
 export class LottoComponent implements OnInit {
   lottoNo$: Observable<GetLotto> = of();
   selectedCompany: string = "";
-  numbers: number[] = Array.from({ length: 10 }, (_, i) => i);
+  numbers: number[] = Array.from({ length: 10 }, (_, i) => (i + 1) % 10);
   selectedNumber: number | null = null;
   companyCode$: Observable<CompanyCode> = of();
   selectedCode$: Observable<string> = of();
@@ -38,16 +38,20 @@ export class LottoComponent implements OnInit {
 
     this.loadLottoDrawTime();
     setInterval(() => {
-      this.updateRemainingTime()
+      this.updateRemainingTime();
     }, 1000);
 
     setInterval(() => {
       this.loadLottoDrawTime();
-    }, 5000)
+    }, 3000)
 
     setInterval(() => {
       this.lottoDrawHistory$ = this.lottoHttpService.getLottoDrawPastDayHistory();
-    }, 10000)
+    }, 60000)
+  }
+
+  resetSelection(): void {
+    this.selectedNumber = null;
   }
 
   loadLottoDrawTime(): void {

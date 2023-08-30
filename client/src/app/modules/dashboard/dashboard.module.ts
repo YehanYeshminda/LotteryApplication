@@ -78,7 +78,7 @@ const entityMetaData: EntityMetadataMap = {
     HomeEntityService,
     SequenceNoResolver,
     MegaDrawResolver,
-    DrawHistoryResolver
+    DrawHistoryResolver,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [

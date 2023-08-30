@@ -87,30 +87,34 @@
   </div>
 </div>
 
-<div class="container mt-3">
-  <h3>Bought Lotteries.</h3>
+<br>
+<br>
+<br>
+<br>
 
-  <div class="row">
-    <ng-container *ngIf="easyDrawHistory$ | async as data; else loadingTemplate">
-      <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
-        <div class="col-12 col-md-6 my-2" *ngFor="let item of data">
-          <div class="card">
-            <h5 class="card-header blac-color-add">{{ item.raffleName }} has been bought for the No: {{ item.ticketNo }}
-            </h5>
-            <div class="card-body">
-              <h5 class="card-title blac-color-add">Bought by: {{ item.username }} at {{ item.addOn | date: 'medium' }}
-              </h5>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <ng-template #noDrawHistoryTemplate>
-        <h5>No Bought Lotteries for the past 1 day</h5>
-      </ng-template>
-    </ng-container>
-  </div>
+<ng-container *ngIf="easyDrawHistory$ | async as data; else loadingTemplateTicker">
+  <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
+    <div class="ticker-wrap">
+      <div class="ticker">
+        <div class="ticker__item" *ngFor="let item of data">{{ item.ticketNo }} is the winning number in {{ item.addOn |
+          date: 'medium' }}</div>
+      </div>
+    </div>
+  </ng-container>
 
-  <ng-template #loadingTemplate>
-    <h4>Loading...</h4>
+  <ng-template #noDrawHistoryTemplate>
+    <div class="ticker-wrap">
+      <div class="ticker">
+        <div class="ticker__item">No Lotteries drawn for the past days</div>
+      </div>
+    </div>
   </ng-template>
-</div>
+</ng-container>
+
+<ng-template #loadingTemplateTicker>
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="ticker__item">Loading...</div>
+    </div>
+  </div>
+</ng-template>

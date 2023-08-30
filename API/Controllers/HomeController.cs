@@ -3,6 +3,7 @@ using API.Models;
 using API.Repos.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 
 namespace API.Controllers
 {
@@ -24,6 +25,108 @@ namespace API.Controllers
             public DateTime DrawDateEndDate { get; set; }
             public string SequenceNo { get; set; }
             public string RafflePrice { get; set; }
+        }
+
+        [HttpPost("GetLottoWinnerEasy")]
+        public async Task<ActionResult<DrawItemsToReturn>> GetEasyDrawItemsForPastDays(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                var newList = new List<DrawItemsToReturn>();
+                var items = await _lotteryContext.Tbldrawhistories.Where(x => x.LotteryId == 2).ToListAsync();
+
+                foreach (var item in items)
+                {
+                    var newItemToAdd = new DrawItemsToReturn
+                    {
+                        AddOn = item.DrawDate,
+                        RaffleName = "Easy Draw",
+                        TicketNo = item.Sequence,
+                        Username = item.UniqueLotteryId
+                    };
+
+                    newList.Add(newItemToAdd);
+                }
+
+                if (items == null)
+                {
+                    return BadRequest("Error while finding Raffles");
+                }
+
+                return Ok(newList);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
+        [HttpPost("GetLottoWinnerMega")]
+        public async Task<ActionResult<DrawItemsToReturn>> GetDrawItemsForPastDays(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                var newList = new List<DrawItemsToReturn>();
+                var items = await _lotteryContext.Tbldrawhistories.Where(x => x.LotteryId == 1).ToListAsync();
+
+                foreach (var item in items)
+                {
+                    var newItemToAdd = new DrawItemsToReturn
+                    {
+                        AddOn = item.DrawDate,
+                        RaffleName = "Mega Draw",
+                        TicketNo = item.Sequence,
+                        Username = item.UniqueLotteryId
+                    };
+
+                    newList.Add(newItemToAdd);
+                }
+
+                if (items == null)
+                {
+                    return BadRequest("Error while finding Raffles");
+                }
+
+                return Ok(newList);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
         }
 
         [HttpPost("GetPastLottos")]
@@ -49,9 +152,10 @@ namespace API.Controllers
             if (currentDate < decryptedDateWithOffset.Date)
             {
                 var newList = new List<DrawItemsToReturn>();
-                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddDays(-1);
+                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddMinutes(-15);
                 var items = await _lotteryContext.Tbllottoorderhistories
                     .Where(order => order.AddOn >= yesterday)
+                    .OrderByDescending(x => x.AddOn)
                     .ToListAsync();
 
                 foreach (var item in items)

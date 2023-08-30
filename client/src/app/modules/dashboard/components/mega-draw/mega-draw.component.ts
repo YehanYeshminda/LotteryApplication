@@ -39,11 +39,11 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
 
     setInterval(() => {
       this.loadMegaDrawTime();
-    }, 5000);
+    }, 3000);
 
     setInterval(() => {
       this.megaDrawHistory$ = this.megaDrawHttpService.getMegaDrawPastDayHistory();
-    }, 10000)
+    }, 60000)
   }
 
   loadMegaDrawTime(): void {

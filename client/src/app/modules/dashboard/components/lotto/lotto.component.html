@@ -8,86 +8,100 @@
     </h3>
 </div>
 
-<div class="container container-lotto-image">
-    <!-- <ng-container *ngIf="(lottoNo$ | async) as data; else loadingTemplate">
-        <div class="row justify-content-center align-items-center g-2 lottery-wheel">
-            <div class="col wheel-numbers wheel-index-0 flipX">{{ data.lottoNo.charAt(0) }}</div>
-            <div class="col wheel-numbers wheel-index-1 flipX">{{ data.lottoNo.charAt(1) }}</div>
-            <div class="col wheel-numbers wheel-index-2 flipX">{{ data.lottoNo.charAt(3) }}</div>
-            <div class="col wheel-numbers wheel-index-3 flipX">{{ data.lottoNo.charAt(4) }}</div>
+<ng-container *ngIf="lottoDrawHistory$ | async as data; else loadingTemplate">
+    <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
+        <div class="ticker-wrap">
+            <div class="ticker">
+                <div class="ticker__item" *ngFor="let item of data">{{ item.ticketNo }} has been bought by {{
+                    item.username }} at {{ item.addOn | date: 'medium' }}</div>
+            </div>
         </div>
-    
-        <div class="button-container-flex">
-            <button class="btn reshuffle-btn" (click)="getLottoNumber()"><i class="fa fa-refresh" aria-hidden="true"></i> RESHUFFLE</button>
-            <button class="btn buynow-btn" ><i class="fas fa-money-bill"></i> BUY NOW</button>
-        </div>
-    </ng-container> -->
+    </ng-container>
 
+    <ng-template #noDrawHistoryTemplate>
+        <div class="ticker-wrap">
+            <div class="ticker">
+                <div class="ticker__item">No Lottos has been bought in last 15 minutes</div>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
+
+<div class="container container-lotto-image">
     <div class="lotto-value-container">
         <div class="lotto-value" *ngIf="(companyCode$ | async) as data">
-            <ng-container *ngIf="!selectedNumber && selectedNumber != 0">
+            <ng-container *ngIf="!selectedNumber && selectedNumber != 0; else selectedValue">
                 <div class="lotto-value-number">{{ data.companyCode }}-01</div>
             </ng-container>
-            <div class="lotto-value-number">{{ formatNumber(selectedNumber, data.companyCode) }}</div>
+
+            <ng-template #selectedValue>
+                <div class="lotto-value-number">{{ formatNumber(selectedNumber, data.companyCode) }}</div>
+            </ng-template>
         </div>
     </div>
 
     <div class="number-container">
-        <div class="number" *ngFor="let num of numbers" (click)="selectNumber(num)"
-            [ngClass]="{ 'selected': selectedNumber === num }">
-            {{ num }}
+        <div class="number-surrounding">
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 1 }"
+                (click)="selectNumber(1)">1</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 2 }"
+                (click)="selectNumber(2)">2</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 3 }"
+                (click)="selectNumber(3)">3</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 4 }"
+                (click)="selectNumber(4)">4</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 5 }"
+                (click)="selectNumber(5)">5</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 6 }"
+                (click)="selectNumber(6)">6</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 7 }"
+                (click)="selectNumber(7)">7</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 8 }"
+                (click)="selectNumber(8)">8</button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 9 }"
+                (click)="selectNumber(9)">9</button>
+            <button class="number add-color-red number_add_dropshadown_red" (click)="resetSelection()">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+            </button>
+            <button class="number number_add_dropshadown" [ngClass]="{ 'selected': selectedNumber === 0 }"
+                (click)="selectNumber(0)">0</button>
+            <button class="number number_add_dropshadown_green add-color-green">
+                <i class="fa fa-check" aria-hidden="true" (click)="buyNewLotto()"></i>
+            </button>
         </div>
-    </div>
-    <div class="button-container-flex">
-        <button type="button" class="btnmain" (click)="buyNewLotto()"><i class="fas fa-money-bill"></i> BUY NOW</button>
     </div>
 
     <ng-template #loadingTemplate>
-        <div class="row justify-content-center align-items-center g-2 lottery-wheel">
-            <div class="col wheel-numbers wheel-index-0 flipX">0</div>
-            <div class="col wheel-numbers wheel-index-1 flipX">0</div>
-            <div class="col wheel-numbers wheel-index-2 flipX">0</div>
-            <div class="col wheel-numbers wheel-index-3 flipX">0</div>
-        </div>
-
-        <div class="button-container-flex">
-            <button class="btn buynow-btn"><i class="fas fa-money-bill"></i>BUY NOW</button>
+        <div class="number-container">
+            <div class="number-surrounding">
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number">0</button>
+                <button class="number add-color-red" (click)="resetSelection()">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+                <button class="number">0</button>
+                <button class="number add-color-green">
+                    <i class="fa fa-check" aria-hidden="true" (click)="buyNewLotto()"></i>
+                </button>
+            </div>
         </div>
     </ng-template>
 
-    <div class="container">
+    <div class="container mt-5">
         <div class="d-flex justify-content-center align-items-center text-white text-decoration-underline">
             <a class="text-white" routerLink="/dashboard/policy">View Rules and Policys</a>
         </div>
     </div>
 
-    <div class="container mt-3">
-        <h3>Bought Lottos.</h3>
-
-        <div class="row">
-            <ng-container *ngIf="lottoDrawHistory$ | async as data; else loadingTemplate">
-                <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
-                    <div class="col-12 col-md-6 my-2" *ngFor="let item of data">
-                        <div class="card">
-                            <h5 class="card-header blac-color-add">{{ item.raffleName }} has been bought for the No: {{
-                                item.ticketNo }}
-                            </h5>
-                            <div class="card-body">
-                                <h5 class="card-title blac-color-add">Bought by: {{ item.username }} at {{ item.addOn |
-                                    date: 'medium' }}
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-template #noDrawHistoryTemplate>
-                    <h5>No Bought Lotteries for the past 1 day</h5>
-                </ng-template>
-            </ng-container>
-        </div>
-
-        <ng-template #loadingTemplate>
-            <h4>Loading...</h4>
-        </ng-template>
-    </div>
+    <br>
+    <br>
+    <br>
+    <br>
 </div>

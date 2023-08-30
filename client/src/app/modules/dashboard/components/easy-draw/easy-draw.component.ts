@@ -32,11 +32,11 @@ export class EasyDrawComponent implements OnInit {
 
     setInterval(() => {
       this.loadMegaDrawTime();
-    }, 5000);
+    }, 3000);
 
     setInterval(() => {
       this.easyDrawHistory$ = this.easyDrawHttpService.getEasyDrawPastDayHistory();
-    }, 10000);
+    }, 60000);
   }
 
   drawRandomNumber() {
