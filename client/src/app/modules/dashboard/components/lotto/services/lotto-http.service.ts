@@ -6,7 +6,7 @@ import { CookieService } from "ngx-cookie-service";
 import { getAuthDetails } from "@shared/methods/methods";
 import { AuthDetails } from "@shared/models/auth";
 import { environment } from "@env/environment.development";
-import { Root } from '../../easy-draw/models/EasyDrawResponse';
+import { GetMegaDrawHistory, Root } from '../../easy-draw/models/EasyDrawResponse';
 
 export interface CompanyCode {
   companyCode: string;
@@ -46,5 +46,10 @@ export class LottoHttpService {
 
   getLottoDrawRemainingTime(): Observable<Date> {
     return this.http.get<Date>(this.baseUrl + "Account/nextexecution-lotti");
+  }
+
+  getLottoDrawPastDayHistory(): Observable<GetMegaDrawHistory[]> {
+    const auth: AuthDetails | null = getAuthDetails(this.cookieService.get('user'));
+    return this.http.post<GetMegaDrawHistory[]>(this.baseUrl + "Home/GetPastLottos", auth);
   }
 }

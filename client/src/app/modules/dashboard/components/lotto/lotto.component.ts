@@ -6,6 +6,7 @@ import { errorNotification, successNotification } from "@shared/alerts/sweetaler
 import { getAuthDetails } from "@shared/methods/methods";
 import { CookieService } from "ngx-cookie-service";
 import { CartEntityService } from "../cart/services/cart-entity.service";
+import { GetMegaDrawHistory } from '../easy-draw/models/EasyDrawResponse';
 
 @Component({
   selector: 'app-lotto',
@@ -22,11 +23,13 @@ export class LottoComponent implements OnInit {
   numValue: string = ""
   lottoDrawTime!: Date; // The time of the next Mega Draw
   remainingTime!: string;
+  lottoDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
 
   constructor(private lottoHttpService: LottoHttpService, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
 
   ngOnInit(): void {
     this.lottoNo$ = this.lottoHttpService.getLottoNo();
+    this.lottoDrawHistory$ = this.lottoHttpService.getLottoDrawPastDayHistory();
     this.companyCode$ = this.lottoHttpService.getCompanyCode().pipe(
       tap((response) => {
         this.numValue = response.companyCode + "-01";
@@ -41,6 +44,10 @@ export class LottoComponent implements OnInit {
     setInterval(() => {
       this.loadLottoDrawTime();
     }, 5000)
+
+    setInterval(() => {
+      this.lottoDrawHistory$ = this.lottoHttpService.getLottoDrawPastDayHistory();
+    }, 10000)
   }
 
   loadLottoDrawTime(): void {

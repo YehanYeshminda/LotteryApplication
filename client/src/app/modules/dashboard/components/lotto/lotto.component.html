@@ -33,15 +33,11 @@
     </div>
 
     <div class="number-container">
-        <div
-          class="number"
-          *ngFor="let num of numbers"
-          (click)="selectNumber(num)"
-          [ngClass]="{ 'selected': selectedNumber === num }"
-        >
-          {{ num }}
+        <div class="number" *ngFor="let num of numbers" (click)="selectNumber(num)"
+            [ngClass]="{ 'selected': selectedNumber === num }">
+            {{ num }}
         </div>
-      </div>
+    </div>
     <div class="button-container-flex">
         <button type="button" class="btnmain" (click)="buyNewLotto()"><i class="fas fa-money-bill"></i> BUY NOW</button>
     </div>
@@ -53,9 +49,45 @@
             <div class="col wheel-numbers wheel-index-2 flipX">0</div>
             <div class="col wheel-numbers wheel-index-3 flipX">0</div>
         </div>
-    
+
         <div class="button-container-flex">
-            <button class="btn buynow-btn" ><i class="fas fa-money-bill"></i>BUY NOW</button>
+            <button class="btn buynow-btn"><i class="fas fa-money-bill"></i>BUY NOW</button>
         </div>
     </ng-template>
+
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center text-white text-decoration-underline">
+            <a class="text-white" routerLink="/dashboard/policy">View Rules and Policys</a>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <h3>Bought Lottos.</h3>
+
+        <div class="row">
+            <ng-container *ngIf="lottoDrawHistory$ | async as data; else loadingTemplate">
+                <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
+                    <div class="col-12 col-md-6 my-2" *ngFor="let item of data">
+                        <div class="card">
+                            <h5 class="card-header blac-color-add">{{ item.raffleName }} has been bought for the No: {{
+                                item.ticketNo }}
+                            </h5>
+                            <div class="card-body">
+                                <h5 class="card-title blac-color-add">Bought by: {{ item.username }} at {{ item.addOn |
+                                    date: 'medium' }}
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-template #noDrawHistoryTemplate>
+                    <h5>No Bought Lotteries for the past 1 day</h5>
+                </ng-template>
+            </ng-container>
+        </div>
+
+        <ng-template #loadingTemplate>
+            <h4>Loading...</h4>
+        </ng-template>
+    </div>
 </div>

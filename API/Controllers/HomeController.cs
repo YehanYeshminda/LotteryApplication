@@ -26,6 +26,60 @@ namespace API.Controllers
             public string RafflePrice { get; set; }
         }
 
+        [HttpPost("GetPastLottos")]
+        public async Task<ActionResult<DrawItemsToReturn>> GetPastLottoDrawsBoughts(AuthDto authDto)
+        {
+            if (authDto.Hash == null)
+            {
+                return Unauthorized("Missing Authentication Details");
+            }
+
+            HelperAuth decodedValues = PasswordHelpers.DecodeValue(authDto.Hash);
+
+            var _user = await _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == decodedValues.UserId && x.Hash == authDto.Hash);
+
+            if (_user == null)
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+
+            var decryptedDateWithOffset = decodedValues.Date.AddDays(1);
+            var currentDate = DateTime.UtcNow.Date;
+
+            if (currentDate < decryptedDateWithOffset.Date)
+            {
+                var newList = new List<DrawItemsToReturn>();
+                DateTime yesterday = IndianTimeHelper.GetIndianLocalTime().AddDays(-1);
+                var items = await _lotteryContext.Tbllottoorderhistories
+                    .Where(order => order.AddOn >= yesterday)
+                    .ToListAsync();
+
+                foreach (var item in items)
+                {
+                    var newItemToAdd = new DrawItemsToReturn
+                    {
+                        AddOn = item.AddOn,
+                        RaffleName = item.ReferenceId,
+                        TicketNo = item.LottoNumbers,
+                        Username = _lotteryContext.Tblregisters.FirstOrDefaultAsync(x => x.Id == item.UserId).Result.CustName
+                    };
+
+                    newList.Add(newItemToAdd);
+                }
+
+                if (items == null)
+                {
+                    return BadRequest("Error while finding Raffles");
+                }
+
+                return Ok(newList);
+            }
+            else
+            {
+                return Unauthorized("Invalid Authentication Details");
+            }
+        }
+
         [HttpPost("GetPastEasyDraws")]
         public async Task<ActionResult<DrawItemsToReturn>> GetPastEasyDayDrawsBoughts(AuthDto authDto)
         {

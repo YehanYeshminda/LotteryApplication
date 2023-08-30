@@ -82,12 +82,18 @@
 </div>
 
 <div class="container">
+  <div class="d-flex justify-content-center align-items-center text-white text-decoration-underline">
+    <a class="text-white" routerLink="/dashboard/policy">View Rules and Policys</a>
+  </div>
+</div>
+
+<div class="container mt-3">
   <h3>Bought Lotteries.</h3>
 
   <div class="row">
     <ng-container *ngIf="easyDrawHistory$ | async as data; else loadingTemplate">
       <ng-container *ngIf="data.length > 0; else noDrawHistoryTemplate">
-        <div class="col-6 my-2" *ngFor="let item of data">
+        <div class="col-12 col-md-6 my-2" *ngFor="let item of data">
           <div class="card">
             <h5 class="card-header blac-color-add">{{ item.raffleName }} has been bought for the No: {{ item.ticketNo }}
             </h5>
