@@ -136,7 +136,8 @@ namespace API.Controllers
                         UserId = _user.Id,
                         AddOn = IndianTimeHelper.GetIndianLocalTime(),
                         LottoUnqueReferenceId = existingLotto.LottoUniqueId,
-                        Price = existingLotto.LottoPrice.ToString()
+                        Price = existingLotto.LottoPrice.ToString(),
+                        AssignedSupervisorId = _user.AssignedSupervisorId
                     };
 
                     _user.AccountBalance -= existingLotto.LottoPrice;

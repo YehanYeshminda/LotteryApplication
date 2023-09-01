@@ -1,6 +1,7 @@
 ﻿using API.Repos.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
+using API.Repos.Dtos;
 
 namespace API.Repos.Services
 {
@@ -103,6 +104,11 @@ namespace API.Repos.Services
             }
 
             return null;
+        }
+
+        public Task<Tblregister> AddSupervisor(CreateUserDto createUserDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

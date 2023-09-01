@@ -494,6 +494,7 @@ namespace API.Controllers
                                 Longitude = makeUpiWithdrawalRequest.Longitude,
                                 Latitude = makeUpiWithdrawalRequest.Latitude,
                                 AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                                AssignedSupervisorId = _user.AssignedSupervisorId
                             };
 
                             await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
@@ -517,6 +518,7 @@ namespace API.Controllers
                                 Longitude = makeUpiWithdrawalRequest.Longitude,
                                 Latitude = makeUpiWithdrawalRequest.Latitude,
                                 AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                                AssignedSupervisorId = _user.AssignedSupervisorId
                             };
 
                             await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
@@ -554,6 +556,7 @@ namespace API.Controllers
                                 UserId = _user.Id,
                                 Status = "0",
                                 AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                                AssignedSupervisorId = _user.AssignedSupervisorId
                             };
 
                             await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);
@@ -577,6 +580,7 @@ namespace API.Controllers
                                 Longitude = makeUpiWithdrawalRequest.Longitude,
                                 Latitude = makeUpiWithdrawalRequest.Latitude,
                                 AddOn = IndianTimeHelper.GetIndianLocalTime(),
+                                AssignedSupervisorId = _user.AssignedSupervisorId
                             };
 
                             await _lotteryContext.Tblrequestwithdrawals.AddAsync(newRequest);

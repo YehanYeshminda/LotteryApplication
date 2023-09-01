@@ -47,6 +47,7 @@ public partial class LotteryContext : DbContext
 
     public virtual DbSet<Tblrequestwithdrawal> Tblrequestwithdrawals { get; set; }
 
+    public virtual DbSet<Tblsupervisor> Tblsupervisors { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Tblbankdetail>(entity =>
@@ -185,6 +186,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AddOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
+            entity.Property(e => e.AssignedSupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.DrawDate)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
@@ -241,6 +245,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AddOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
+            entity.Property(e => e.AssignedSupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.LottoNumbers)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
@@ -295,6 +302,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AddOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
+            entity.Property(e => e.AssignedSupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.LotteryReferenceId)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
@@ -339,6 +349,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AddOn)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("datetime");
+            entity.Property(e => e.AssignedSupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.OrderStatus).HasColumnType("int(10) unsigned");
             entity.Property(e => e.PackageName).HasMaxLength(45);
             entity.Property(e => e.PackageOrderUniqueId)
@@ -429,6 +442,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.AlternatePhone)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.AssignedSupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.AvatarNo)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
@@ -487,6 +503,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Amount)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
+            entity.Property(e => e.AssignedSupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
             entity.Property(e => e.BankId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
@@ -503,6 +522,26 @@ public partial class LotteryContext : DbContext
                 .HasMaxLength(45)
                 .HasDefaultValueSql("'NULL'");
             entity.Property(e => e.UserId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+        });
+
+        modelBuilder.Entity<Tblsupervisor>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tblsupervisor");
+
+            entity.HasIndex(e => e.CouponNo, "CouponNo_UNIQUE").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnType("int(11)");
+            entity.Property(e => e.CouponNo)
+                .HasMaxLength(45)
+                .HasDefaultValueSql("'NULL'");
+            entity.Property(e => e.SupervisorId)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnType("int(11)");
+            entity.Property(e => e.UnderUserId)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)");
         });

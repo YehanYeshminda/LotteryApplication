@@ -18,6 +18,7 @@ namespace API.Repos.Dtos
         public string? Photo { get; set; }
         public ulong? CustStatus { get; set; } = 0;
         public decimal? AccountBalance { get; set; } = 0;
+        public string Coupon { get; set; } = "NO COUPON";
         public string? Role { get; set; } = "Customer";
     }
 }

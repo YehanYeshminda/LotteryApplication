@@ -20,4 +20,6 @@ public partial class Tbllotterywinner
     public DateTime? AddOn { get; set; }
 
     public int? RaffleId { get; set; }
+
+    public int? AssignedSupervisorId { get; set; }
 }

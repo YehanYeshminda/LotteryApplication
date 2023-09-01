@@ -20,4 +20,6 @@ public partial class Tblpackageorderhistory
     public DateTime? AddOn { get; set; }
 
     public uint OrderStatus { get; set; }
+
+    public int? AssignedSupervisorId { get; set; }
 }

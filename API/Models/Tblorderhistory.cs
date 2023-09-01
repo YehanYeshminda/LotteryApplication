@@ -18,4 +18,6 @@ public partial class Tblorderhistory
     public DateTime? AddOn { get; set; }
 
     public string? LotteryReferenceId { get; set; }
+
+    public int? AssignedSupervisorId { get; set; }
 }

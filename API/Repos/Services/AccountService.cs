@@ -5,7 +5,6 @@ using API.Models;
 using System.Text;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 namespace API.Repos.Services
 {
@@ -62,6 +61,13 @@ namespace API.Repos.Services
                 return RegistrationResult.Error("User already exists with this contact No!");
             }
 
+            var existingSupervisorWithCoupon = await _lotteryContext.Tblsupervisors.FirstOrDefaultAsync(x => x.CouponNo == createUserDto.Coupon);
+
+            if (existingSupervisorWithCoupon == null)
+            {
+                return RegistrationResult.Error("Coupon Does not exist");
+            }
+
             createUserDto.CustPassword = GetHashedPassword(createUserDto.CustPassword);
 
             string refreshToken = TokenHelpers.GenerateToken();
@@ -83,7 +89,8 @@ namespace API.Repos.Services
                 Photo = "",
                 Hash = refreshToken,
                 Role = createUserDto.Role,
-                Dob = createUserDto.Dob
+                Dob = createUserDto.Dob,
+                AssignedSupervisorId = existingSupervisorWithCoupon.Id
             };
 
             await _registerRepository.AddUser(newUser);

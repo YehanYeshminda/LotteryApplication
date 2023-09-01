@@ -18,4 +18,6 @@ public partial class Tbllottoorderhistory
     public string? Price { get; set; }
 
     public string? LottoUnqueReferenceId { get; set; }
+
+    public int? AssignedSupervisorId { get; set; }
 }

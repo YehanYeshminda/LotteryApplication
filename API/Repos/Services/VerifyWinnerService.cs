@@ -134,7 +134,7 @@ namespace API.Repos.Services
                                 TicketNo = orderHistories[i].TicketNo,
                                 UserId = orderHistories[i].UserId,
                                 Matches = matchingIndexes[i],
-                                RaffleId = (int)existingTicketNo.Id
+                                RaffleId = (int)existingTicketNo.Id // add the supervisor
                             };
                             await lotteryContext.Tbllotterywinners.AddAsync(newWin);
 

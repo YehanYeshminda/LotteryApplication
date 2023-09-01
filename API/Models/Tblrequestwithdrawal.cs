@@ -22,4 +22,6 @@ public partial class Tblrequestwithdrawal
     public string? Status { get; set; }
 
     public DateTime AddOn { get; set; }
+
+    public int? AssignedSupervisorId { get; set; }
 }

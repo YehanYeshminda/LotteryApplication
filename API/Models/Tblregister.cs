@@ -40,4 +40,6 @@ public partial class Tblregister
     public string? Role { get; set; }
 
     public DateTime? Dob { get; set; }
+
+    public int? AssignedSupervisorId { get; set; }
 }

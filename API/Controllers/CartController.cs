@@ -353,6 +353,7 @@ namespace API.Controllers
                                 UserId = (uint)_user.Id,
                                 AddOn = IndianTimeHelper.GetIndianLocalTime(),
                                 PackageOrderUniqueId = packageId,
+                                AssignedSupervisorId = _user.AssignedSupervisorId
                             };
 
                             _lotteryContext.Tblpackageorderhistories.AddRange(newPurchaseOrder);

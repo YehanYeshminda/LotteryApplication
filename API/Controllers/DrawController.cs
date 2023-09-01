@@ -427,6 +427,7 @@ namespace API.Controllers
                         RaffleUniqueId = existingRaffle.UniqueRaffleId,
                         TicketNo = buyDrawsDto.TicketNo,
                         UserId = _user.Id,
+                        AssignedSupervisorId = _user.AssignedSupervisorId
                     };
 
                     _user.AccountBalance -= existingRaffle.RafflePrice;

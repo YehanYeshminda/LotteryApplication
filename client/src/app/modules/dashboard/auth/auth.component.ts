@@ -55,6 +55,7 @@ export class AuthComponent implements OnInit {
         contactNo: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(REGEXFORNUMBER)]],
         dob: [new Date(), []],
         custPassword: ['', [Validators.required, Validators.minLength(8)]],
+        coupon: ['', [Validators.required]]
       });
     }
 
