@@ -9,7 +9,6 @@ const routes: Routes = [
   {
     path: 'dashboard', loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [AuthGuard]
   },
-  { path: 'admin', loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule) },
 ];
 
 @NgModule({

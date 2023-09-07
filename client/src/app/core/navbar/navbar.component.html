@@ -1,4 +1,3 @@
-
 <!--  <link-->
 <!--  href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"-->
 <!--  rel="stylesheet"-->
@@ -286,7 +285,7 @@
       </span>
     </a>
     <a routerLink="/dashboard/user-package/packages">
-      <span class="nav-item" >
+      <span class="nav-item">
         <i class="w-8 fas fa-money-bill"></i>
         <span class="nav-text">Packages</span>
       </span>
@@ -308,7 +307,8 @@
         <span class="nav-text">History</span>
         <div class="dropdown-container">
           <a routerLink="/dashboard/history/user-history" class="dropdown-option">Lottery History</a>
-          <a routerLink="/dashboard/history/user-history" class="dropdown-option" routerLink="/dashboard/payment-status">Past Payments</a>
+          <a routerLink="/dashboard/history/user-history" class="dropdown-option"
+            routerLink="/dashboard/payment-status">Past Payments</a>
           <a routerLink="/dashboard/history/user-trasanction-history" class="dropdown-option">Bought History</a>
           <a routerLink="/dashboard/tournaments/home" class="dropdown-option">Tournaments</a>
           <a class="dropdown-option" routerLink="/dashboard/history/GetLottoTransactionHistory">Past Lottos</a>
@@ -345,62 +345,72 @@
 <ng-template #greaterThan768>
   <div class="container">
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
-      <a routerLink="/dashboard/user-home" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+      <a routerLink="/dashboard/user-home"
+        class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
         <img ngSrc="assets/images/logo/logo.png" alt="logo" height="90" width="157">
       </a>
-  
+
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a class="nav-link custom-text text-white px-2 link-secondary" routerLink="/dashboard/user-home">Home</a></li>
+        <li><a class="nav-link custom-text text-white px-2 link-secondary" routerLink="/dashboard/user-home">Home</a>
+        </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Draws
+          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Draws
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" routerLink="/dashboard/easy-draw">Easy Draw</a></li>
-              <li><a class="dropdown-item" routerLink="/dashboard/mega-draw">Mega Draw</a></li>
+            <li><a class="dropdown-item" routerLink="/dashboard/easy-draw">Easy Draw</a></li>
+            <li><a class="dropdown-item" routerLink="/dashboard/mega-draw">Mega Draw</a></li>
           </ul>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
             Lottos
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" routerLink="/dashboard/lotto">Lotto</a></li>
-        </ul>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-text text-white px-2 link-dark" id="navbarDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
             Past Orders
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li>
-            <a class="dropdown-item" routerLink="/dashboard/history/user-history">Past Lottery Draws</a>
-          </li>
-          <li>
-            <a class="dropdown-item" routerLink="/dashboard/history/user-trasanction-history">Past Lottery History</a>
-          </li>
-          <li>
-            <a class="dropdown-item" routerLink="/dashboard/history/GetLottoTransactionHistory">Past Lotto History</a>
-          </li>
-          <li>
-            <a class="dropdown-item" routerLink="/dashboard/payment-status">Past Payment History</a>
-          </li>
-        </ul>
-      </li>
-      <li><a class="nav-link custom-text text-white px-2 link-dark" routerLink="/dashboard/tournaments/home">Tournaments</a></li>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item" routerLink="/dashboard/history/user-history">Past Lottery Draws</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/dashboard/history/user-trasanction-history">Past Lottery History</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/dashboard/history/GetLottoTransactionHistory">Past Lotto History</a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/dashboard/payment-status">Past Payment History</a>
+            </li>
+          </ul>
+        </li>
+        <li><a class="nav-link custom-text text-white px-2 link-dark"
+            routerLink="/dashboard/tournaments/home">Tournaments</a></li>
       </ul>
-  
+
       <ng-container *ngIf="(isUser$ | async); else userTemplate">
-        <div class="col-md-3 text-end">
-          <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/user-package/packages"><i class="fas fa-money-bill-wave"></i></button>
-          <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/cart"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> <span class="text-white ms-1">{{ (cartItems$ | async)?.length }}</span></button>
-          <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/info/edit-user">View Profile</button>
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/user-package/packages"><i
+              class="fas fa-money-bill-wave"></i></button>
+          <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/cart"><i
+              class="fa fa-cart-arrow-down" aria-hidden="true"></i> <span class="text-white ms-1">{{ (cartItems$ |
+              async)?.length }}</span></button>
+          <button type="button" class="btn btn-outline-primary me-2" routerLink="/dashboard/info/edit-user">View
+            Profile</button>
           <button type="button" class="btn btn-primary" (click)="logOut()">Logout</button>
         </div>
       </ng-container>
       <ng-template #userTemplate>
         <button type="button" class="btn btn-outline-primary me-2" routerLink="/">Login</button>
-          <button type="button" class="btn btn-primary" routerLink="/">Sign-up</button>
+        <button type="button" class="btn btn-primary" routerLink="/">Sign-up</button>
       </ng-template>
     </header>
   </div>

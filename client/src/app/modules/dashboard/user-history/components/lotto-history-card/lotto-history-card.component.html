@@ -1,19 +1,21 @@
 <div class="card bg-light d-flex flex-fill">
-    <div class="card-header fw-bolder text-decoration-underline border-bottom-0">
-      <h2 class="lead mt-2"><b>Ticket No: {{ lotto.lottoNumbers }}</b></h2>
-    </div>
-    <div class="card-body pt-2">
-      <div class="row">
-        <div class="col-9">
-          <ul class="ml-0 mb-0 fa-ul text-muted">
-            <li class="small">
-                <span class="fa-li"><i class="fa fa-id-card" aria-hidden="true"></i></span> Unique Id: {{ lotto.lottoUnqueReferenceId }}
-            </li>
-            <li class="small">
-                <span class="fa-li"><i class="fa fa-calendar" aria-hidden="true"></i></span> Ordered On: {{ lotto.addOn | date: 'short' }}
-            </li>
-          </ul>
-        </div>
+  <div class="card-header fw-bolder text-decoration-underline border-bottom-0">
+    <h2 class="lead mt-2"><b style="color: black;">Ticket No: {{ lotto.lottoNumbers }}</b></h2>
+  </div>
+  <div class="card-body pt-2">
+    <div class="row">
+      <div class="col-9">
+        <ul class="ml-0 mb-0 fa-ul text-muted">
+          <li class="small">
+            <span class="fa-li"><i class="fa fa-id-card" aria-hidden="true"></i></span> Unique Id: {{
+            lotto.lottoUnqueReferenceId }}
+          </li>
+          <li class="small">
+            <span class="fa-li"><i class="fa fa-calendar" aria-hidden="true"></i></span> Ordered On: {{ lotto.addOn |
+            date: 'short' }}
+          </li>
+        </ul>
       </div>
     </div>
+  </div>
 </div>
