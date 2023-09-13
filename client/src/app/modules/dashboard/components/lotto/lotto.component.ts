@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CompanyCode, LottoHttpService } from "./services/lotto-http.service";
 import { debounceTime, Observable, of, tap } from "rxjs";
 import { GetLotto } from "./models/lotto";
-import { errorNotification, successNotification } from "@shared/alerts/sweetalert";
+import { errorNotification, errorNotificationInsufficientBalance, successNotification } from "@shared/alerts/sweetalert";
 import { getAuthDetails } from "@shared/methods/methods";
 import { CookieService } from "ngx-cookie-service";
 import { CartEntityService } from "../cart/services/cart-entity.service";
 import { GetMegaDrawHistory } from '../easy-draw/models/EasyDrawResponse';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lotto',
@@ -25,7 +26,12 @@ export class LottoComponent implements OnInit {
   remainingTime!: string;
   lottoDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
 
-  constructor(private lottoHttpService: LottoHttpService, private cookieService: CookieService, private cartEntityService: CartEntityService) { }
+  constructor(
+    private lottoHttpService: LottoHttpService,
+    private cookieService: CookieService,
+    private cartEntityService: CartEntityService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.lottoNo$ = this.lottoHttpService.getLottoNo();
@@ -112,7 +118,12 @@ export class LottoComponent implements OnInit {
         }
 
         if (!response.isSuccess) {
-          errorNotification(response.message);
+          errorNotificationInsufficientBalance(response.message, "Buy new Tokens").then(response => {
+            if (response.isConfirmed) {
+              this.router.navigateByUrl("/dashboard/user-package/packages")
+            } else {
+            }
+          })
         }
       })
     }

@@ -15,42 +15,43 @@
         <!-- <ngx-spinner [fullScreen]="false" type="ball-scale-multiple" class=""></ngx-spinner> -->
       </mat-tab>
     </ng-container>
-    
+
     <ng-container *ngIf="(userHistoryDataWin$ | async) as userWinHistoryData">
-      <mat-tab label="Winnings" > 
-          <div class="row" *ngIf="userWinHistoryData.length > 0; else noWinHistoryTemplate">
+      <mat-tab label="Winnings">
+        <div class="row" *ngIf="userWinHistoryData.length > 0; else noWinHistoryTemplate">
           <div class="col-12 col-sm-6 col-md-4 my-3" *ngFor="let item of userWinHistoryData">
-              <app-historycard [userHistoryData]="item"></app-historycard>
-            </div>
+            <app-historycard [userHistoryData]="item"></app-historycard>
           </div>
-  
+        </div>
+
         <!-- used for the infinate scroll -->
-        <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()" (scrolledUp)="onUp()">
-      </div>
+        <div infinite-scroll [infiniteScrollDistance]="500" [infiniteScrollThrottle]="3000" (scrolled)="onScrollDown()"
+          (scrolledUp)="onUp()">
+        </div>
       </mat-tab>
     </ng-container>
   </mat-tab-group>
 
   <ng-template #noDrawsTemplate>
-    <div class="card w-100" >
+    <div class="card w-100">
       <div class="card-body">
-        <h2>No Order History to show...</h2>
+        <h5 class="card-title text-black" style="color: black;">No Payments has been made</h5>
       </div>
     </div>
   </ng-template>
 
   <ng-template #noWinHistoryTemplate>
-    <div class="card w-100" >
+    <div class="card w-100">
       <div class="card-body">
-        <h2>No Winnings...</h2>
+        <h5 class="card-title text-black" style="color: black;">No Winnings</h5>
       </div>
     </div>
   </ng-template>
 
   <ng-template #noLatestOrdersTemplate>
-    <div class="card w-100" >
+    <div class="card w-100">
       <div class="card-body">
-        <h2>No Orders for the last 3 days...</h2>
+        <h5 class="card-title text-black" style="color: black;">No Orders for the last 3 days...</h5>
       </div>
     </div>
   </ng-template>

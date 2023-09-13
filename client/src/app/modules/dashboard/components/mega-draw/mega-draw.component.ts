@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription, map, of, shareReplay, take } from "rxjs";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { getAuthDetails } from 'src/app/shared/methods/methods';
 import { CookieService } from 'ngx-cookie-service';
-import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { errorNotification, errorNotificationInsufficientBalance, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { FullMegaDraw } from './models/megaDraw';
 import { MegaDrawHttpService } from './services/mega-draw-http.service';
 import { BuyEasyDraw, GetMegaDrawHistory } from '../easy-draw/models/EasyDrawResponse';
@@ -24,7 +24,7 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
   private selectedItemsSubscription!: Subscription;
   megaDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
 
-  constructor(private route: ActivatedRoute, private cookieService: CookieService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService) { }
+  constructor(private route: ActivatedRoute, private cookieService: CookieService, private megaDrawHttpService: MegaDrawHttpService, private easyDrawHttpService: EasyDrawHttpService, private router: Router) { }
 
   ngOnInit(): void {
     this.megaDrawInfo$ = this.megaDrawHttpService.getMegaDraw();
@@ -109,7 +109,13 @@ export class MegaDrawComponent implements OnInit, OnDestroy {
                 successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
                 this.getRandomDraw();
               } else {
-                errorNotification(response.message);
+                errorNotificationInsufficientBalance(response.message, "Buy new Tokens").then(response => {
+                  if (response.isConfirmed) {
+                    this.router.navigateByUrl("/dashboard/user-package/packages")
+                  } else {
+                  }
+                })
+                // confirmApproveNotification("Are you sure").
               }
             },
           });

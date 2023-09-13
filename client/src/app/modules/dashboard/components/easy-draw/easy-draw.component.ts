@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { EasyDrawHttpService } from './services/easy-draw-http.service';
 import { BuyEasyDraw, EasyDrawResponse, FullEasyDraw, GetMegaDrawHistory } from './models/EasyDrawResponse';
 import { CookieService } from "ngx-cookie-service";
-import { errorNotification, successNotification } from 'src/app/shared/alerts/sweetalert';
+import { errorNotification, errorNotificationInsufficientBalance, successNotification } from 'src/app/shared/alerts/sweetalert';
 import { getAuthDetails } from '@shared/methods/methods';
 import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-easy-draw',
@@ -19,7 +20,7 @@ export class EasyDrawComponent implements OnInit {
   easyDraw$: Observable<FullEasyDraw> = of();
   easyDrawHistory$: Observable<GetMegaDrawHistory[]> = of([]);
 
-  constructor(private easyDrawHttpService: EasyDrawHttpService, private cookieService: CookieService) { }
+  constructor(private easyDrawHttpService: EasyDrawHttpService, private cookieService: CookieService, private router: Router) { }
 
   ngOnInit(): void {
     this.easyDraw$ = this.easyDrawHttpService.getEasyDraw();
@@ -93,7 +94,12 @@ export class EasyDrawComponent implements OnInit {
             successNotification(`Successfully bought ${response.result.ticketNo} with order reference number of ${response.result.lotteryReferenceId}!`);
             this.drawRandomNumber();
           } else {
-            errorNotification(response.message);
+            errorNotificationInsufficientBalance(response.message, "Buy new Tokens").then(response => {
+              if (response.isConfirmed) {
+                this.router.navigateByUrl("/dashboard/user-package/packages")
+              } else {
+              }
+            })
           }
         },
       });

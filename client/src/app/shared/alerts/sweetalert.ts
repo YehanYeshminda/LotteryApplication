@@ -8,6 +8,16 @@ export function errorNotification(error: string) {
   });
 }
 
+export function errorNotificationInsufficientBalance(error: string, confirmText?: string) {
+  return Swal.fire({
+    icon: 'error',
+    title: 'Opps',
+    text: error,
+    showCancelButton: true,
+    confirmButtonText: confirmText,
+  });
+}
+
 export function errorNotificationList(error: string[]) {
   Swal.fire({
     icon: 'error',
